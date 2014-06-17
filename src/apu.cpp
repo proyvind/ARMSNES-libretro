@@ -193,26 +193,6 @@ static inline void S9xSetFrequencyModulationEnable (uint8 byte)
     SoundData.pitch_mod = byte & (0xFE);//~1;
 }
 
-static inline int S9xGetEnvelopeHeight (int channel)
-{
-    if ((Settings.SoundEnvelopeHeightReading ||
-	 SNESGameFixes.SoundEnvelopeHeightReading2) &&
-        SoundData.channels[channel].state != SOUND_SILENT &&
-        SoundData.channels[channel].state != SOUND_GAIN)
-    {
-        return (SoundData.channels[channel].envx);
-    }
-
-    //siren fix from XPP
-    if (SNESGameFixes.SoundEnvelopeHeightReading2 &&
-        SoundData.channels[channel].state != SOUND_SILENT)
-    {
-        return (SoundData.channels[channel].envx);
-    }
-
-    return (0);
-}
-
 static inline void S9xSetSoundHertz (int channel, int hertz)
 {
     SoundData.channels[channel].hertz = hertz;

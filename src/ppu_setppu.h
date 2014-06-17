@@ -361,21 +361,6 @@ static void SetPPU_210C_delayedRasterFx (uint8 Byte, uint16 Address)
 	}
 }
 
-static void SetPPU_210C (uint8 Byte, uint16 Address)
-{
-	if (Byte != Memory.FillRAM[Address])
-	{
-#ifdef	__DEBUG__
-	printf("SetPPU_210C, BG 2 & 3, NameBase. Byte : %x\n", Byte);
-#endif
-		FLUSH_REDRAW();
-		PPU.BG[2].NameBase = (Byte & 7) << 12;
-		PPU.BG[3].NameBase = ((Byte >> 4) & 7) << 12;
-		Memory.FillRAM[Address] = Byte;
-	}
-}
-
-
 //This is the Theme Park fix - it appears all these registers
 //share a previous byte value for setting them.
 
