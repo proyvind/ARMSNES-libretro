@@ -242,7 +242,6 @@ struct FxRegs_s
     int32	vOverflow;		/* (v >= 0x8000 || v < -0x8000) */
     
     /* Other emulator variables */
-    
     int32	vErrorCode;
     uint32	vIllegalAddress;
     
@@ -288,7 +287,7 @@ struct FxRegs_s
   NULL, NULL,      0,      0,      0,   0,    0,   0,    0,    0, \
      0,    0,      0,      0,   NULL,   0, NULL,   0, NULL,    0, \
      0, NULL, {NULL},    {0},      0,   0,    0,   0, NULL, NULL, \
-  NULL, NULL,   NULL, {NULL}, {NULL},   0, NULL, {0},    0,    0, \
+  NULL, NULL,   NULL, {NULL}, {NULL},   0, NULL, {0},    0,    0, 0 \
 }
 
 /* GSU registers */
