@@ -409,13 +409,10 @@ static FreezeData SnapSA1 [] = {
 
 static void Freeze ();
 static int Unfreeze ();
-void FreezeStruct (char *name, void *base, FreezeData *fields,
-		   int num_fields);
-void FreezeBlock (char *name, uint8 *block, int size);
-
-int UnfreezeStruct (char *name, void *base, FreezeData *fields,
-		    int num_fields);
-int UnfreezeBlock (char *name, uint8 *block, int size);
+void FreezeStruct (const char *name, void *base, FreezeData *fields, int num_fields);
+void FreezeBlock (const char *name, uint8 *block, int size);
+int UnfreezeStruct (const char *name, void *base, FreezeData *fields, int num_fields);
+int UnfreezeBlock (const char *name, uint8 *block, int size);
 
 bool8 Snapshot (const char *filename)
 {
@@ -715,8 +712,7 @@ int FreezeSize (int size, int type)
     }
 }
 
-void FreezeStruct(char *name, void *base, FreezeData *fields,
-		   int num_fields)
+void FreezeStruct(const char *name, void *base, FreezeData *fields, int num_fields)
 {
     // Work out the size of the required block
     int len = 0;
@@ -804,17 +800,15 @@ void FreezeStruct(char *name, void *base, FreezeData *fields,
  	free(block);
 }
 
-void FreezeBlock (char *name, uint8 *block, int size)
+void FreezeBlock (const char *name, uint8 *block, int size)
 {
     char buffer [512];
     sprintf (buffer, "%s:%06d:", name, size);
     statef_write(buffer, strlen (buffer));
     statef_write(block, size);
-    
 }
 
-int UnfreezeStruct (char *name, void *base, FreezeData *fields,
-		     int num_fields)
+int UnfreezeStruct (const char *name, void *base, FreezeData *fields, int num_fields)
 {
     // Work out the size of the required block
     int len = 0;
@@ -908,7 +902,7 @@ int UnfreezeStruct (char *name, void *base, FreezeData *fields,
     return (result);
 }
 
-int UnfreezeBlock(char *name, uint8 *block, int size)
+int UnfreezeBlock(const char *name, uint8 *block, int size)
 {
     char buffer [20];
     int len = 0;
