@@ -57,9 +57,9 @@
 #ifdef USE_SA1
 #include "sa1.h"
 #endif
-
+#ifdef ASMCPU
 #include "os9x_asm_cpu.h"
-
+#endif
 
 void (*S9x_Current_HBlank_Event)();
 
