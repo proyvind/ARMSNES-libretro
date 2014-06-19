@@ -406,10 +406,8 @@ INLINE void S9xSetWord (uint16 Word, uint32 Address)
 	    SA1.WaitCounter = 0;
 	}
 	SetAddress -= Address & 0xffff;
-	WRITE_WORD(SetAddress, Word);
-#else
-	WRITE_WORD(SetAddress + (Address & 0xffff), Word);
 #endif
+	WRITE_WORD(SetAddress + (Address & 0xffff), Word);
 	return;
     }
 
