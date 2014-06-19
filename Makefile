@@ -11,8 +11,8 @@ CFLAGS += -Os
 endif
 
 OBJECTS    = ./src/apu.o ./src/apuaux.o ./src/c4.o ./src/c4emu.o ./src/cheats.o ./src/cheats2.o \
-	 			 ./src/clip.o ./src/data.o ./src/screenshot.o ./src/dsp1.o ./src/fxemu.o ./src/fxinst.o  \
-				 ./src/globals.o ./src/loadzip.o ./src/ppu.o ./src/dma.o ./src/memmap.o ./src/cpu.o \
+	 			 ./src/clip.o ./src/data.o ./src/dsp1.o ./src/fxemu.o ./src/fxinst.o  \
+				 ./src/globals.o ./src/ppu.o ./src/dma.o ./src/memmap.o ./src/cpu.o \
 				 ./src/cpuexec.o ./src/cpuops.o ./src/sa1.o ./src/sa1cpu.o ./src/sdd1.o ./src/sdd1emu.o \
 				 ./src/snapshot.o ./src/soundux.o ./src/spc700.o ./src/spc700a.o ./src/srtc.o \
 				 ./src/spc_decode.o ./src/tile16.o ./src/tile16add.o ./src/tile16add1_2.o \
