@@ -86,11 +86,12 @@ typedef short			int16_32;
 //Misc Items
 #define VAR_CYCLES
 #define LSB_FIRST
+#define INLINE inline
 #define STATIC static
+#define VOID void
 #define FASTCALL
 #define PIXEL_FORMAT RGB565
 #define CHECK_SOUND()
-#define VOID void
 #define CPU_SHUTDOWN
 #define UNZIP_SUPPORT
 #define ZeroMemory(a,b) memset((a),0,(b))
@@ -104,15 +105,5 @@ typedef short			int16_32;
 #endif
 
 EXTERN_C void S9xGenerateSound ();
-
-#ifdef INLINE
-#undef INLINE
-#define INLINE __inline
-#endif
-
-#ifdef inline
-#undef inline
-#define inline __inline
-#endif
 
 #endif //  _PORT_H_
