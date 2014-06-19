@@ -35,12 +35,8 @@ static retro_input_poll_t poll_cb = NULL;
 static retro_input_state_t input_cb = NULL;
 static retro_audio_sample_batch_t audio_batch_cb = NULL;
 static retro_environment_t environ_cb = NULL;
-
 static uint32 joys[5];
-
 bool8 ROMAPUEnabled = 0;
-char currentWorkingDir[MAX_PATH+1] = {0};
-
 memstream_t *s_stream;
 
 int s_open(const char *fname, const char *mode)
@@ -600,67 +596,4 @@ void S9xMessage(int a, int b, const char* msg)
 {
    fprintf(stderr, "%s\n", msg);
 }
-
-/* S9x weirdness. */
-#ifndef _WIN32
-void _splitpath (const char * path, char * drive, char * dir, char * fname, char * ext)
-{
-	const char *slash, *dot;
-
-	slash = strrchr(path, SLASH_CHAR);
-	dot   = strrchr(path, '.');
-
-	if (dot && slash && dot < slash)
-		dot = NULL;
-
-	if (!slash)
-	{
-		*dir = 0;
-
-		strcpy(fname, path);
-
-		if (dot)
-		{
-			fname[dot - path] = 0;
-			strcpy(ext, dot + 1);
-		}
-		else
-			*ext = 0;
-	}
-	else
-	{
-		strcpy(dir, path);
-		dir[slash - path] = 0;
-
-		strcpy(fname, slash + 1);
-
-		if (dot)
-		{
-			fname[dot - slash - 1] = 0;
-			strcpy(ext, dot + 1);
-		}
-		else
-			*ext = 0;
-	}
-}
-
-void _makepath (char *path, const char * a, const char *dir, const char *fname, const char *ext)
-{
-   if (dir && *dir)
-   {
-      strcpy(path, dir);
-      strcat(path, SLASH_STR);
-   }
-   else
-      *path = 0;
-
-   strcat(path, fname);
-
-   if (ext && *ext)
-   {
-      strcat(path, ".");
-      strcat(path, ext);
-   }
-}
-#endif
 

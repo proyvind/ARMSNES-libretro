@@ -40,11 +40,6 @@
  */
 #include <string.h>
 #include <ctype.h>
-
-#ifdef __linux
-//#include <unistd.h>
-#endif
-
 #include "snes9x.h"
 #include "memmap.h"
 #include "cpuexec.h"
@@ -55,22 +50,12 @@
 #include "sa1.h"
 #include "srtc.h"
 #include "sdd1.h"
-
-#ifndef ZSNES_FX
 #include "fxemu.h"
+
 extern struct FxInit_s SuperFX;
-#else
-START_EXTERN_C
-extern uint8 *SFXPlotTable;
-END_EXTERN_C
-#endif
-
 static uint8 bytes0x2000 [0x2000];
-
 extern bool8  ROMAPUEnabled;
-
 extern char *rom_filename;
-extern bool8 LoadZip(const char* , int32 *, int32 *);
 
 bool8_32 CMemory::AllASCII (uint8 *b, int size)
 {
@@ -315,10 +300,6 @@ int checkzip( char * fn  )
 /* LoadROM()                                                                                  */
 /* This function loads a Snes-Backup image                                                    */
 /**********************************************************************************************/
-#ifdef _SNESPPC
-#pragma warning(disable : 4101)
-#pragma warning(disable : 4700)
-#endif
 bool8_32 CMemory::LoadROM (const char *filename)
 {
     unsigned long FileSize = 0;
@@ -341,32 +322,9 @@ bool8_32 CMemory::LoadROM (const char *filename)
 
     CalculatedSize = 0;
 again:
-#ifndef _SNESPPC
-    _splitpath (filename, drive, dir, name, ext);
-    _makepath (fname, drive, dir, name, ext);
-#else
 	strcpy(fname, filename);
-//	strupr(fname);
-#endif
-
-#ifdef __WIN32__
-    memmove (&ext [0], &ext[1], 4);
-#endif
-
     int32 TotalFileSize = 0;
 
-#ifdef UNZIP_SUPPORT
-
-    if( checkzip( fname ) )
-    {
-    	if (!LoadZip (fname, &TotalFileSize, &HeaderCount))
-    	    return (FALSE);
-
-    	strcpy (ROMFilename, fname);
-    }
-    else
-#endif
-    {
 	if ((ROMFile = OPEN_STREAM (fname, "rb")) == NULL)
 	    return (FALSE);
 
@@ -378,285 +336,253 @@ again:
 
 	do
 	{
-	    FileSize = READ_STREAM (ptr, MAX_ROM_SIZE + 0x200 - (ptr - ROM), ROMFile);
-	    CLOSE_STREAM (ROMFile);
-	    int calc_size = (FileSize / 0x2000) * 0x2000;
+		FileSize = READ_STREAM (ptr, MAX_ROM_SIZE + 0x200 - (ptr - ROM), ROMFile);
+		CLOSE_STREAM (ROMFile);
+		int calc_size = (FileSize / 0x2000) * 0x2000;
 
-	    if ((FileSize - calc_size == 512 && !Settings.ForceNoHeader) ||
-		Settings.ForceHeader)
-	    {
-		memmove (ptr, ptr + 512, calc_size);
-		HeaderCount++;
-		FileSize -= 512;
-	    }
-	    ptr += FileSize;
-	    TotalFileSize += FileSize;
+		if ((FileSize - calc_size == 512 && !Settings.ForceNoHeader) ||
+			Settings.ForceHeader)
+		{
+			memmove (ptr, ptr + 512, calc_size);
+			HeaderCount++;
+			FileSize -= 512;
+		}
+		ptr += FileSize;
+		TotalFileSize += FileSize;
 
-	    int len;
-	    if (ptr - ROM < MAX_ROM_SIZE + 0x200 &&
-		(isdigit (ext [0]) && ext [1] == 0 && ext [0] < '9'))
-	    {
-		more = TRUE;
-		ext [0]++;
-#ifdef __WIN32__
-                memmove (&ext [1], &ext [0], 4);
-                ext [0] = '.';
-#endif
-#ifndef _SNESPPC
-		_makepath (fname, drive, dir, name, ext);
-#endif
+		int len;
+		if (ptr - ROM < MAX_ROM_SIZE + 0x200 &&
+			(isdigit (ext [0]) && ext [1] == 0 && ext [0] < '9'))
+		{
+			more = TRUE;
+			ext [0]++;
 		}
-	    else
-	    if (ptr - ROM < MAX_ROM_SIZE + 0x200 &&
-		(((len = strlen (name)) == 7 || len == 8) &&
-		 strncasecmp (name, "sf", 2) == 0 &&
-		 isdigit (name [2]) && isdigit (name [3]) && isdigit (name [4]) &&
-		 isdigit (name [5]) && isalpha (name [len - 1])))
-	    {
-		more = TRUE;
-		name [len - 1]++;
-#ifdef __WIN32__
-                memmove (&ext [1], &ext [0], 4);
-                ext [0] = '.';
-#endif
-#ifndef _SNESPPC
-		_makepath (fname, drive, dir, name, ext);
-#endif
+		else
+			if (ptr - ROM < MAX_ROM_SIZE + 0x200 &&
+				(((len = strlen (name)) == 7 || len == 8) &&
+					strncasecmp (name, "sf", 2) == 0 &&
+						isdigit (name [2]) && isdigit (name [3]) && isdigit (name [4]) &&
+							isdigit (name [5]) && isalpha (name [len - 1])))
+		{
+			more = TRUE;
+			name [len - 1]++;
 		}
-	    else
-		more = FALSE;
+		else
+			more = FALSE;
 	} while (more && (ROMFile = OPEN_STREAM (fname, "rb")) != NULL);
-    }
 
-    if (HeaderCount == 0)
-	S9xMessage (S9X_INFO, S9X_HEADERS_INFO, "No ROM file header found.");
-    else
-    {
-	if (HeaderCount == 1)
-	    S9xMessage (S9X_INFO, S9X_HEADERS_INFO,
-			"Found ROM file header (and ignored it).");
+	if (HeaderCount == 0)
+		S9xMessage (S9X_INFO, S9X_HEADERS_INFO, "No ROM file header found.");
 	else
-	    S9xMessage (S9X_INFO, S9X_HEADERS_INFO,
-			"Found multiple ROM file headers (and ignored them).");
-    }
+	{
+		if (HeaderCount == 1)
+			S9xMessage (S9X_INFO, S9X_HEADERS_INFO,
+		"Found ROM file header (and ignored it).");
+		else
+			S9xMessage (S9X_INFO, S9X_HEADERS_INFO,
+		"Found multiple ROM file headers (and ignored them).");
+	}
 
-    CheckForIPSPatch (filename, HeaderCount != 0, TotalFileSize);
-    int orig_hi_score, orig_lo_score;
-    int hi_score, lo_score;
+	CheckForIPSPatch (filename, HeaderCount != 0, TotalFileSize);
+	int orig_hi_score, orig_lo_score;
+	int hi_score, lo_score;
 
-    orig_hi_score = hi_score = ScoreHiROM (FALSE);
-    orig_lo_score = lo_score = ScoreLoROM (FALSE);
+	orig_hi_score = hi_score = ScoreHiROM (FALSE);
+	orig_lo_score = lo_score = ScoreLoROM (FALSE);
     
-    if (HeaderCount == 0 && !Settings.ForceNoHeader &&
-	((hi_score > lo_score && ScoreHiROM (TRUE) > hi_score) ||
-	 (hi_score <= lo_score && ScoreLoROM (TRUE) > lo_score)))
-    {
-	memmove (Memory.ROM, Memory.ROM + 512, TotalFileSize - 512);
-	TotalFileSize -= 512;
-	S9xMessage (S9X_INFO, S9X_HEADER_WARNING, 
-		    "Try specifying the -nhd command line option if the game doesn't work\n");
-    }
-
-    CalculatedSize = (TotalFileSize / 0x2000) * 0x2000;
-    ZeroMemory (ROM + CalculatedSize, MAX_ROM_SIZE - CalculatedSize);
-
-    // Check for cherryroms.com DAIKAIJYUMONOGATARI2
-
-    if (CalculatedSize == 0x500000 && 
-	strncmp ((const char *)&ROM [0x40ffc0], "DAIKAIJYUMONOGATARI2", 20) == 0 &&
-	strncmp ((const char *)&ROM [0x40ffb0], "18AE6J", 6) == 0 &&
-	memcmp (&ROM[0x40ffb0], &ROM [0xffb0], 0x30))
-    {
-	memmove (&ROM[0x100000], ROM, 0x500000);
-	memmove (ROM, &ROM[0x500000], 0x100000);
-    }
-
-    Interleaved = Settings.ForceInterleaved || Settings.ForceInterleaved2;
-    if (Settings.ForceLoROM || (!Settings.ForceHiROM && lo_score >= hi_score))
-    {
-	LoROM = TRUE;
-	HiROM = FALSE;
-
-	// Ignore map type byte if not 0x2x or 0x3x
-	if ((ROM [0x7fd5] & 0xf0) == 0x20 || (ROM [0x7fd5] & 0xf0) == 0x30)
+	if (HeaderCount == 0 && !Settings.ForceNoHeader &&
+		((hi_score > lo_score && ScoreHiROM (TRUE) > hi_score) ||
+			(hi_score <= lo_score && ScoreLoROM (TRUE) > lo_score)))
 	{
-	    switch (ROM [0x7fd5] & 0xf)
-	    {
-	    case 1:
-		if (strncmp ((char *) &ROM [0x7fc0], "TREASURE HUNTER G", 17) != 0)
-		    Interleaved = TRUE;
-		break;
-	    case 2:
-#if 0
-		if (!Settings.ForceLoROM &&
-		    strncmp ((char *) &ROM [0x7fc0], "SUPER FORMATION SOCCE", 21) != 0 &&
-		    strncmp ((char *) &ROM [0x7fc0], "Star Ocean", 10) != 0)
+		memmove (Memory.ROM, Memory.ROM + 512, TotalFileSize - 512);
+		TotalFileSize -= 512;
+		S9xMessage (S9X_INFO, S9X_HEADER_WARNING, 
+		"Try specifying the -nhd command line option if the game doesn't work\n");
+	}
+
+	CalculatedSize = (TotalFileSize / 0x2000) * 0x2000;
+	ZeroMemory (ROM + CalculatedSize, MAX_ROM_SIZE - CalculatedSize);
+
+	// Check for cherryroms.com DAIKAIJYUMONOGATARI2
+
+	if (CalculatedSize == 0x500000 && 
+		strncmp ((const char *)&ROM [0x40ffc0], "DAIKAIJYUMONOGATARI2", 20) == 0 &&
+			strncmp ((const char *)&ROM [0x40ffb0], "18AE6J", 6) == 0 &&
+				memcmp (&ROM[0x40ffb0], &ROM [0xffb0], 0x30))
+	{
+		memmove (&ROM[0x100000], ROM, 0x500000);
+		memmove (ROM, &ROM[0x500000], 0x100000);
+	}
+
+	Interleaved = Settings.ForceInterleaved || Settings.ForceInterleaved2;
+	if (Settings.ForceLoROM || (!Settings.ForceHiROM && lo_score >= hi_score))
+	{
+		LoROM = TRUE;
+		HiROM = FALSE;
+
+		// Ignore map type byte if not 0x2x or 0x3x
+		if ((ROM [0x7fd5] & 0xf0) == 0x20 || (ROM [0x7fd5] & 0xf0) == 0x30)
 		{
-		    LoROM = FALSE;
-		    HiROM = TRUE;
+			switch (ROM [0x7fd5] & 0xf)
+			{
+				case 1:
+				if (strncmp ((char *) &ROM [0x7fc0], "TREASURE HUNTER G", 17) != 0)
+					Interleaved = TRUE;
+				break;
+				case 2:
+				break;
+				case 5:
+				Interleaved = TRUE;
+				Tales = TRUE;
+				break;
+			}
 		}
-#endif
-		break;
-	    case 5:
-		Interleaved = TRUE;
-		Tales = TRUE;
-		break;
-	    }
-	}
-    }
-    else
-    {
-	if ((ROM [0xffd5] & 0xf0) == 0x20 || (ROM [0xffd5] & 0xf0) == 0x30)
-	{
-	    switch (ROM [0xffd5] & 0xf)
-	    {
-	    case 0:
-	    case 3:
-		Interleaved = TRUE;
-		break;
-	    }
-	}
-	LoROM = FALSE;
-	HiROM = TRUE;
-    }
-
-    // More 
-    if (!Settings.ForceHiROM && !Settings.ForceLoROM &&
-	!Settings.ForceInterleaved && !Settings.ForceInterleaved2 &&
-	!Settings.ForceNotInterleaved && !Settings.ForcePAL &&
-	!Settings.ForceSuperFX && !Settings.ForceDSP1 &&
-	!Settings.ForceSA1 && !Settings.ForceC4 &&
-	!Settings.ForceSDD1)
-    {
-	if (strncmp ((char *) &ROM [0x7fc0], "YUYU NO QUIZ DE GO!GO!", 22) == 0)
-	{
-	    LoROM = TRUE;
-	    HiROM = FALSE;
-	    Interleaved = FALSE;
-	}
-	else 
-	if (strncmp ((char *) &ROM [0x7fc0], "SP MOMOTAROU DENTETSU2", 22) == 0)
-	{
-	    LoROM = TRUE;
-	    HiROM = FALSE;
-	    Interleaved = FALSE;
-	}
-	else 
-	if (CalculatedSize == 0x100000 && 
-	    strncmp ((char *) &ROM [0xffc0], "WWF SUPER WRESTLEMANIA", 22) == 0)
-	{
-	    int cvcount;
-
-	    memmove (&ROM[0x100000] , ROM, 0x100000);
-	    for (cvcount = 0; cvcount < 16; cvcount++)
-	    {
-		memmove (&ROM[0x8000 * cvcount], &ROM[0x10000 * cvcount + 0x100000 + 0x8000], 0x8000);
-		memmove (&ROM[0x8000 * cvcount + 0x80000], &ROM[0x10000 * cvcount + 0x100000], 0x8000);
-	    }
-	    LoROM = TRUE;
-	    HiROM = FALSE;
-	    ZeroMemory (ROM + CalculatedSize, MAX_ROM_SIZE - CalculatedSize);
-	}
-    }
-
-    if (!Settings.ForceNotInterleaved && Interleaved)
-    {
-	CPU.TriedInterleavedMode2 = TRUE;
-	S9xMessage (S9X_INFO, S9X_ROM_INTERLEAVED_INFO,
-		    "ROM image is in interleaved format - converting...");
-
-	int nblocks = CalculatedSize >> 16;
-#if 0
-	int step = 64;
-
-	while (nblocks <= step)
-	    step >>= 1;
-	    
-	nblocks = step;
-#endif
-	uint8 blocks [256];
-
-	if (Tales)
-	{
-	    nblocks = 0x60;
-	    for (i = 0; i < 0x40; i += 2)
-	    {
-		blocks [i + 0] = (i >> 1) + 0x20;
-		blocks [i + 1] = (i >> 1) + 0x00;
-	    }
-	    for (i = 0; i < 0x80; i += 2)
-	    {
-		blocks [i + 0x40] = (i >> 1) + 0x80;
-		blocks [i + 0x41] = (i >> 1) + 0x40;
-	    }
-	    LoROM = FALSE;
-	    HiROM = TRUE;
-	}
-	else
-	if (Settings.ForceInterleaved2)
-	{
-	    for (i = 0; i < nblocks * 2; i++)
-	    {
-		blocks [i] = (i & ~0x1e) | ((i & 2) << 2) | ((i & 4) << 2) |
-			     ((i & 8) >> 2) | ((i & 16) >> 2);
-	    }
 	}
 	else
 	{
-	    bool8_32 t = LoROM;
-
-	    LoROM = HiROM;
-	    HiROM = t;
-
-	    for (i = 0; i < nblocks; i++)
-	    {
-		blocks [i * 2] = i + nblocks;
-		blocks [i * 2 + 1] = i;
-	    }
-	}
-
-	uint8 *tmp = (uint8 *) malloc (0x8000);
-	if (tmp)
-	{
-	    for (i = 0; i < nblocks * 2; i++)
-	    {
-		for (int j = i; j < nblocks * 2; j++)
+		if ((ROM [0xffd5] & 0xf0) == 0x20 || (ROM [0xffd5] & 0xf0) == 0x30)
 		{
-		    if (blocks [j] == i)
-		    {
-			memmove (tmp, &ROM [blocks [j] * 0x8000], 0x8000);
-			memmove (&ROM [blocks [j] * 0x8000], 
-				 &ROM [blocks [i] * 0x8000], 0x8000);
-			memmove (&ROM [blocks [i] * 0x8000], tmp, 0x8000);
-			uint8 b = blocks [j];
-			blocks [j] = blocks [i];
-			blocks [i] = b;
-			break;
-		    }
+			switch (ROM [0xffd5] & 0xf)
+			{
+				case 0:
+				case 3:
+				Interleaved = TRUE;
+				break;
+			}
 		}
-	    }
-	    free ((char *) tmp);
+		LoROM = FALSE;
+		HiROM = TRUE;
 	}
 
-	hi_score = ScoreHiROM (FALSE);
-	lo_score = ScoreLoROM (FALSE);
-
-	if ((HiROM &&
-	     (lo_score >= hi_score || hi_score < 0)) ||
-	    (LoROM && 
-	     (hi_score > lo_score || lo_score < 0)))
+	// More 
+	if (!Settings.ForceHiROM && !Settings.ForceLoROM &&
+		!Settings.ForceInterleaved && !Settings.ForceInterleaved2 &&
+			!Settings.ForceNotInterleaved && !Settings.ForcePAL &&
+				!Settings.ForceSuperFX && !Settings.ForceDSP1 &&
+					!Settings.ForceSA1 && !Settings.ForceC4 &&
+						!Settings.ForceSDD1)
 	{
-	    if (retry_count == 0)
-	    {
-		S9xMessage (S9X_INFO, S9X_ROM_CONFUSING_FORMAT_INFO,
-			    "ROM lied about its type! Trying again.");
-		Settings.ForceNotInterleaved = TRUE;
-		Settings.ForceInterleaved = FALSE;
-		retry_count++;
-		goto again;
-	    }
+		if (strncmp ((char *) &ROM [0x7fc0], "YUYU NO QUIZ DE GO!GO!", 22) == 0)
+		{
+			LoROM = TRUE;
+			HiROM = FALSE;
+			Interleaved = FALSE;
+		}
+		else 
+			if (strncmp ((char *) &ROM [0x7fc0], "SP MOMOTAROU DENTETSU2", 22) == 0)
+		{
+			LoROM = TRUE;
+			HiROM = FALSE;
+			Interleaved = FALSE;
+		}
+		else 
+			if (CalculatedSize == 0x100000 && 
+				strncmp ((char *) &ROM [0xffc0], "WWF SUPER WRESTLEMANIA", 22) == 0)
+		{
+			int cvcount;
+
+			memmove (&ROM[0x100000] , ROM, 0x100000);
+			for (cvcount = 0; cvcount < 16; cvcount++)
+			{
+				memmove (&ROM[0x8000 * cvcount], &ROM[0x10000 * cvcount + 0x100000 + 0x8000], 0x8000);
+				memmove (&ROM[0x8000 * cvcount + 0x80000], &ROM[0x10000 * cvcount + 0x100000], 0x8000);
+			}
+			LoROM = TRUE;
+			HiROM = FALSE;
+			ZeroMemory (ROM + CalculatedSize, MAX_ROM_SIZE - CalculatedSize);
+		}
 	}
-    }
+
+	if (!Settings.ForceNotInterleaved && Interleaved)
+	{
+		CPU.TriedInterleavedMode2 = TRUE;
+		S9xMessage (S9X_INFO, S9X_ROM_INTERLEAVED_INFO,
+		"ROM image is in interleaved format - converting...");
+
+		int nblocks = CalculatedSize >> 16;
+		uint8 blocks [256];
+
+		if (Tales)
+		{
+			nblocks = 0x60;
+			for (i = 0; i < 0x40; i += 2)
+			{
+				blocks [i + 0] = (i >> 1) + 0x20;
+				blocks [i + 1] = (i >> 1) + 0x00;
+			}
+			for (i = 0; i < 0x80; i += 2)
+			{
+				blocks [i + 0x40] = (i >> 1) + 0x80;
+				blocks [i + 0x41] = (i >> 1) + 0x40;
+			}
+			LoROM = FALSE;
+			HiROM = TRUE;
+		}
+		else
+			if (Settings.ForceInterleaved2)
+		{
+			for (i = 0; i < nblocks * 2; i++)
+			{
+				blocks [i] = (i & ~0x1e) | ((i & 2) << 2) | ((i & 4) << 2) |
+					((i & 8) >> 2) | ((i & 16) >> 2);
+			}
+		}
+		else
+		{
+			bool8_32 t = LoROM;
+
+			LoROM = HiROM;
+			HiROM = t;
+
+			for (i = 0; i < nblocks; i++)
+			{
+				blocks [i * 2] = i + nblocks;
+				blocks [i * 2 + 1] = i;
+			}
+		}
+
+		uint8 *tmp = (uint8 *) malloc (0x8000);
+		if (tmp)
+		{
+			for (i = 0; i < nblocks * 2; i++)
+			{
+				for (int j = i; j < nblocks * 2; j++)
+				{
+					if (blocks [j] == i)
+					{
+						memmove (tmp, &ROM [blocks [j] * 0x8000], 0x8000);
+						memmove (&ROM [blocks [j] * 0x8000], 
+						&ROM [blocks [i] * 0x8000], 0x8000);
+						memmove (&ROM [blocks [i] * 0x8000], tmp, 0x8000);
+						uint8 b = blocks [j];
+						blocks [j] = blocks [i];
+						blocks [i] = b;
+						break;
+					}
+				}
+			}
+			free ((char *) tmp);
+		}
+
+		hi_score = ScoreHiROM (FALSE);
+		lo_score = ScoreLoROM (FALSE);
+
+		if ((HiROM &&
+			(lo_score >= hi_score || hi_score < 0)) ||
+				(LoROM && 
+					(hi_score > lo_score || lo_score < 0)))
+		{
+			if (retry_count == 0)
+			{
+				S9xMessage (S9X_INFO, S9X_ROM_CONFUSING_FORMAT_INFO,
+				"ROM lied about its type! Trying again.");
+				Settings.ForceNotInterleaved = TRUE;
+				Settings.ForceInterleaved = FALSE;
+				retry_count++;
+				goto again;
+			}
+		}
+	}
     FreeSDD1Data ();
     InitROM (Tales);
 	
