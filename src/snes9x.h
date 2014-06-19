@@ -45,60 +45,19 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-
-#ifdef __WIN32__
-#include "..\wsnes9x.h"
-#include "..\zlib\zlib.h"
-#endif
-
 #include "port.h"
 #include "65c816.h"
 #include "messages.h"
-
-#if defined(USE_GLIDE) && !defined(GFX_MULTI_FORMAT)
-#define GFX_MULTI_FORMAT
-#endif
+#include "../libretro/memstream.h"
 
 #define ROM_NAME_LEN 23
 
-#ifdef __LIBRETRO__
-#include "../libretro/memstream.h"
 #define STREAM memstream_t *
 #define READ_STREAM(p, l, s)     memstream_read(s, p, l)
 #define WRITE_STREAM(p, l, s)    memstream_write(s, p, l)
 #define OPEN_STREAM(f, m)        memstream_open()
 #define CLOSE_STREAM(s)          memstream_close(s)
-#define SEEK_STREAM(p,r,s)   memstream_seek(p,r,s)
-#elif defined(ZLIB)
-//#ifndef __WIN32__
-#include "zlib.h"
-//#endif
-#define STREAM gzFile
-#define READ_STREAM(p,l,s) gzread (s,p,l)
-#define WRITE_STREAM(p,l,s) gzwrite (s,p,l)
-#define OPEN_STREAM(f,m) gzopen (f,m)
-#define CLOSE_STREAM(s) gzclose (s)
-#define SEEK_STREAM(p,r,s) gzseek(s,p,r)
-#else
-#ifdef __GP32__
-#define STREAM long * //F_HANDLE * 
-#define READ_STREAM(p,l,s) gp32_fread ((unsigned char*)p,(long)l,s)
-#define WRITE_STREAM(p,l,s) gp32_fwrite ((unsigned char*)p,(long)l,s)
-#define OPEN_STREAM(f,m) gp32_fopen ((char*)f,(char*)m)
-#define CLOSE_STREAM(s) gp32_fclose (s)
-#define SEEK_STREAM(p,r,s) gp32_fseek(p,r,s)
-
-#else
-#define STREAM FILE *
-#define READ_STREAM(p,l,s) fread (p,1,l,s)
-#define WRITE_STREAM(p,l,s) fwrite (p,1,l,s)
-#define OPEN_STREAM(f,m) fopen (f,m)
-#define CLOSE_STREAM(s) fclose (s)
-#define SEEK_STREAM(p,r,s) fseek(s,p,r)
-#define FROM_CURRENT SEEK_CUR
-#endif
-#endif
-
+#define SEEK_STREAM(p,r,s)       memstream_seek(p,r,s)
 
 /* SNES screen width and height */
 #define SNES_WIDTH		256
@@ -113,15 +72,15 @@
 #define SPC700_TO_65C816_RATIO	2
 #define AUTO_FRAMERATE		200
 
-#define PPU_IGNORE_FIXEDCOLCHANGES 			(1<<0)
-#define PPU_IGNORE_WINDOW					(1<<1)
-#define PPU_IGNORE_ADDSUB					(1<<2)
-#define PPU_IGNORE_PALWRITE				 	(1<<3)
-#define GFX_IGNORE_OBJ				 		(1<<4)
-#define GFX_IGNORE_BG0				 		(1<<5)
-#define GFX_IGNORE_BG1				 		(1<<6)
-#define GFX_IGNORE_BG2				 		(1<<7)
-#define GFX_IGNORE_BG3				 		(1<<8)
+#define PPU_IGNORE_FIXEDCOLCHANGES 	(1<<0)
+#define PPU_IGNORE_WINDOW		(1<<1)
+#define PPU_IGNORE_ADDSUB		(1<<2)
+#define PPU_IGNORE_PALWRITE		(1<<3)
+#define GFX_IGNORE_OBJ			(1<<4)
+#define GFX_IGNORE_BG0			(1<<5)
+#define GFX_IGNORE_BG1			(1<<6)
+#define GFX_IGNORE_BG2			(1<<7)
+#define GFX_IGNORE_BG3			(1<<8)
 
 // NTSC master clock signal 21.47727MHz
 // PPU: master clock / 4
@@ -169,23 +128,23 @@ enum {
     SNES_MOUSE_SWAPPED,
     SNES_MOUSE,
     SNES_SUPERSCOPE,
-	SNES_JUSTIFIER,
-	SNES_JUSTIFIER_2,
+    SNES_JUSTIFIER,
+    SNES_JUSTIFIER_2,
     SNES_MAX_CONTROLLER_OPTIONS
 };
 
-#define DEBUG_MODE_FLAG	    (1 << 0)
-#define TRACE_FLAG			(1 << 1)
-#define SINGLE_STEP_FLAG    (1 << 2)
-#define BREAK_FLAG			(1 << 3)
-#define SCAN_KEYS_FLAG	    (1 << 4)
-#define SAVE_SNAPSHOT_FLAG  (1 << 5)
-#define DELAYED_NMI_FLAG    (1 << 6)
-#define NMI_FLAG			(1 << 7)
-#define PROCESS_SOUND_FLAG  (1 << 8)
-#define FRAME_ADVANCE_FLAG  (1 << 9)
-#define DELAYED_NMI_FLAG2   (1 << 10)
-#define IRQ_PENDING_FLAG    (1 << 11)
+#define DEBUG_MODE_FLAG		(1 << 0)
+#define TRACE_FLAG		(1 << 1)
+#define SINGLE_STEP_FLAG	(1 << 2)
+#define BREAK_FLAG		(1 << 3)
+#define SCAN_KEYS_FLAG		(1 << 4)
+#define SAVE_SNAPSHOT_FLAG	(1 << 5)
+#define DELAYED_NMI_FLAG	(1 << 6)
+#define NMI_FLAG		(1 << 7)
+#define PROCESS_SOUND_FLAG	(1 << 8)
+#define FRAME_ADVANCE_FLAG	(1 << 9)
+#define DELAYED_NMI_FLAG2	(1 << 10)
+#define IRQ_PENDING_FLAG	(1 << 11)
 
 #ifdef VAR_CYCLES
 #define ONE_CYCLE 6
