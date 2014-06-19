@@ -98,7 +98,7 @@ typedef short		int16_32;
 #define PACKING __attribute__ ((packed))
 #define ALIGN_BY_ONE  __attribute__ ((aligned (1), packed))
 #define LSB_FIRST
-#undef  FAST_LSB_WORD_ACCESS
+#define FAST_LSB_WORD_ACCESS
 #define SUPER_FX
 #ifdef ASMCPU
 	#define ASM_SPC700
