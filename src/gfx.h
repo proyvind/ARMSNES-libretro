@@ -146,16 +146,8 @@ extern uint32 even_high [4][16];
 extern uint32 even_low [4][16];
 extern SBG BG;
 extern uint32 DirectColourMaps [8][256];
-
-//extern uint8 add32_32 [32][32];
-//extern uint8 add32_32_half [32][32];
-//extern uint8 sub32_32 [32][32];
-//extern uint8 sub32_32_half [32][32];
 extern uint8 mul_brightness [16][32];
 
-// Could use BSWAP instruction on Intel port...
-//#define SWAP_DWORD(dw) dw = ((dw & 0xff) << 24) | ((dw & 0xff00) << 8) | \
-//		            ((dw & 0xff0000) >> 8) | ((dw & 0xff000000) >> 24)
 // by Harald Kipp, from http://www.ethernut.de/en/documents/arm-inline-asm.html
 #define SWAP_DWORD(val) \
     __asm__ __volatile__ ( \
@@ -168,25 +160,8 @@ extern uint8 mul_brightness [16][32];
         : "r3", "cc" \
     );
 
-
-#ifdef FAST_LSB_WORD_ACCESS
-#define READ_2BYTES(s) (*(uint16 *) (s))
-#define WRITE_2BYTES(s, d) *(uint16 *) (s) = (d)
-#else
-#ifdef LSB_FIRST
-#define READ_2BYTES(s) (*(uint16 *) (s))
-#define WRITE_2BYTES(s, d) *(uint16 *) (s) = (d)
-
-//#define READ_2BYTES(s) (*(uint8 *) (s) | (*((uint8 *) (s) + 1) << 8))
-//#define WRITE_2BYTES(s, d) *(uint8 *) (s) = (d), \
-//			   *((uint8 *) (s) + 1) = (d) >> 8
-#else  // else MSB_FISRT
-#define READ_2BYTES(s) (*(uint8 *) (s) | (*((uint8 *) (s) + 1) << 8))
-#define WRITE_2BYTES(s, d) *(uint8 *) (s) = (d), \
-			   *((uint8 *) (s) + 1) = (d) >> 8
-#endif // LSB_FIRST
-#endif // i386
-
+#define READ_2BYTES(s) READ_WORD(s)
+#define WRITE_2BYTES(s, d) WRITE_WORD(s, d)
 #define SUB_SCREEN_DEPTH 0
 #define MAIN_SCREEN_DEPTH 32
 

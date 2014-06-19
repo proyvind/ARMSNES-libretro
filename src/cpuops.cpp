@@ -253,11 +253,7 @@ static void Op29M1 (void)
 
 static void Op29M0 (void)
 {
-#ifdef FAST_LSB_WORD_ACCESS
-    Registers.A.W &= *(uint16 *) CPU.PC;
-#else
-    Registers.A.W &= *CPU.PC + (*(CPU.PC + 1) << 8);
-#endif
+    Registers.A.W &= READ_WORD(CPU.PC);
     CPU.PC += 2;
 #ifdef VAR_CYCLES
     CPU.Cycles += CPU.MemSpeedx2;
@@ -506,11 +502,7 @@ static void Op89M1 (void)
 
 static void Op89M0 (void)
 {
-#ifdef FAST_LSB_WORD_ACCESS
-    ICPU._Zero = (Registers.A.W & *(uint16 *) CPU.PC) != 0;
-#else
-    ICPU._Zero = (Registers.A.W & (*CPU.PC + (*(CPU.PC + 1) << 8))) != 0;
-#endif	
+    ICPU._Zero = (Registers.A.W & READ_WORD(CPU.PC)) != 0;
 #ifdef VAR_CYCLES
     CPU.Cycles += CPU.MemSpeedx2;
 #endif
@@ -579,12 +571,7 @@ static void OpC9M1 (void)
 
 static void OpC9M0 (void)
 {
-#ifdef FAST_LSB_WORD_ACCESS    
-    long s9xInt32 = (long) Registers.A.W - (long) *(uint16 *) CPU.PC;
-#else
-    long s9xInt32 = (long) Registers.A.W -
-	    (long) (*CPU.PC + (*(CPU.PC + 1) << 8));
-#endif
+    long s9xInt32 = (long) Registers.A.W - (long) READ_WORD(CPU.PC);
     ICPU._Carry = s9xInt32 >= 0;
     SetZN16 ((uint16) s9xInt32);
     CPU.PC += 2;
@@ -776,12 +763,7 @@ static void OpE0X1 (void)
 
 static void OpE0X0 (void)
 {
-#ifdef FAST_LSB_WORD_ACCESS    
-    long s9xInt32 = (long) Registers.X.W - (long) *(uint16 *) CPU.PC;
-#else
-    long s9xInt32 = (long) Registers.X.W -
-	    (long) (*CPU.PC + (*(CPU.PC + 1) << 8));
-#endif
+    long s9xInt32 = (long) Registers.X.W - (long) READ_WORD(CPU.PC);
     ICPU._Carry = s9xInt32 >= 0;
     SetZN16 ((uint16) s9xInt32);
     CPU.PC += 2;
@@ -829,12 +811,7 @@ static void OpC0X1 (void)
 
 static void OpC0X0 (void)
 {
-#ifdef FAST_LSB_WORD_ACCESS    
-    long s9xInt32 = (long) Registers.Y.W - (long) *(uint16 *) CPU.PC;
-#else
-    long s9xInt32 = (long) Registers.Y.W -
-	    (long) (*CPU.PC + (*(CPU.PC + 1) << 8));
-#endif
+    long s9xInt32 = (long) Registers.Y.W - (long) READ_WORD(CPU.PC);
     ICPU._Carry = s9xInt32 >= 0;
     SetZN16 ((uint16) s9xInt32);
     CPU.PC += 2;
@@ -942,11 +919,7 @@ static void Op49M1 (void)
 
 static void Op49M0 (void)
 {
-#ifdef FAST_LSB_WORD_ACCESS
-    Registers.A.W ^= *(uint16 *) CPU.PC;
-#else
-    Registers.A.W ^= *CPU.PC + (*(CPU.PC + 1) << 8);
-#endif
+    Registers.A.W ^= READ_WORD(CPU.PC);
     CPU.PC += 2;
 #ifdef VAR_CYCLES
     CPU.Cycles += CPU.MemSpeedx2;
@@ -1196,12 +1169,7 @@ static void OpA9M1 (void)
 
 static void OpA9M0 (void)
 {
-#ifdef FAST_LSB_WORD_ACCESS
-    Registers.A.W = *(uint16 *) CPU.PC;
-#else
-    Registers.A.W = *CPU.PC + (*(CPU.PC + 1) << 8);
-#endif
-
+    Registers.A.W = READ_WORD(CPU.PC);
     CPU.PC += 2;
 #ifdef VAR_CYCLES
     CPU.Cycles += CPU.MemSpeedx2;
@@ -1391,11 +1359,7 @@ static void OpA2X1 (void)
 
 static void OpA2X0 (void)
 {
-#ifdef FAST_LSB_WORD_ACCESS
-    Registers.X.W = *(uint16 *) CPU.PC;
-#else
-    Registers.X.W = *CPU.PC + (*(CPU.PC + 1) << 8);
-#endif
+    Registers.X.W = READ_WORD(CPU.PC);
     CPU.PC += 2;
 #ifdef VAR_CYCLES
     CPU.Cycles += CPU.MemSpeedx2;
@@ -1464,12 +1428,7 @@ static void OpA0X1 (void)
 
 static void OpA0X0 (void)
 {
-#ifdef FAST_LSB_WORD_ACCESS
-    Registers.Y.W = *(uint16 *) CPU.PC;
-#else
-    Registers.Y.W = *CPU.PC + (*(CPU.PC + 1) << 8);
-#endif
-
+    Registers.Y.W = READ_WORD(CPU.PC);
     CPU.PC += 2;
 #ifdef VAR_CYCLES
     CPU.Cycles += CPU.MemSpeedx2;
@@ -1599,11 +1558,7 @@ static void Op09M1 (void)
 
 static void Op09M0 (void)
 {
-#ifdef FAST_LSB_WORD_ACCESS
-    Registers.A.W |= *(uint16 *) CPU.PC;
-#else
-    Registers.A.W |= *CPU.PC + (*(CPU.PC + 1) << 8);
-#endif
+    Registers.A.W |= READ_WORD(CPU.PC);
     CPU.PC += 2;
 #ifdef VAR_CYCLES
     CPU.Cycles += CPU.MemSpeedx2;

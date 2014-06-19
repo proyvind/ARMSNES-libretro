@@ -169,12 +169,7 @@ INLINE uint16 S9xGetWord (uint32 Address)
 	if (Memory.BlockIsRAM [block])
 	    CPU.WaitAddress = CPU.PCAtOpcodeStart;
 #endif
-#ifdef FAST_LSB_WORD_ACCESS
-	return (*(uint16 *) (GetAddress + (Address & 0xffff)));
-#else
-	return (*(GetAddress + (Address & 0xffff)) |
-		(*(GetAddress + (Address & 0xffff) + 1) << 8));
-#endif	
+	return READ_WORD(GetAddress + (Address & 0xffff));
     }
 
     switch ((intptr_t) GetAddress)
@@ -411,19 +406,9 @@ INLINE void S9xSetWord (uint16 Word, uint32 Address)
 	    SA1.WaitCounter = 0;
 	}
 	SetAddress -= Address & 0xffff;
-#ifdef FAST_LSB_WORD_ACCESS
-	*(uint16 *) SetAddress = Word;
+	WRITE_WORD(SetAddress, Word);
 #else
-	*(SetAddress + (Address & 0xffff)) = (uint8) Word;
-	*(SetAddress + ((Address + 1) & 0xffff)) = Word >> 8;
-#endif
-#else
-#ifdef FAST_LSB_WORD_ACCESS
-	*(uint16 *) (SetAddress + (Address & 0xffff)) = Word;
-#else
-	*(SetAddress + (Address & 0xffff)) = (uint8) Word;
-	*(SetAddress + ((Address + 1) & 0xffff)) = Word >> 8;
-#endif
+	WRITE_WORD(SetAddress + (Address & 0xffff), Word);
 #endif
 	return;
     }

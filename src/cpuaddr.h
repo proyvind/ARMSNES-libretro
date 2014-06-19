@@ -71,11 +71,7 @@ STATIC inline void Relative ()
 
 STATIC inline void RelativeLong ()
 {
-#ifdef FAST_LSB_WORD_ACCESS
-    OpAddress = *(uint16 *) CPU.PC;
-#else
-    OpAddress = *CPU.PC + (*(CPU.PC + 1) << 8);
-#endif
+    OpAddress = READ_WORD(CPU.PC);
 #ifdef VAR_CYCLES
     CPU.Cycles += CPU.MemSpeedx2 + ONE_CYCLE;
 #endif
@@ -86,11 +82,7 @@ STATIC inline void RelativeLong ()
 
 STATIC inline void AbsoluteIndexedIndirect ()
 {
-#ifdef FAST_LSB_WORD_ACCESS
-    OpAddress = (Registers.X.W + *(uint16 *) CPU.PC) & 0xffff;
-#else
-    OpAddress = (Registers.X.W + *CPU.PC + (*(CPU.PC + 1) << 8)) & 0xffff;
-#endif
+    OpAddress = (Registers.X.W + READ_WORD(CPU.PC)) & 0xffff;
 #ifdef VAR_CYCLES
     CPU.Cycles += CPU.MemSpeedx2;
 #endif
@@ -100,12 +92,7 @@ STATIC inline void AbsoluteIndexedIndirect ()
 
 STATIC inline void AbsoluteIndirectLong ()
 {
-#ifdef FAST_LSB_WORD_ACCESS
-    OpAddress = *(uint16 *) CPU.PC;
-#else
-    OpAddress = *CPU.PC + (*(CPU.PC + 1) << 8);
-#endif
-
+    OpAddress = READ_WORD(CPU.PC);
 #ifdef VAR_CYCLES
     CPU.Cycles += CPU.MemSpeedx2;
 #endif
@@ -115,12 +102,7 @@ STATIC inline void AbsoluteIndirectLong ()
 
 STATIC inline void AbsoluteIndirect ()
 {
-#ifdef FAST_LSB_WORD_ACCESS
-    OpAddress = *(uint16 *) CPU.PC;
-#else
-    OpAddress = *CPU.PC + (*(CPU.PC + 1) << 8);
-#endif
-
+    OpAddress = READ_WORD(CPU.PC);
 #ifdef VAR_CYCLES
     CPU.Cycles += CPU.MemSpeedx2;
 #endif
@@ -130,11 +112,7 @@ STATIC inline void AbsoluteIndirect ()
 
 STATIC inline void Absolute ()
 {
-#ifdef FAST_LSB_WORD_ACCESS
-    OpAddress = *(uint16 *) CPU.PC + ICPU.ShiftedDB;
-#else
-    OpAddress = *CPU.PC + (*(CPU.PC + 1) << 8) + ICPU.ShiftedDB;
-#endif
+    OpAddress = READ_WORD(CPU.PC) + ICPU.ShiftedDB;
     CPU.PC += 2;
 #ifdef VAR_CYCLES
     CPU.Cycles += CPU.MemSpeedx2;
@@ -143,11 +121,7 @@ STATIC inline void Absolute ()
 
 STATIC inline void AbsoluteLong ()
 {
-#ifdef FAST_LSB_WORD_ACCESS
-    OpAddress = (*(uint32 *) CPU.PC) & 0xffffff;
-#else
-    OpAddress = *CPU.PC + (*(CPU.PC + 1) << 8) + (*(CPU.PC + 2) << 16);
-#endif
+    OpAddress = READ_3WORD(CPU.PC);
     CPU.PC += 3;
 #ifdef VAR_CYCLES
     CPU.Cycles += CPU.MemSpeedx2 + CPU.MemSpeed;
@@ -238,12 +212,7 @@ STATIC inline void DirectIndexedY ()
 
 STATIC inline void AbsoluteIndexedX ()
 {
-#ifdef FAST_LSB_WORD_ACCESS
-    OpAddress = ICPU.ShiftedDB + *(uint16 *) CPU.PC + Registers.X.W;
-#else
-    OpAddress = ICPU.ShiftedDB + *CPU.PC + (*(CPU.PC + 1) << 8) +
-		Registers.X.W;
-#endif
+    OpAddress = ICPU.ShiftedDB + READ_WORD(CPU.PC) + Registers.X.W;
     CPU.PC += 2;
 #ifdef VAR_CYCLES
     CPU.Cycles += CPU.MemSpeedx2;
@@ -254,12 +223,7 @@ STATIC inline void AbsoluteIndexedX ()
 
 STATIC inline void AbsoluteIndexedY ()
 {
-#ifdef FAST_LSB_WORD_ACCESS
-    OpAddress = ICPU.ShiftedDB + *(uint16 *) CPU.PC + Registers.Y.W;
-#else
-    OpAddress = ICPU.ShiftedDB + *CPU.PC + (*(CPU.PC + 1) << 8) +
-		Registers.Y.W;
-#endif    
+    OpAddress = ICPU.ShiftedDB + READ_WORD(CPU.PC) + Registers.Y.W;
     CPU.PC += 2;
 #ifdef VAR_CYCLES
     CPU.Cycles += CPU.MemSpeedx2;
@@ -270,11 +234,7 @@ STATIC inline void AbsoluteIndexedY ()
 
 STATIC inline void AbsoluteLongIndexedX ()
 {
-#ifdef FAST_LSB_WORD_ACCESS
-    OpAddress = (*(uint32 *) CPU.PC + Registers.X.W) & 0xffffff;
-#else
-    OpAddress = (*CPU.PC + (*(CPU.PC + 1) << 8) + (*(CPU.PC + 2) << 16) + Registers.X.W) & 0xffffff;
-#endif
+    OpAddress = (READ_3WORD(CPU.PC) + Registers.X.W) & 0x00ffffff;
     CPU.PC += 3;
 #ifdef VAR_CYCLES
     CPU.Cycles += CPU.MemSpeedx2 + CPU.MemSpeed;
