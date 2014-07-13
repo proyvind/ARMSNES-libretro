@@ -20,7 +20,7 @@ regpcbase	.req R12 @ 32bits address
 rscratch	.req R0  @ format : 0xhhll0000 if data and calculation or return of S9XREADBYTE	or WORD
 regopcode	.req R0  @ format : 0x000000ll
 rscratch2	.req R1  @ format : 0xhhll for calculation and value
-rscratch3	.req R2  @ 
+rscratch3	.req R2  @
 rscratch4	.req R3  @ ??????
 
 @ used for SBC opcode
@@ -86,7 +86,7 @@ reg_cpu_var .req R14
 /*****************************************************************/
 /*     Offset in SCPUState structure				 */
 /*****************************************************************/
-.equ Flags_ofs,		    0    
+.equ Flags_ofs,		    0
 .equ BranchSkip_ofs,	4
 .equ NMIActive_ofs,		5
 .equ IRQActive_ofs,		6
@@ -102,7 +102,7 @@ reg_cpu_var .req R14
 .equ	RS_ofs,		    18
 .equ	RY_ofs,		    20
 @.equ	RPC_ofs,		22
-   
+
 .equ PC_ofs,			24
 .equ Cycles_ofs,		28
 .equ PCBase_ofs,		32
@@ -250,7 +250,7 @@ reg_cpu_var .req R14
 	ORRS		rstatus, rstatus, rscratch,LSL #STATUS_SHIFTER @ 24
 	@ if Carry set, then EMULATION bit was set
 	ORRCS		rstatus,rstatus,#MASK_EMUL	
-	@ 
+	@
 	LDRH		reg_a,[reg_cpu_var,#RA_ofs]		
 	LDRH		reg_x,[reg_cpu_var,#RX_ofs]
 	LDRH		reg_y,[reg_cpu_var,#RY_ofs]
@@ -325,10 +325,10 @@ reg_cpu_var .req R14
 	STRH		rscratch,[reg_cpu_var,#RD_ofs]
 	@ rstatus & reg_d_bank is same register
 	STRB		reg_d_bank,[reg_cpu_var,#RDB_ofs]
-	MOVS		rscratch, rstatus, LSR #STATUS_SHIFTER  
+	MOVS		rscratch, rstatus, LSR #STATUS_SHIFTER
 	ORRCS		rscratch,rscratch,#0x100 @ EMULATION bit
 	STRH		rscratch,[reg_cpu_var,#RP_ofs]
-	@ 
+	@
 	@ Shift X,Y & A according to the current mode (INDEX, MEMORY bits)
 	TST		rstatus,#MASK_INDEX
 	MOVNE		rscratch,reg_x,LSR #24
@@ -557,7 +557,7 @@ reg_cpu_var .req R14
 		@beq	1110f
 		bicne	rstatus, rstatus, #MASK_BRANCHSKIP
 		subne	rscratch2, rpc, regpcbase
-		cmpne	rscratch2, rscratch 
+		cmpne	rscratch2, rscratch
 		bhi	1111f	
 		
 		@LDRB	rscratch2,[reg_cpu_var,#BranchSkip_ofs]
@@ -578,7 +578,7 @@ reg_cpu_var .req R14
 		@beq	1110f
 		bicne	rstatus, rstatus, #MASK_BRANCHSKIP
 		subne	rscratch2, rpc, regpcbase
-		cmpne	rscratch2, rscratch 
+		cmpne	rscratch2, rscratch
 		bhi	1111f	
 
 		@LDRB	rscratch2,[reg_cpu_var,#BranchSkip_ofs]
@@ -599,7 +599,7 @@ reg_cpu_var .req R14
 		@beq	1110f
 		bicne	rstatus, rstatus, #MASK_BRANCHSKIP
 		subne	rscratch2, rpc, regpcbase
-		cmpne	rscratch2, rscratch 
+		cmpne	rscratch2, rscratch
 		bhi	1111f	
 
 		@LDRB	rscratch2,[reg_cpu_var,#BranchSkip_ofs]
@@ -716,7 +716,7 @@ reg_cpu_var .req R14
 		MOV	R0,R0		
 .endm
 .macro		S9xGetWordRegStatus	reg
-		@  in  : rscratch (0x00hhmmll) 
+		@  in  : rscratch (0x00hhmmll)
 		@  out : reg      (0xhhll0000)
 		@  flags have to be updated with read value
 		STMFD	R13!,{PC} @ Push return address
@@ -725,7 +725,7 @@ reg_cpu_var .req R14
 		MOVS	\reg, R0, LSL #16
 .endm
 .macro		S9xGetWordRegNS	reg
-		@  in  : rscratch (0x00hhmmll) 
+		@  in  : rscratch (0x00hhmmll)
 		@  out : reg (0xhhll0000)
 		@  DOES NOT DESTROY rscratch (R0)
 		STMFD	R13!,{R0}
@@ -736,7 +736,7 @@ reg_cpu_var .req R14
 		LDMFD	R13!,{R0}
 .endm			
 .macro		S9xGetWordLowRegNS	reg
-		@  in  : rscratch (0x00hhmmll) 
+		@  in  : rscratch (0x00hhmmll)
 		@  out : reg (0xhhll0000)
 		@  DOES NOT DESTROY rscratch (R0)
 		STMFD	R13!,{R0}
@@ -756,7 +756,7 @@ reg_cpu_var .req R14
 		MOV	R0, R0, LSL #24
 .endm
 .macro		S9xGetByteLow
-		@  in  : rscratch (0x00hhmmll) 
+		@  in  : rscratch (0x00hhmmll)
 		@  out : rscratch (0x000000ll)		
 		STMFD	R13!,{PC}		
 		B	asmS9xGetByte
@@ -772,7 +772,7 @@ reg_cpu_var .req R14
 		MOVS	\reg, R0, LSL #24
 .endm
 .macro		S9xGetByteRegNS	reg
-		@  in  : rscratch (0x00hhmmll) 
+		@  in  : rscratch (0x00hhmmll)
 		@  out : reg      (0xll000000)
 		@  DOES NOT DESTROY rscratch (R0)
 		STMFD	R13!,{R0}
@@ -783,7 +783,7 @@ reg_cpu_var .req R14
 		LDMFD	R13!,{R0}
 .endm
 .macro		S9xGetByteLowRegNS	reg
-		@  in  : rscratch (0x00hhmmll) 
+		@  in  : rscratch (0x00hhmmll)
 		@  out : reg      (0x000000ll)
 		@  DOES NOT DESTROY rscratch (R0)
 		STMFD	R13!,{R0}
@@ -921,7 +921,7 @@ endmainLoop:
     S9xPackStatus ();
     APURegisters.PC = IAPU.PC - IAPU.RAM;
     S9xAPUPackStatus ();
-    
+
     if (CPU.Flags & SCAN_KEYS_FLAG)
     {
 	    S9xSyncSpeed ();

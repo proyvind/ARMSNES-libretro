@@ -56,7 +56,7 @@ void doRaster(ROPSTRUCT *rop) {
 			break;
 		case ROP_PALETTE:
 			{
-			// Pallette, colors 
+			// Pallette, colors
 			unsigned char col = rop->value & 255;
 			IPPU.Blue[col] = (rop->value >> (16 + 10)) & 0x1f;
 			IPPU.Green[col] = (rop->value >> (16 + 5)) & 0x1f;
@@ -154,22 +154,22 @@ void doRaster(ROPSTRUCT *rop) {
 			break;
 		case ROP_MAIN_SCREEN_DESIG:
 			// Main screen designation (backgrounds 1 - 4 and objects)
-			if ((GFX.r212c_s & GFX.r212e_s & 0x1f) != (GFX.r212e_s & rop->value & 0x1f)) PPU.RecomputeClipWindows = TRUE; 
+			if ((GFX.r212c_s & GFX.r212e_s & 0x1f) != (GFX.r212e_s & rop->value & 0x1f)) PPU.RecomputeClipWindows = TRUE;
 			GFX.r212c_s = rop->value;
 			break;
 		case ROP_SUB_SCREEN_DESIG:
 			// Sub-screen designation (backgrounds 1 - 4 and objects)
-			if ((GFX.r212d_s & GFX.r212f_s & 0x1f) != (GFX.r212f_s & rop->value & 0x1f)) PPU.RecomputeClipWindows = TRUE; 
+			if ((GFX.r212d_s & GFX.r212f_s & 0x1f) != (GFX.r212f_s & rop->value & 0x1f)) PPU.RecomputeClipWindows = TRUE;
 			GFX.r212d_s = rop->value;
 			break;
 		case ROP_MAIN_SCREEN_WMASK:
 			// Window mask designation for main screen ?
-			if ((GFX.r212c_s & GFX.r212e_s & 0x1f) != (GFX.r212c_s & rop->value & 0x1f)) PPU.RecomputeClipWindows = TRUE; 
+			if ((GFX.r212c_s & GFX.r212e_s & 0x1f) != (GFX.r212c_s & rop->value & 0x1f)) PPU.RecomputeClipWindows = TRUE;
 			GFX.r212e_s = rop->value;
 			break;
 		case ROP_SUB_SCREEN_WMASK:
 			// Window mask designation for sub-sreen ?
-			if ((GFX.r212d_s & GFX.r212f_s & 0x1f) != (GFX.r212d_s & rop->value & 0x1f)) PPU.RecomputeClipWindows = TRUE; 
+			if ((GFX.r212d_s & GFX.r212f_s & 0x1f) != (GFX.r212d_s & rop->value & 0x1f)) PPU.RecomputeClipWindows = TRUE;
 			GFX.r212f_s = rop->value;
 			break;
 		case ROP_FIXEDCOL_OR_SCREEN:

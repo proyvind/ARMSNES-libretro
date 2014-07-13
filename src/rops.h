@@ -2,7 +2,7 @@
 #define __ROPS_H__
 
 /*
-	Raster Operations macros 
+	Raster Operations macros
 */
 
 // -------------

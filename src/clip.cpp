@@ -4,7 +4,7 @@
  * (c) Copyright 1996 - 2001 Gary Henderson (gary.henderson@ntlworld.com) and
  *                           Jerremy Koot (jkoot@snes9x.com)
  *
- * Super FX C emulator code 
+ * Super FX C emulator code
  * (c) Copyright 1997 - 1999 Ivar (ivar@snes9x.com) and
  *                           Gary Henderson.
  * Super FX assembler emulator code (c) Copyright 1998 zsKnight and _Demo_.
@@ -60,7 +60,7 @@ struct Band
 #define OR_BANDS(R,A,B) {\
     R.Left = MIN(A.Left, B.Left); \
     R.Right = MAX(A.Right, B.Right);}
-    
+
 #define AND_BANDS(R,A,B) {\
     R.Left = MAX(A.Left, B.Left); \
     R.Right = MIN(A.Right, B.Right);}
@@ -144,7 +144,7 @@ void ComputeClipWindow(bool8_32 invert, int w, int wok, struct ClipData *pClip) 
 				}
 				else
 				{
-				    // 'outside' a window with no range - 
+				    // 'outside' a window with no range -
 				    // appears to be the whole screen.
 				    Win1[0].Left = 0;
 				    Win1[0].Right = 256;
@@ -425,7 +425,7 @@ void ComputeClipWindow(bool8_32 invert, int w, int wok, struct ClipData *pClip) 
 				    if (points [i] == points [i + 1])
 					continue;
 				    Bands [B].Left = points [i];
-				    while (i + 2 < p && 
+				    while (i + 2 < p &&
 					   points [i + 1] == points [i + 2])
 				    {
 					i += 2;
@@ -453,7 +453,7 @@ void ComputeClipWindow(bool8_32 invert, int w, int wok, struct ClipData *pClip) 
 				else
 				    empty_band_count++;
 			    }
-			    
+			
 			    if (j > 0)
 			    {
 				if (j == 1)
@@ -646,7 +646,7 @@ void ComputeClipWindow(bool8_32 invert, int w, int wok, struct ClipData *pClip) 
 
 		    if ((w != 5) && (pClip->Count [5]))
 		    {
-			//if 
+			//if
 			//{
 			    // Colour window enabled. Set the
 			    // clip windows for all remaining backgrounds to be
@@ -727,7 +727,7 @@ void ComputeClipWindows ()
     }
     else if (GFX.r2130_s & 0x30) ComputeClipWindow(((GFX.r2130_s & 0x30) == 0x10), 5, 1, &IPPU.Clip [1]);
     else IPPU.Clip[1].Count[5] = 0;
-    // - Objs 
+    // - Objs
     ComputeClipWindow(FALSE, 4, (GFX.r212d_s & GFX.r212f_s & (1 << 4)), &IPPU.Clip [1]);
     // - Backgrounds
     ComputeClipWindow(FALSE, 3, (GFX.r212d_s & GFX.r212f_s & (1 << 3)), &IPPU.Clip [1]);

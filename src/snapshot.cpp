@@ -4,7 +4,7 @@
  * (c) Copyright 1996 - 2001 Gary Henderson (gary.henderson@ntlworld.com) and
  *                           Jerremy Koot (jkoot@snes9x.com)
  *
- * Super FX C emulator code 
+ * Super FX C emulator code
  * (c) Copyright 1997 - 1999 Ivar (ivar@snes9x.com) and
  *                           Gary Henderson.
  * Super FX assembler emulator code (c) Copyright 1998 zsKnight and _Demo_.
@@ -39,7 +39,7 @@
  * Nintendo Co., Limited and its subsidiary companies.
  */
 
-#ifndef __GP32__ 
+#ifndef __GP32__
 #include <string.h>
 #include <ctype.h>
 #include <stdlib.h>
@@ -441,7 +441,7 @@ bool8 S9xUnfreezeGame (const char *filename)
 			switch (result)
 			{
 			case WRONG_FORMAT:
-			S9xMessage (S9X_ERROR, S9X_WRONG_FORMAT, 
+			S9xMessage (S9X_ERROR, S9X_WRONG_FORMAT,
 					"File not in Snes9x freeze format");
 			S9xReset();
 			break;
@@ -461,7 +461,7 @@ bool8 S9xUnfreezeGame (const char *filename)
 		return (TRUE);
     }
 
-    
+
     return (FALSE);
 }
 
@@ -522,7 +522,7 @@ static void Freeze ()
 	SA1Registers.PC = SA1.PC - SA1.PCBase;
 	S9xSA1PackStatus ();
 	FreezeStruct ("SA1", &SA1, SnapSA1, COUNT (SnapSA1));
-	FreezeStruct ("SAR", &SA1Registers, SnapSA1Registers, 
+	FreezeStruct ("SAR", &SA1Registers, SnapSA1Registers,
 		      COUNT (SnapSA1Registers));
     }
 #endif
@@ -563,8 +563,8 @@ static int Unfreeze()
 	S9xMessage (S9X_WARNING, S9X_FREEZE_ROM_NAME,
 		    "Current loaded ROM image doesn't match that required by freeze-game file.");
     }
-    
-    
+
+
 
     uint32 old_flags = CPU.Flags;
 #ifdef USE_SA1
@@ -573,7 +573,7 @@ static int Unfreeze()
 	S9xReset ();
     S9xSetSoundMute (TRUE);
 
-    if ((result = UnfreezeStruct("CPU", &CPU, SnapCPU, 
+    if ((result = UnfreezeStruct("CPU", &CPU, SnapCPU,
 				  COUNT (SnapCPU))) != SUCCESS)
 	return (result);
 	
@@ -600,7 +600,7 @@ static int Unfreeze()
     S9xFixColourBrightness ();
     IPPU.RenderThisFrame = FALSE;
 
-    if ((result = UnfreezeStruct ("DMA", DMA, SnapDMA, 
+    if ((result = UnfreezeStruct ("DMA", DMA, SnapDMA,
 				  COUNT (SnapDMA))) != SUCCESS)
 	return (result);
 	
@@ -639,11 +639,11 @@ static int Unfreeze()
 
 		if ((result = UnfreezeBlock ("ARA", IAPU.RAM, 0x10000)) != SUCCESS)
 		    return (result);
-		    
+		
 		if ((result = UnfreezeStruct ("SOU", &SoundData, SnapSoundData,
 				      COUNT (SnapSoundData))) != SUCCESS)
 		    return (result);
-	    
+	
 	    // notaz: just to be sure
 		for(int u=0; u<8; u++) {
 			SoundData.channels[u].env_ind_attack &= 0xf;
@@ -667,10 +667,10 @@ static int Unfreeze()
 	S9xSetSoundMute (TRUE);
     }
 #ifdef USE_SA1
-    if ((result = UnfreezeStruct ("SA1", &SA1, SnapSA1, 
+    if ((result = UnfreezeStruct ("SA1", &SA1, SnapSA1,
 				  COUNT(SnapSA1))) == SUCCESS)
     {
-	if ((result = UnfreezeStruct ("SAR", &SA1Registers, 
+	if ((result = UnfreezeStruct ("SAR", &SA1Registers,
 				      SnapSA1Registers, COUNT (SnapSA1Registers))) != SUCCESS)
 	    return (result);
 
@@ -682,8 +682,8 @@ static int Unfreeze()
     ICPU.ShiftedPB = Registers.PB << 16;
     ICPU.ShiftedDB = Registers.DB << 16;
     S9xSetPCBase (ICPU.ShiftedPB + Registers.PC);
-    
-#ifndef ASMCPU    
+
+#ifndef ASMCPU
     S9xUnpackStatus (); // not needed
     S9xFixCycles (); // also not needed?
 #endif
@@ -721,9 +721,9 @@ void FreezeStruct(const char *name, void *base, FreezeData *fields, int num_fiel
 
     for (i = 0; i < num_fields; i++)
     {
-	if (fields [i].offset + FreezeSize (fields [i].size, 
+	if (fields [i].offset + FreezeSize (fields [i].size,
 					    fields [i].type) > len)
-	    len = fields [i].offset + FreezeSize (fields [i].size, 
+	    len = fields [i].offset + FreezeSize (fields [i].size,
 						  fields [i].type);
     }
 
@@ -817,9 +817,9 @@ int UnfreezeStruct (const char *name, void *base, FreezeData *fields, int num_fi
 
     for (i = 0; i < num_fields; i++)
     {
-	if (fields [i].offset + FreezeSize (fields [i].size, 
+	if (fields [i].offset + FreezeSize (fields [i].size,
 					    fields [i].type) > len)
-	    len = fields [i].offset + FreezeSize (fields [i].size, 
+	    len = fields [i].offset + FreezeSize (fields [i].size,
 						  fields [i].type);
     }
 
@@ -907,20 +907,20 @@ int UnfreezeBlock(const char *name, uint8 *block, int size)
     char buffer [20];
     int len = 0;
     int rem = 0;
-    
+
     if (statef_read(buffer, 11) != 11 ||
 	strncmp (buffer, name, 3) != 0 || buffer [3] != ':' ||
 	(len = atoi (&buffer [4])) == 0)
     {
 		return (WRONG_FORMAT);
     }
-    
+
     if (len > size)
     {
 		rem = len - size;
 		len = size;
     }
-    
+
     if (statef_read(block, len) != len)
     {
 		return (WRONG_FORMAT);

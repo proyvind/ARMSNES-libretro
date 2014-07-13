@@ -4,7 +4,7 @@
  * (c) Copyright 1996 - 2001 Gary Henderson (gary.henderson@ntlworld.com) and
  *                           Jerremy Koot (jkoot@snes9x.com)
  *
- * Super FX C emulator code 
+ * Super FX C emulator code
  * (c) Copyright 1997 - 1999 Ivar (ivar@snes9x.com) and
  *                           Gary Henderson.
  * Super FX assembler emulator code (c) Copyright 1998 zsKnight and _Demo_.
@@ -263,9 +263,9 @@ extern uint32 TileBlank;
 		NORMAL (Offset, bp); \
 	} \
     }
-    
-    
-    
+
+
+
 #define RENDER_CLIPPED_TILEHI(NORMAL, FLIPPED, N) \
 	d1=(d1&0xFF)|((d1&0xFF0000)>>8)|((d2&0xFF)<<16)|((d2&0xFF0000)<<8);\
     if (!(Tile & (V_FLIP | H_FLIP))) \
@@ -309,6 +309,6 @@ extern uint32 TileBlank;
 	    /*if ((dd = (*(uint32 *) bp) & d1))*/ if (dd = (((((uint32)bp[6])<<24)|(((uint32)bp[4])<<16)|(((uint32)bp[2])<<8)|((uint32)bp[0]))&d1)) \
 		NORMAL (Offset, (uint8 *) &dd); \
 	} \
-    }    
+    }
 
 #endif

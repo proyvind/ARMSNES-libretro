@@ -4,7 +4,7 @@
  * (c) Copyright 1996 - 2001 Gary Henderson (gary.henderson@ntlworld.com) and
  *                           Jerremy Koot (jkoot@snes9x.com)
  *
- * Super FX C emulator code 
+ * Super FX C emulator code
  * (c) Copyright 1997 - 1999 Ivar (ivar@snes9x.com) and
  *                           Gary Henderson.
  * Super FX 	assembler emulator code (c) Copyright 1998 zsKnight and _Demo_.
@@ -38,9 +38,9 @@
  * Super NES and Super Nintendo Entertainment System are trademarks of
  * Nintendo Co., Limited and its subsidiary companies.
  */
- 
 
- 
+
+
 #include "snes9x.h"
 
 #include "memmap.h"
@@ -323,7 +323,7 @@ void S9xMainLoop_NoSA1_NoAPU (void)
 
     }
 }
-#endif 
+#endif
 
 
 void
@@ -334,16 +334,16 @@ S9xMainLoop (void)
 	#ifdef USE_SA1
 		if (Settings.SA1) S9xMainLoop_SA1_APU();
 		else
-	#endif 
+	#endif
 		  S9xMainLoop_NoSA1_APU();
 	} else {
 	#ifdef USE_SA1
 		if (Settings.SA1) S9xMainLoop_SA1_NoAPU();
 		else S9xMainLoop_NoSA1_NoAPU();
-	#endif 
+	#endif
 
 	}
-#else  
+#else
   if (Settings.asmspc700) asmMainLoop_spcAsm(&CPU);
   else asmMainLoop_spcC(&CPU);		
 #endif
@@ -360,7 +360,7 @@ S9xMainLoop (void)
    // {
       CPU.Flags &= ~SCAN_KEYS_FLAG;
     //}
-    
+
     if (CPU.BRKTriggered && Settings.SuperFX && !CPU.TriedInterleavedMode2)
     {
 	CPU.TriedInterleavedMode2 = TRUE;
@@ -376,7 +376,7 @@ void S9xSetIRQ (uint32 source)
     CPU.IRQCycleCount = 3;
     if (CPU.WaitingForInterrupt)
     {
-	// Force IRQ to trigger immediately after WAI - 
+	// Force IRQ to trigger immediately after WAI -
 	// Final Fantasy Mystic Quest crashes without this.
 	CPU.IRQCycleCount = 0;
 	CPU.WaitingForInterrupt = FALSE;
@@ -509,7 +509,7 @@ void S9xDoHBlankProcessing ()
 #ifdef SPC700_SHUTDOWN		
 				IAPU.WaitCounter++;
 				/*IAPU.APUExecuting*/CPU.APU_APUExecuting = TRUE;
-#endif		    
+#endif		
 				}
 			}
 			if (APU.TimerEnabled [1])
@@ -522,7 +522,7 @@ void S9xDoHBlankProcessing ()
 #ifdef SPC700_SHUTDOWN		
 				IAPU.WaitCounter++;
 				/*IAPU.APUExecuting*/CPU.APU_APUExecuting = TRUE;
-#endif		    
+#endif		
 				}
 			}
 			}

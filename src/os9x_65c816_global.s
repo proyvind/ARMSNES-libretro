@@ -318,7 +318,7 @@ GB7SRM:
 GBHSRAM:
 	ADD		reg_cycles,reg_cycles,#SLOW_ONE_CYCLE	@ update Cycles		
 	
-	MOV		R1,R0,LSL #17  
+	MOV		R1,R0,LSL #17
 	AND		R2,R0,#0xF0000
 	MOV		R1,R1,LSR #17	@ Address&0x7FFF	
 	MOV		R2,R2,LSR #3 @ (Address&0xF0000 >> 3)
@@ -353,7 +353,7 @@ GBC4:
 	LDMFD		R13!,{PC} @ Return
 GBDEBUG:	
 GBBWRAM:
-	MOV		R0,R0,LSL #17  
+	MOV		R0,R0,LSL #17
 	ADD		reg_cycles,reg_cycles,#SLOW_ONE_CYCLE	@ update Cycles	
 	MOV		R0,R0,LSR #17	@ Address&0x7FFF			
 	LDR		R1,[reg_cpu_var,#BWRAM]	
@@ -557,7 +557,7 @@ GWHSRAM:
 	TST		R0,#1
 	BNE		GW_Not_Aligned3
 	
-	MOV		R1,R0,LSL #17  
+	MOV		R1,R0,LSL #17
 	AND		R2,R0,#0xF0000
 	MOV		R1,R1,LSR #17	@ Address&0x7FFF	
 	MOV		R2,R2,LSR #3 @ (Address&0xF0000 >> 3)
@@ -571,14 +571,14 @@ GWHSRAM:
 	LDMFD		R13!,{PC}		@ return
 	
 GW_Not_Aligned3:	
-	MOV		R3,R0,LSL #17  
+	MOV		R3,R0,LSL #17
 	AND		R2,R0,#0xF0000
 	MOV		R3,R3,LSR #17	@ Address&0x7FFF	
 	MOV		R2,R2,LSR #3 @ (Address&0xF0000 >> 3)	
 	ADD		R2,R2,R3						
 	ADD		R0,R0,#1	
 	SUB		R2,R2,#0x6000 @ ((Address & 0x7fff) - 0x6000 + ((Address & 0xf0000) >> 3))
-	MOV		R3,R0,LSL #17  
+	MOV		R3,R0,LSL #17
 	AND		R0,R0,#0xF0000
 	MOV		R3,R3,LSR #17	@ (Address+1)&0x7FFF	
 	MOV		R0,R0,LSR #3 @ ((Address+1)&0xF0000 >> 3)	
@@ -626,7 +626,7 @@ GWC4:
 GWBWRAM:
 	TST		R0,#1
 	BNE		GW_Not_Aligned4
-	MOV		R0,R0,LSL #17  
+	MOV		R0,R0,LSL #17
 	ADD		reg_cycles,reg_cycles,#(SLOW_ONE_CYCLE*2)	@ update Cycles
 	MOV		R0,R0,LSR #17	@ Address&0x7FFF
 	LDR		R1,[reg_cpu_var,#BWRAM]		
@@ -660,7 +660,7 @@ asmS9xSetByte:
 	@STR		R2,[reg_cpu_var,#WaitAddress_ofs]
 	bic		rstatus, rstatus, #MASK_SHUTDOWN
 
-	@ 
+	@
 	
 	@ R3 <= block				
 	MOV		R3,R0,LSR #MEMMAP_SHIFT
@@ -728,7 +728,7 @@ SBPPU:
 	LDMFD		R13!,{PC} @ Return
 SBCPU:	
 	ADD		reg_cycles,reg_cycles,#ONE_CYCLE	@ update Cycles	
-	@MOV		R0,R0,LSL #16 
+	@MOV		R0,R0,LSL #16
 	bic		r0, r0, #0xff0000		
 	STR		reg_cycles,[reg_cpu_var,#Cycles_ofs] @ Save Cycles
 	@MOV		R0,R0,LSR #16	@ Address&0xFFFF
@@ -743,7 +743,7 @@ SBCPU:
 SBDSP:
 	ADD		reg_cycles,reg_cycles,#SLOW_ONE_CYCLE	@ update Cycles	
 	@MOV		R0,R0,LSL #16
-	bic		r0, r0, #0x0ff0000 
+	bic		r0, r0, #0x0ff0000
 	STR		reg_cycles,[reg_cpu_var,#Cycles_ofs] @ Save Cycles
 	@MOV		R0,R0,LSR #16	@ Address&0xFFFF
 		PREPARE_C_CALL	
@@ -772,7 +772,7 @@ SB7SRM:
 SBHSRAM:
 	ADD		reg_cycles,reg_cycles,#SLOW_ONE_CYCLE	@ update Cycles		
 	
-	MOV		R3,R0,LSL #17  
+	MOV		R3,R0,LSL #17
 	AND		R2,R0,#0xF0000
 	MOV		R3,R3,LSR #17	@ Address&0x7FFF	
 	MOV		R2,R2,LSR #3 @ (Address&0xF0000 >> 3)	
@@ -798,7 +798,7 @@ SBDEBUG:
 	LDMFD		R13!,{PC}
 SBC4:
 	ADD		reg_cycles,reg_cycles,#SLOW_ONE_CYCLE	@ update Cycles	
-	@MOV		R0,R0,LSL #16 
+	@MOV		R0,R0,LSL #16
 	bic		r0, r0, #0xff0000			
 	STR		reg_cycles,[reg_cpu_var,#Cycles_ofs] @ Save Cycles
 	@MOV		R0,R0,LSR #16	@ Address&0xFFFF	
@@ -811,7 +811,7 @@ SBC4:
 	LDR		reg_cycles,[reg_cpu_var,#Cycles_ofs] @ Load Cycles	
 	LDMFD		R13!,{PC} @ Return
 SBBWRAM:
-	MOV		R0,R0,LSL #17  
+	MOV		R0,R0,LSL #17
 	ADD		reg_cycles,reg_cycles,#SLOW_ONE_CYCLE	@ update Cycles
 	MOV		R0,R0,LSR #17	@ Address&0x7FFF			
 	LDR		R2,[reg_cpu_var,#BWRAM]	
@@ -951,7 +951,7 @@ SWPPU:
 	LDMFD		R13!,{PC} @ Return
 SWCPU:	
 	ADD		reg_cycles,reg_cycles,#(ONE_CYCLE*2)	@ update Cycles	
-	@MOV		R0,R0,LSL #16 
+	@MOV		R0,R0,LSL #16
 	bic		r0, r0, #0xff0000			
 	STR		reg_cycles,[reg_cpu_var,#Cycles_ofs] @ Save Cycles
 	@MOV		R0,R0,LSR #16	@ Address&0xFFFF
@@ -970,7 +970,7 @@ SWCPU:
 	LDMFD		R13!,{PC} @ Return
 SWDSP:
 	ADD		reg_cycles,reg_cycles,#SLOW_ONE_CYCLE	@ update Cycles	
-	@MOV		R0,R0,LSL #16 
+	@MOV		R0,R0,LSL #16
 	bic		r0, r0, #0x0ff0000		
 	STR		reg_cycles,[reg_cpu_var,#Cycles_ofs] @ Save Cycles
 	@MOV		R0,R0,LSR #16	@ Address&0xFFFF
@@ -1027,7 +1027,7 @@ SWHSRAM:
 	TST		R0,#1
 	BNE		SW_not_aligned3	
 	@ aligned
-	MOV		R3,R0,LSL #17  
+	MOV		R3,R0,LSL #17
 	AND		R2,R0,#0xF0000
 	MOV		R3,R3,LSR #17	@ Address&0x7FFF	
 	MOV		R2,R2,LSR #3 @ (Address&0xF0000 >> 3)	
@@ -1041,7 +1041,7 @@ SWHSRAM:
 	STRB		R0,[reg_cpu_var,#SRAMModified_ofs]		
 	LDMFD		R13!,{PC}	@ return		
 SW_not_aligned3:	
-	MOV		R3,R0,LSL #17  
+	MOV		R3,R0,LSL #17
 	AND		R2,R0,#0xF0000
 	MOV		R3,R3,LSR #17	@ Address&0x7FFF	
 	MOV		R2,R2,LSR #3 @ (Address&0xF0000 >> 3)	
@@ -1049,7 +1049,7 @@ SW_not_aligned3:
 	SUB		R2,R2,#0x6000 @ ((Address & 0x7fff) - 0x6000 + ((Address & 0xf0000) >> 3))
 	
 	ADD		R0,R0,#1	
-	MOV		R3,R0,LSL #17  
+	MOV		R3,R0,LSL #17
 	AND		R0,R0,#0xF0000
 	MOV		R3,R3,LSR #17	@ (Address+1)&0x7FFF	
 	MOV		R0,R0,LSR #3 @ ((Address+1)&0xF0000 >> 3)	
@@ -1075,7 +1075,7 @@ SWDEBUG:
 	LDMFD		R13!,{PC}	@ return
 SWC4:
 	ADD		reg_cycles,reg_cycles,#(SLOW_ONE_CYCLE*2)	@ update Cycles	
-	@MOV		R0,R0,LSL #16 
+	@MOV		R0,R0,LSL #16
 	bic		r0, r0, #0xff0000			
 	STR		reg_cycles,[reg_cpu_var,#Cycles_ofs] @ Save Cycles
 	@MOV		R0,R0,LSR #16	@ Address&0xFFFF	

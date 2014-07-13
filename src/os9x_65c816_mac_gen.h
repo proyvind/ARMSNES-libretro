@@ -2,7 +2,7 @@
 /*****************************************************************/
 /*     Offset in SCPUState structure				 */
 /*****************************************************************/
-#define Flags_ofs		0    
+#define Flags_ofs		0
 #define BranchSkip_ofs		4
 #define NMIActive_ofs		5
 #define IRQActive_ofs		6
@@ -40,7 +40,7 @@
 #define	RX_ofs		82
 #define	RY_ofs		84
 #define	RPC_ofs		86
-   
+
 
 #define	asm_OPTABLE_ofs		88
 #define TriedInterleavedMode2_ofs	92
@@ -181,7 +181,7 @@
 	STRH		rscratch,[regCPUvar,#RD_ofs]
 	//rstatus & regDBank is same register
 	STRB		regDBank,[regCPUvar,#RDB_ofs]
-	MOVS		rscratch, rstatus, LSR #STATUS_SHIFTER  
+	MOVS		rscratch, rstatus, LSR #STATUS_SHIFTER
 	ORRCS		rscratch,rscratch,#0x100 //EMULATION bit
 	STRH		rscratch,[regCPUvar,#RP_ofs]
 	//
@@ -566,7 +566,7 @@ endmainLoop:
     S9xPackStatus ();
     APURegisters.PC = IAPU.PC - IAPU.RAM;
     S9xAPUPackStatus ();
-    
+
     if (CPU.Flags & SCAN_KEYS_FLAG)
     {
 	    S9xSyncSpeed ();

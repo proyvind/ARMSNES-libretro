@@ -55,7 +55,7 @@
   .equ flag_o,             0x40
   .equ flag_n,             0x80
 
-  .equ cpu_apu_executing,		124 
+  .equ cpu_apu_executing,		124
 
 @ --------------------------- Framework --------------------------
 	.align 	4

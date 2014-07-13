@@ -4,7 +4,7 @@
  * (c) Copyright 1996 - 2001 Gary Henderson (gary.henderson@ntlworld.com) and
  *                           Jerremy Koot (jkoot@snes9x.com)
  *
- * Super FX C emulator code 
+ * Super FX C emulator code
  * (c) Copyright 1997 - 1999 Ivar (ivar@snes9x.com) and
  *                           Gary Henderson.
  * Super FX assembler emulator code (c) Copyright 1998 zsKnight and _Demo_.
@@ -41,7 +41,7 @@
 
 #ifdef CPUASM
 #define	_CPUADDR_H_
-#endif 
+#endif
 
 #ifndef _CPUADDR_H_
 #define _CPUADDR_H_
@@ -65,7 +65,7 @@ STATIC inline void Relative ()
     signed char s9xInt8 = *CPU.PC++;
 #ifdef VAR_CYCLES
     CPU.Cycles += CPU.MemSpeed;
-#endif    
+#endif
     OpAddress = ((int) (CPU.PC - CPU.PCBase) + s9xInt8) & 0xffff;
 }
 

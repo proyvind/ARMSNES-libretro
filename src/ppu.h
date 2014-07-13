@@ -4,7 +4,7 @@
  * (c) Copyright 1996 - 2001 Gary Henderson (gary.henderson@ntlworld.com) and
  *                           Jerremy Koot (jkoot@snes9x.com)
  *
- * Super FX C emulator code 
+ * Super FX C emulator code
  * (c) Copyright 1997 - 1999 Ivar (ivar@snes9x.com) and
  *                           Gary Henderson.
  * Super FX assembler emulator code (c) Copyright 1998 zsKnight and _Demo_.
@@ -142,7 +142,7 @@ struct SPPU {
     } BG [4];
 
     bool8  CGFLIP;
-    uint16 CGDATA [256]; 
+    uint16 CGDATA [256];
     uint8  FirstSprite;
     uint8  LastSprite;
     struct SOBJ OBJ [128];
@@ -504,7 +504,7 @@ STATIC INLINE void REGISTER_2122(uint8 Byte)
 #endif
 {
     // CG-RAM (palette) write
-   
+
     if (PPU.CGFLIP)
     {
 	if ((Byte & 0x7f) != (PPU.CGDATA[PPU.CGADD] >> 8))
@@ -542,7 +542,7 @@ STATIC INLINE void REGISTER_2122(uint8 Byte)
 STATIC INLINE void REGISTER_2122_normalRasterFx(uint8 Byte)
 {
     // CG-RAM (palette) write
-   
+
     if (PPU.CGFLIP)
     {
 	if ((Byte & 0x7f) != (PPU.CGDATA[PPU.CGADD] >> 8))
@@ -558,8 +558,8 @@ STATIC INLINE void REGISTER_2122_normalRasterFx(uint8 Byte)
 		IPPU.ColorsChanged = TRUE;
 		IPPU.Blue [PPU.CGADD] = (Byte >> 2) & 0x1f;
 		IPPU.Green [PPU.CGADD] = (PPU.CGDATA[PPU.CGADD] >> 5) & 0x1f;
-		IPPU.ScreenColors [PPU.CGADD] = (uint16) BUILD_PIXEL (IPPU.XB[IPPU.Red[PPU.CGADD]], 
-									IPPU.XB[IPPU.Green[PPU.CGADD]], 
+		IPPU.ScreenColors [PPU.CGADD] = (uint16) BUILD_PIXEL (IPPU.XB[IPPU.Red[PPU.CGADD]],
+									IPPU.XB[IPPU.Green[PPU.CGADD]],
 									IPPU.XB[IPPU.Blue [PPU.CGADD]]);
 	}
 	PPU.CGADD++;
@@ -580,8 +580,8 @@ STATIC INLINE void REGISTER_2122_normalRasterFx(uint8 Byte)
 	    	IPPU.ColorsChanged = TRUE;
 		IPPU.Red [PPU.CGADD] = Byte & 0x1f;
 		IPPU.Green [PPU.CGADD] = (PPU.CGDATA[PPU.CGADD] >> 5) & 0x1f;
-		IPPU.ScreenColors [PPU.CGADD] = (uint16) BUILD_PIXEL (IPPU.XB[IPPU.Red[PPU.CGADD]], 
-									IPPU.XB[IPPU.Green[PPU.CGADD]], 
+		IPPU.ScreenColors [PPU.CGADD] = (uint16) BUILD_PIXEL (IPPU.XB[IPPU.Red[PPU.CGADD]],
+									IPPU.XB[IPPU.Green[PPU.CGADD]],
 									IPPU.XB[IPPU.Blue [PPU.CGADD]]);
 	}
     }
@@ -592,7 +592,7 @@ STATIC INLINE void REGISTER_2122_normalRasterFx(uint8 Byte)
 
 STATIC INLINE void REGISTER_2122(uint8 Byte) {
 	if (snesMenuOptions.delayedRasterFX) REGISTER_2122_delayedRasterFx(Byte);
-	else REGISTER_2122_normalRasterFx(Byte); 
+	else REGISTER_2122_normalRasterFx(Byte);
 }
 #endif
 

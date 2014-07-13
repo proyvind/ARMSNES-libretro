@@ -216,7 +216,7 @@ int32  SinTable2Fix[INCR];//=NULL;
 
 float Atan(float x)
 {
-	if ((x>=1) || (x<=1)) 
+	if ((x>=1) || (x<=1))
 		return (x/(1+0.28*x*x));
 	else
 		return (PI/2 - Atan(1/x));
@@ -231,7 +231,7 @@ void InitDSP(void)
 {
 #ifdef __OPT__
         unsigned int i;
-        
+
 //    CosTable2Fix = (int32 *) ljz_malloc(INCR*sizeof(int32));
 //	SinTable2Fix = (int32 *) ljz_malloc(INCR*sizeof(int32));
 		
@@ -909,7 +909,7 @@ void DSPOp06()
    SADDMULT1616(ObjPX1,ObjPX,CosFix(tanval2),ObjPY,-SinFix(tanval2))
    SADDMULT1616(ObjPY1,ObjPX,SinFix(tanval2),ObjPY,CosFix(tanval2))
    ObjPZ1=ObjPZ;
-   
+
 
    // rotate around X
 //   tanval2 = (-Op02AZS/(65536/INCR)) & 1023;
@@ -1020,7 +1020,7 @@ void DSPOp06()
       Log_Message("OP06 H:%d V:%d S:%d",Op06H,Op06V,Op06S);
    #endif
 }
-#endif 
+#endif
 
 
 short matrixC[3][3];
@@ -1312,7 +1312,7 @@ void DSPOp0B()
 }
 
 void DSPOp1B()
-{   
+{
     Op1BS = (Op1BX * matrixB[0][0] + Op1BY * matrixB[0][1] + Op1BZ * matrixB[0][2]) >> 15;
 
 	#ifdef DebugDSP1

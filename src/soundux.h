@@ -4,7 +4,7 @@
  * (c) Copyright 1996 - 2001 Gary Henderson (gary.henderson@ntlworld.com) and
  *                           Jerremy Koot (jkoot@snes9x.com)
  *
- * Super FX C emulator code 
+ * Super FX C emulator code
  * (c) Copyright 1997 - 1999 Ivar (ivar@snes9x.com) and
  *                           Gary Henderson.
  * Super FX assembler emulator code (c) Copyright 1998 zsKnight and _Demo_.
@@ -129,7 +129,7 @@ typedef struct {
 typedef struct
 {
     short master_volume_left;  // 0x00
-    short master_volume_right; // 0x02 
+    short master_volume_right; // 0x02
     short echo_volume_left;    // 0x04	
     short echo_volume_right;	// 0x06
     int echo_enable;		// 0x08
@@ -298,7 +298,7 @@ static inline void S9xSetEchoFeedback (int feedback)
 static inline void S9xSetFilterCoefficient (int tap, int value)
 {
     FilterTaps [tap & 7] = value;
-    SoundData.no_filter = (FilterTaps [0] == 127 || FilterTaps [0] == 0) && 
+    SoundData.no_filter = (FilterTaps [0] == 127 || FilterTaps [0] == 0) &&
 			   FilterTaps [1] == 0   &&
 			   FilterTaps [2] == 0   &&
 			   FilterTaps [3] == 0   &&
@@ -329,7 +329,7 @@ static inline void S9xSetSoundFrequency (int channel, int hertz) // hertz [0~64K
 
 	/*	if (Settings.FixFrequency)
 		{
-			SoundData.channels[channel].frequency = 
+			SoundData.channels[channel].frequency =
 			(unsigned long) ((double)  SoundData.channels[channel].frequency * 0.980);
 		}*/
 	}

@@ -4,7 +4,7 @@
  * (c) Copyright 1996 - 2001 Gary Henderson (gary.henderson@ntlworld.com) and
  *                           Jerremy Koot (jkoot@snes9x.com)
  *
- * Super FX C emulator code 
+ * Super FX C emulator code
  * (c) Copyright 1997 - 1999 Ivar (ivar@snes9x.com) and
  *                           Gary Henderson.
  * Super FX assembler emulator code (c) Copyright 1998 zsKnight and _Demo_.
@@ -181,7 +181,7 @@ static uint8 S9xSA1GetByte_BWRAM_BITMAP2 (uint32 address) {
 
 // GetByte JumpTable for Memmory map modes
 uint8 (*S9xSA1GetByte_JumpTable[(1 << (16 - 12))]) (uint32 address) = {
-	S9xSA1GetByte_PPU, // MAP_PPU 
+	S9xSA1GetByte_PPU, // MAP_PPU
 	S9xSA1GetByte_default, // MAP_CPU
 	S9xSA1GetByte_default, // MAP_DSP
 	S9xSA1GetByte_SA1RAM, // MAP_LOROM_SRAM
@@ -197,16 +197,16 @@ uint8 (*S9xSA1GetByte_JumpTable[(1 << (16 - 12))]) (uint32 address) = {
 	S9xSA1GetByte_default, // MAP_LAST+1
 	S9xSA1GetByte_default, // MAP_LAST+2
 	S9xSA1GetByte_default  // MAP_LAST+3
-};  
+};
 
 uint8 S9xSA1GetByte (uint32 address)
 {
     uint8 *GetAddress = SA1_Map [(address >> MEMMAP_SHIFT) & MEMMAP_MASK];
     if (GetAddress >= (uint8 *) CMemory::MAP_LAST) return (*(GetAddress + (address & 0xffff)));
     return S9xSA1GetByte_JumpTable[(intptr_t) GetAddress](address);
-//	return (SA1_Map [(address >> MEMMAP_SHIFT) & MEMMAP_MASK] >= (uint8 *)CMemory::MAP_LAST) ? 
-//		(*((uint8 *)(SA1_Map [(address >> MEMMAP_SHIFT) & MEMMAP_MASK]) + (address & 0xffff))) : 
-//		S9xSA1GetByte_JumpTable[(int) SA1_Map [(address >> MEMMAP_SHIFT) & MEMMAP_MASK]](address); 
+//	return (SA1_Map [(address >> MEMMAP_SHIFT) & MEMMAP_MASK] >= (uint8 *)CMemory::MAP_LAST) ?
+//		(*((uint8 *)(SA1_Map [(address >> MEMMAP_SHIFT) & MEMMAP_MASK]) + (address & 0xffff))) :
+//		S9xSA1GetByte_JumpTable[(int) SA1_Map [(address >> MEMMAP_SHIFT) & MEMMAP_MASK]](address);
 }
 
 /*
@@ -263,7 +263,7 @@ static void S9xSA1SetByte_BWRAM_BITMAP2 (uint8 byte, uint32 address) {
 
 // SetByte JumpTable for Memmory map modes
 void (*S9xSA1SetByte_JumpTable[(1 << (16 - 12))]) (uint8 byte, uint32 address) = {
-	S9xSA1SetByte_PPU, // MAP_PPU 
+	S9xSA1SetByte_PPU, // MAP_PPU
 	S9xSA1SetByte_default, // MAP_CPU
 	S9xSA1SetByte_default, // MAP_DSP
 	S9xSA1SetByte_SA1RAM, // MAP_LOROM_SRAM
@@ -279,7 +279,7 @@ void (*S9xSA1SetByte_JumpTable[(1 << (16 - 12))]) (uint8 byte, uint32 address) =
 	S9xSA1SetByte_default, // MAP_LAST+1
 	S9xSA1SetByte_default, // MAP_LAST+2
 	S9xSA1SetByte_default  // MAP_LAST+3
-};  
+};
 
 void S9xSA1SetByte (uint8 byte, uint32 address)
 {
@@ -371,7 +371,7 @@ void S9xSetSA1MemMap (uint32 which1, uint8 map)
 	for (i = c; i < c + 16; i++)
 	    Memory.Map [start + i] = SA1_Map [start + i] = block;
     }
-    
+
     for (c = 0; c < 0x200; c += 16)
     {
 	block = &Memory.ROM [(map & 7) * 0x100000 + (c << 11) - 0x8000];
@@ -386,7 +386,7 @@ uint8 S9xGetSA1 (uint32 address)
     switch (address)
     {
     case 0x2300:
-		return ((uint8) ((Memory.FillRAM [0x2209] & 0x5f) | 
+		return ((uint8) ((Memory.FillRAM [0x2209] & 0x5f) |
 		 (CPU.IRQActive & (SA1_IRQ_SOURCE | SA1_DMA_IRQ_SOURCE))));
     case 0x2301:
 		return ((Memory.FillRAM [0x2200] & 0xf) |
@@ -416,12 +416,12 @@ uint8 S9xGetSA1 (uint32 address)
 			return (byte);
     }
     }
-    
+
 }
 
 void S9xSetSA1 (uint8 byte, uint32 address)
 {
-  
+
     if (address < 0x2200 || address > 0x22ff) return;
 
     switch (address)
@@ -596,7 +596,7 @@ void S9xSetSA1 (uint8 byte, uint32 address)
 		  SA1.sum = 0;
 			SA1.arithmetic_op = byte & 3;
 		break;
-    
+
     case 0x2251:
 		SA1.op1 = (SA1.op1 & 0xff00) | byte;
 		break;
@@ -729,7 +729,7 @@ static void S9xSA1DMA ()
     }
     memmove (d, s, len);
     Memory.FillRAM [0x2301] |= 0x20;
-    
+
     if (Memory.FillRAM [0x220a] & 0x20)
     {
 			SA1.Flags |= IRQ_PENDING_FLAG;

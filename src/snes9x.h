@@ -4,7 +4,7 @@
  * (c) Copyright 1996 - 2001 Gary Henderson (gary.henderson@ntlworld.com) and
  *                           Jerremy Koot (jkoot@snes9x.com)
  *
- * Super FX C emulator code 
+ * Super FX C emulator code
  * (c) Copyright 1997 - 1999 Ivar (ivar@snes9x.com) and
  *                           Gary Henderson.
  * Super FX assembler emulator code (c) Copyright 1998 zsKnight and _Demo_.
@@ -201,7 +201,7 @@ struct SCPUState{
 	uint32	_ARM_asm_reserved_1;	//88  to stock current jmp table
     bool8  TriedInterleavedMode2;	//92
     bool8  _ARM_asm_padding1[3];	//93
-    
+
     uint8*	Memory_Map;				//96
     uint8*	Memory_WriteMap;		//100
     uint32*	Memory_MemorySpeed;		//104
@@ -216,7 +216,7 @@ struct SCPUState{
   	volatile int32	APU_Cycles;				//140 notaz
 	void *DSPGet;
 	void *DSPSet;
-	int32 rstatus; 
+	int32 rstatus;
 };
 
 
@@ -285,7 +285,7 @@ struct SSettings{
     bool8  SuperScope;
     bool8  SRTC;
     uint32 ControllerOption;
-    
+
     bool8  ShutdownMaster;
     bool8  MultiPlayer5Master;
     bool8  SuperScopeMaster;
@@ -315,7 +315,7 @@ struct SSettings{
 //    bool8  NextAPUEnabled;
     uint8  AltSampleDecode;
     bool8  FixFrequency;
-    
+
     // Graphics options
     bool8  SixteenBit;
     bool8  Transparency;
@@ -343,7 +343,7 @@ struct SSettings{
     uint32 TurboSkipFrames;
     uint32 AutoMaxSkipFrames;
 	uint32 os9x_hack;
-    
+
 // Fixes for individual games
     uint32 StrikeGunnerOffsetHack;
     bool8  ChuckRock;
@@ -355,7 +355,7 @@ struct SSettings{
     bool8  DaffyDuck;
     uint8  APURAMInitialValue;
     bool8  SDD1Pack;
-    
+
 	bool8 asmspc700;
 	bool8 SpeedHacks;
 #ifdef __WIN32__

@@ -4,7 +4,7 @@
  * (c) Copyright 1996 - 2001 Gary Henderson (gary.henderson@ntlworld.com) and
  *                           Jerremy Koot (jkoot@snes9x.com)
  *
- * Super FX C emulator code 
+ * Super FX C emulator code
  * (c) Copyright 1997 - 1999 Ivar (ivar@snes9x.com) and
  *                           Gary Henderson.
  * Super FX assembler emulator code (c) Copyright 1998 zsKnight and _Demo_.
@@ -259,7 +259,7 @@ void S9xSetCPU(uint8 byte, uint16 Address)
 #endif
 				break;
 			case 0x4201 :
-				// I/O port output 
+				// I/O port output
 			case 0x4202 :
 				// Multiplier (for multply)
 				break;

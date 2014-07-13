@@ -83,7 +83,7 @@
 // DrawTile16 -----------------------------------------
 DEC_DRAW(ROPNAME)
 {
-     TILE_PREAMBLE 
+     TILE_PREAMBLE
 
   if (Tile & V_FLIP){
     if (!(Tile & H_FLIP)){
@@ -93,7 +93,7 @@ DEC_DRAW(ROPNAME)
 		ROW("#8")
 
 		"	sub	%[bp], %[bp], #(8+8)		\n"	
-		"	add	%[screen], %[screen], #(640-16)	\n" 
+		"	add	%[screen], %[screen], #(640-16)	\n"
 		"	add	%[depth], %[depth], #(320-8)	\n"
 		"	subs 	%[lcount], %[lcount], #1	\n"
 		"	bne	2b"
@@ -117,7 +117,7 @@ DEC_DRAW(ROPNAME)
 		"2:						\n"
 		ROW1("#8")
 
-		"	add	%[screen], %[screen], #(640-16)	\n" 
+		"	add	%[screen], %[screen], #(640-16)	\n"
 		"	add	%[depth], %[depth], #(320-8)	\n"
 		"	subs 	%[lcount], %[lcount], #1	\n"
 		"	bne	2b"
@@ -143,7 +143,7 @@ DEC_DRAW(ROPNAME)
 		"2:					\n"
 		ROW("#8")
 
-		"	add	%[screen], %[screen], #(640-16)	\n" 
+		"	add	%[screen], %[screen], #(640-16)	\n"
 		"	add	%[depth], %[depth], #(320-8)	\n"
 		"	subs 	%[lcount], %[lcount], #1	\n"
 		"	bne	2b"
@@ -168,7 +168,7 @@ DEC_DRAW(ROPNAME)
 		ROW1("#8")
 
 		"	add	%[bp], %[bp], #(8+8)		\n"	
-		"	add	%[screen], %[screen], #(640-16)	\n" 
+		"	add	%[screen], %[screen], #(640-16)	\n"
 		"	add	%[depth], %[depth], #(320-8)	\n"
 		"	subs 	%[lcount], %[lcount], #1	\n"
 		"	bne	2b"
@@ -198,7 +198,7 @@ DEC_DRAWCLIPPED(ROPNAME)
 {
 if (Width == 0) return;
 
-     TILE_PREAMBLE 
+     TILE_PREAMBLE
 
 Offset = Offset + StartPixel;
 if (Tile & V_FLIP){
@@ -211,8 +211,8 @@ if (Tile & V_FLIP){
 		// Loop	
 		"1:						\n"	
 		"	sub	%[bp], %[bp], #8		\n"
-		"	add	%[screen], %[screen], #640	\n" 
-		"	add	%[depth], %[depth], #320	\n" 
+		"	add	%[screen], %[screen], #640	\n"
+		"	add	%[depth], %[depth], #320	\n"
 		// --
 		"	sub	%[bp], %[bp], %[width]		\n"
 		"	sub	%[screen], %[screen], %[width], lsl #1	\n"
@@ -243,8 +243,8 @@ if (Tile & V_FLIP){
 		// Loop	
 		"1:						\n"	
 		"	sub	%[bp], %[bp], #8		\n"	
-		"	add	%[screen], %[screen], #640	\n" 
-		"	add	%[depth], %[depth], #320	\n" 
+		"	add	%[screen], %[screen], #640	\n"
+		"	add	%[depth], %[depth], #320	\n"
 		// --
 		"	add	%[bp], %[bp], %[width]		\n"
 		"	sub	%[screen], %[screen], %[width], lsl #1	\n"
@@ -277,8 +277,8 @@ if (Tile & V_FLIP){
 		// Loop	
 		"1:						\n"
 		"	add	%[bp], %[bp], #8		\n"	
-		"	add	%[screen], %[screen], #640	\n" 
-		"	add	%[depth], %[depth], #320	\n" 
+		"	add	%[screen], %[screen], #640	\n"
+		"	add	%[depth], %[depth], #320	\n"
 		// --
 		"	sub	%[bp], %[bp], %[width]		\n"
 		"	sub	%[screen], %[screen], %[width], lsl #1	\n"
@@ -309,8 +309,8 @@ if (Tile & V_FLIP){
 		// Loop	
 		"1:						\n"	
 		"	add	%[bp], %[bp], #8		\n"	
-		"	add	%[screen], %[screen], #640	\n" 
-		"	add	%[depth], %[depth], #320	\n" 
+		"	add	%[screen], %[screen], #640	\n"
+		"	add	%[depth], %[depth], #320	\n"
 		// --
 		"	add	%[bp], %[bp], %[width]		\n"
 		"	sub	%[screen], %[screen], %[width], lsl #1	\n"

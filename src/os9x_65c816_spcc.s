@@ -78,7 +78,7 @@
 		ldmfd		r13!, {r4, r12, r14}
 
 43211:
-.endm 
+.endm
 /*
 .macro		asmAPU_EXECUTE2
 		LDR		R0,[reg_cpu_var,#APUExecuting_ofs]
@@ -98,7 +98,7 @@
 /*
 
 
-CLI_OPE_REC_Nos_Layer0 
+CLI_OPE_REC_Nos_Layer0
   	nos.nos_ope_treasury_date = convert(DATETIME, @treasuryDate, 103)
     	nos.nos_ope_accounting_date = convert(DATETIME, @accountingDate, 103)
 
@@ -118,7 +118,7 @@ Ecrans:
    +nécessité d'avoir des valeurs dans l'opening pour date tréso=date compta=laccdate
 	
 [Accounting rec] : si laccdate pas bonne (pas = BD-1) -> message warning et pas de donnée
-sinon : 
+sinon :
   +données nécessaires : opening date tréso=date compta=laccdate=BD-1
   +données nécessaires : opening date tréso=date compta=laccdate-1
   +données nécessaires : opening date tréso=laccdate-1 et date compta=laccdate

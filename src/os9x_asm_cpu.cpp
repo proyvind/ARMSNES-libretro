@@ -163,7 +163,7 @@ void asm_S9xOpcode_IRQ(void)
 
 #ifdef USE_SA1
 	if (Settings.SA1 && (Memory.FillRAM [0x2209] & 0x40))
-	    S9xSetPCBase (Memory.FillRAM [0x220e] | 
+	    S9xSetPCBase (Memory.FillRAM [0x220e] |
 			  (Memory.FillRAM [0x220f] << 8));
 	else
 #endif
@@ -187,7 +187,7 @@ void asm_S9xOpcode_IRQ(void)
 
 #ifdef USE_SA1
 	if (Settings.SA1 && (Memory.FillRAM [0x2209] & 0x40))
-	    S9xSetPCBase (Memory.FillRAM [0x220e] | 
+	    S9xSetPCBase (Memory.FillRAM [0x220e] |
 			  (Memory.FillRAM [0x220f] << 8));
 	else
 #endif

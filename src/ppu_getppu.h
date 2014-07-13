@@ -171,7 +171,7 @@ static uint8 GetPPU_213B (uint16 Address)
 	PPU.CGFLIPRead ^= 1;
 	return (byte);
 }
-	    
+	
 static uint8 GetPPU_213C (uint16 Address)
 {
 	uint8 byte = 0;
@@ -253,7 +253,7 @@ static uint8 GetPPU_APUR (uint16 Address)
 			&& Address <= 0x2143
 			&& !CPU.V_Counter)
 		{
-			return (uint8) ((Address & 1) ? 
+			return (uint8) ((Address & 1) ?
 				((rand() & 0xff00) >> 8) : (rand() & 0xff));
 		}
 		return (APU.OutPorts[Address & 3]);

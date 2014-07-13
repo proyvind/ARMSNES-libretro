@@ -4,7 +4,7 @@
  * (c) Copyright 1996 - 2001 Gary Henderson (gary.henderson@ntlworld.com) and
  *                           Jerremy Koot (jkoot@snes9x.com)
  *
- * Super FX C emulator code 
+ * Super FX C emulator code
  * (c) Copyright 1997 - 1999 Ivar (ivar@snes9x.com) and
  *                           Gary Henderson.
  * Super FX assembler emulator code (c) Copyright 1998 zsKnight and _Demo_.
@@ -59,13 +59,13 @@ public:
     bool8_32 Init ();
     void  Deinit ();
     void  FreeSDD1Data ();
-    
+
     void WriteProtectROM ();
     void FixROMSpeed ();
     void MapRAM ();
     void MapExtraRAM ();
     char *Safe (const char *);
-    
+
     void LoROMMap ();
     void LoROM24MBSMap ();
     void SRAM512KLoROMMap ();
@@ -83,7 +83,7 @@ public:
     void ApplyROMFixes ();
     void CheckForIPSPatch (const char *rom_filename, bool8_32 header,
 			   int32 &rom_size);
-    
+
     const char *TVStandard ();
     const char *Speed ();
     const char *StaticRAMSize ();
@@ -95,14 +95,14 @@ public:
     const char *ROMID ();
     const char *CompanyID ();
 	uint32 caCRC32(uint8 *array, uint32 size, register uint32 crc32= 0xFFFFFFFF);	
-    
+
     enum {
 	MAP_PPU, MAP_CPU, MAP_DSP, MAP_LOROM_SRAM, MAP_HIROM_SRAM,
 	MAP_NONE, MAP_DEBUG, MAP_C4, MAP_BWRAM, MAP_BWRAM_BITMAP,
 	MAP_BWRAM_BITMAP2, MAP_SA1RAM, MAP_LAST
     };
     enum { MAX_ROM_SIZE = 0x600000 };
-    
+
     uint8 *RAM;
     uint8 *ROM;
     uint8 *VRAM;

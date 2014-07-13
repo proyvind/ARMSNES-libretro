@@ -4,7 +4,7 @@
  * (c) Copyright 1996 - 2001 Gary Henderson (gary.henderson@ntlworld.com) and
  *                           Jerremy Koot (jkoot@snes9x.com)
  *
- * Super FX C emulator code 
+ * Super FX C emulator code
  * (c) Copyright 1997 - 1999 Ivar (ivar@snes9x.com) and
  *                           Gary Henderson.
  * Super FX assembler emulator code (c) Copyright 1998 zsKnight and _Demo_.
@@ -181,7 +181,7 @@ void S9xFixSoundAfterSnapshotLoad ()
     S9xSetFilterCoefficient (5, (signed char) APU.DSP [APU_C5]);
     S9xSetFilterCoefficient (6, (signed char) APU.DSP [APU_C6]);
     S9xSetFilterCoefficient (7, (signed char) APU.DSP [APU_C7]);
- 
+
 	for (int i = 0; i < 8; i++)
     {
 		SoundData.channels[i].needs_decode = TRUE;
@@ -215,7 +215,7 @@ void S9xSetEnvelopeHeight (int channel, int level)
 }
 
 #if 1
-void S9xSetSoundSample (int, uint16) 
+void S9xSetSoundSample (int, uint16)
 {
 }
 #else
@@ -223,7 +223,7 @@ void S9xSetSoundSample (int channel, uint16 sample_number)
 {
     register Channel *ch = &SoundData.channels[channel];
 
-    if (ch->state != SOUND_SILENT && 
+    if (ch->state != SOUND_SILENT &&
 	sample_number != ch->sample_number)
     {
 	int keep = ch->state;
@@ -267,7 +267,7 @@ static void DecodeBlock (Channel *ch)
     unsigned int i;
 	
     compressed++;
-    
+
     int32 prev0 = ch->previous [0];
     int32 prev1 = ch->previous [1];
     shift = filter >> 4;
@@ -311,7 +311,7 @@ static void DecodeBlock (Channel *ch)
 			out = (sample1 << shift) - prev1 + (prev1 >> 4);
 			prev1 = (int16) prev0;
 			prev0 &= ~3;
-			*raw++ = prev0 = out + (prev0 << 1) - (prev0 >> 5) - 
+			*raw++ = prev0 = out + (prev0 << 1) - (prev0 >> 5) -
 				(prev0 >> 4);
 			
 			out = (sample2 << shift) - prev1 + (prev1 >> 4);
@@ -333,14 +333,14 @@ static void DecodeBlock (Channel *ch)
 			out = out - prev1 + (prev1 >> 3) + (prev1 >> 4);
 			prev1 = (int16) prev0;
 			prev0 &= ~3;
-			*raw++ = prev0 = out + (prev0 << 1) - (prev0 >> 3) - 
+			*raw++ = prev0 = out + (prev0 << 1) - (prev0 >> 3) -
 				(prev0 >> 4) - (prev1 >> 6);
 			
 			out = (sample2 << shift);
 			out = out - prev1 + (prev1 >> 3) + (prev1 >> 4);
 			prev1 = (int16) prev0;
 			prev0 &= ~3;
-			*raw++ = prev0 = out + (prev0 << 1) - (prev0 >> 3) - 
+			*raw++ = prev0 = out + (prev0 << 1) - (prev0 >> 3) -
 				(prev0 >> 4) - (prev1 >> 6);
 		}
 		break;
@@ -357,7 +357,7 @@ static void MixStereo (int sample_count)
 {
     int pitch_mod = SoundData.pitch_mod & (0xFFFFFFFF^APU.DSP[APU_NON]);//~APU.DSP[APU_NON];
 
-    for (uint32 J = 0; J < NUM_CHANNELS; J++) 
+    for (uint32 J = 0; J < NUM_CHANNELS; J++)
     {
 	int32 VL, VR;
 	Channel *ch = &SoundData.channels[J];
@@ -370,7 +370,7 @@ static void MixStereo (int sample_count)
 
 	bool8 mod = pitch_mod & (1 << J);
 
-	if (ch->needs_decode) 
+	if (ch->needs_decode)
 	{
 	    DecodeBlock(ch);
 	    ch->needs_decode = FALSE;
@@ -394,7 +394,7 @@ static void MixStereo (int sample_count)
 		freq = PITCH_MOD(freq, wave [I / 2]);
 
 	    ch->env_error += ch->erate;
-	    if (ch->env_error >= FIXED_POINT) 
+	    if (ch->env_error >= FIXED_POINT)
 	    {
 		uint32 step = ch->env_error >> FIXED_POINT_SHIFT;
 
@@ -410,7 +410,7 @@ static void MixStereo (int sample_count)
 			ch->envx = 127;
 			ch->envxx = 127 << ENVX_SHIFT;
 			ch->state = SOUND_DECAY;
-			if (ch->sustain_level != 8) 
+			if (ch->sustain_level != 8)
 			{
 			    S9xSetEnvRate (ch, ch->decay_rate, -1,
 						(MAX_ENVELOPE_HEIGHT * ch->sustain_level) >> 3, 1<<28);
@@ -453,7 +453,7 @@ static void MixStereo (int sample_count)
 			goto stereo_exit;
 		    }
 		    break;
-		    
+		
 		case SOUND_RELEASE:
 		    while (ch->env_error >= FIXED_POINT)
 		    {
@@ -618,7 +618,7 @@ static void MixMono (int sample_count)
 {
     int pitch_mod = SoundData.pitch_mod & (0xFFFFFFFF^APU.DSP[APU_NON]);
 
-    for (uint32 J = 0; J < NUM_CHANNELS; J++) 
+    for (uint32 J = 0; J < NUM_CHANNELS; J++)
     {
 	Channel *ch = &SoundData.channels[J];
 	unsigned long freq0 = ch->frequency;
@@ -630,7 +630,7 @@ static void MixMono (int sample_count)
 
 	bool8 mod = pitch_mod & (1 << J);
 
-	if (ch->needs_decode) 
+	if (ch->needs_decode)
 	{
 	    DecodeBlock(ch);
 	    ch->needs_decode = FALSE;
@@ -653,7 +653,7 @@ static void MixMono (int sample_count)
 		freq = PITCH_MOD(freq, wave [I]);
 
 	    ch->env_error += ch->erate;
-	    if (ch->env_error >= FIXED_POINT) 
+	    if (ch->env_error >= FIXED_POINT)
 	    {
 		uint32 step = ch->env_error >> FIXED_POINT_SHIFT;
 
@@ -669,7 +669,7 @@ static void MixMono (int sample_count)
 			ch->envx = 127;
 			ch->envxx = 127 << ENVX_SHIFT;
 			ch->state = SOUND_DECAY;
-			if (ch->sustain_level != 8) 
+			if (ch->sustain_level != 8)
 			{
 			    S9xSetEnvRate (ch, ch->decay_rate, -1,
 						(MAX_ENVELOPE_HEIGHT * ch->sustain_level) >> 3, 1<<28);
@@ -712,7 +712,7 @@ static void MixMono (int sample_count)
 			goto mono_exit;
 		    }
 		    break;
-		    
+		
 		case SOUND_RELEASE:
 		    while (ch->env_error >= FIXED_POINT)
 		    {

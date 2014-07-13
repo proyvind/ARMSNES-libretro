@@ -4,7 +4,7 @@
  * (c) Copyright 1996 - 2001 Gary Henderson (gary.henderson@ntlworld.com) and
  *                           Jerremy Koot (jkoot@snes9x.com)
  *
- * Super FX C emulator code 
+ * Super FX C emulator code
  * (c) Copyright 1997 - 1999 Ivar (ivar@snes9x.com) and
  *                           Gary Henderson.
  * Super FX assembler emulator code (c) Copyright 1998 zsKnight and _Demo_.
@@ -3349,7 +3349,7 @@ void S9xOpcode_IRQ (void)
 			 (Memory.FillRAM [0x2208] << 8));
 #else
 	if (Settings.SA1 && (Memory.FillRAM [0x2209] & 0x40))
-	    S9xSetPCBase (Memory.FillRAM [0x220e] | 
+	    S9xSetPCBase (Memory.FillRAM [0x220e] |
 			  (Memory.FillRAM [0x220f] << 8));
 	else
 	    S9xSetPCBase (S9xGetWord (0xFFEE));
@@ -3377,7 +3377,7 @@ void S9xOpcode_IRQ (void)
 			 (Memory.FillRAM [0x2208] << 8));
 #else
 	if (Settings.SA1 && (Memory.FillRAM [0x2209] & 0x40))
-	    S9xSetPCBase (Memory.FillRAM [0x220e] | 
+	    S9xSetPCBase (Memory.FillRAM [0x220e] |
 			  (Memory.FillRAM [0x220f] << 8));
 	else
 	    S9xSetPCBase (S9xGetWord (0xFFFE));
@@ -3620,12 +3620,12 @@ static void Op54X1 (void)
 #ifdef VAR_CYCLES
     CPU.Cycles += CPU.MemSpeedx2 + TWO_CYCLES;
 #endif
-    
+
     Registers.DB = *CPU.PC++;
     ICPU.ShiftedDB = Registers.DB << 16;
     SrcBank = *CPU.PC++;
 
-    S9xSetByte (S9xGetByte ((SrcBank << 16) + Registers.X.W), 
+    S9xSetByte (S9xGetByte ((SrcBank << 16) + Registers.X.W),
 	     ICPU.ShiftedDB + Registers.Y.W);
 
     Registers.XL++;
@@ -3642,12 +3642,12 @@ static void Op54X0 (void)
 #ifdef VAR_CYCLES
     CPU.Cycles += CPU.MemSpeedx2 + TWO_CYCLES;
 #endif
-    
+
     Registers.DB = *CPU.PC++;
     ICPU.ShiftedDB = Registers.DB << 16;
     SrcBank = *CPU.PC++;
 
-    S9xSetByte (S9xGetByte ((SrcBank << 16) + Registers.X.W), 
+    S9xSetByte (S9xGetByte ((SrcBank << 16) + Registers.X.W),
 	     ICPU.ShiftedDB + Registers.Y.W);
 
     Registers.X.W++;
@@ -3663,11 +3663,11 @@ static void Op44X1 (void)
 
 #ifdef VAR_CYCLES
     CPU.Cycles += CPU.MemSpeedx2 + TWO_CYCLES;
-#endif    
+#endif
     Registers.DB = *CPU.PC++;
     ICPU.ShiftedDB = Registers.DB << 16;
     SrcBank = *CPU.PC++;
-    S9xSetByte (S9xGetByte ((SrcBank << 16) + Registers.X.W), 
+    S9xSetByte (S9xGetByte ((SrcBank << 16) + Registers.X.W),
 	     ICPU.ShiftedDB + Registers.Y.W);
 
     Registers.XL--;
@@ -3683,11 +3683,11 @@ static void Op44X0 (void)
 
 #ifdef VAR_CYCLES
     CPU.Cycles += CPU.MemSpeedx2 + TWO_CYCLES;
-#endif    
+#endif
     Registers.DB = *CPU.PC++;
     ICPU.ShiftedDB = Registers.DB << 16;
     SrcBank = *CPU.PC++;
-    S9xSetByte (S9xGetByte ((SrcBank << 16) + Registers.X.W), 
+    S9xSetByte (S9xGetByte ((SrcBank << 16) + Registers.X.W),
 	     ICPU.ShiftedDB + Registers.Y.W);
 
     Registers.X.W--;
@@ -3783,7 +3783,7 @@ static void Op40 (void)
 	missing.emulate6502 = 1;
     }
     S9xSetPCBase (ICPU.ShiftedPB + Registers.PC);
-    
+
     if (CheckIndex ())
     {
 	Registers.XH = 0;
@@ -3856,7 +3856,7 @@ static void Op42 (void) {
 	signed char s9xInt8=0xF0|(b&0xF);
 	#ifdef VAR_CYCLES
   CPU.Cycles += CPU.MemSpeed;
-	#endif    
+	#endif
   OpAddress = ((int) (CPU.PC - CPU.PCBase) + s9xInt8) & 0xffff;
 		
 	switch (b&0xF0) {		

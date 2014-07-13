@@ -1,19 +1,19 @@
 /*******************************************************************************
   Snes9x - Portable Super Nintendo Entertainment System (TM) emulator.
- 
+
   (c) Copyright 1996 - 2003 Gary Henderson (gary.henderson@ntlworld.com) and
                             Jerremy Koot (jkoot@snes9x.com)
 
   (c) Copyright 2002 - 2003 Matthew Kendora and
                             Brad Jorsch (anomie@users.sourceforge.net)
- 
 
-                      
+
+
   C4 x86 assembler and some C emulation code
   (c) Copyright 2000 - 2003 zsKnight (zsknight@zsnes.com),
                             _Demo_ (_demo_@zsnes.com), and
                             Nach (n-a-c-h@users.sourceforge.net)
-                                          
+
   C4 C++ code
   (c) Copyright 2003 Brad Jorsch
 
@@ -22,7 +22,7 @@
                             John Weidman (jweidman@slip.net),
                             neviksti (neviksti@hotmail.com), and
                             Kris Bleakley (stinkfish@bigpond.com)
- 
+
   DSP-2 emulator code
   (c) Copyright 2003 Kris Bleakley, John Weidman, neviksti, Matthew Kendora, and
                      Lord Nightmare (lord_nightmare@users.sourceforge.net
@@ -37,38 +37,38 @@
 
   S-RTC C emulator code
   (c) Copyright 2001 John Weidman
-  
-  Super FX x86 assembler emulator code 
-  (c) Copyright 1998 - 2003 zsKnight, _Demo_, and pagefault 
 
-  Super FX C emulator code 
+  Super FX x86 assembler emulator code
+  (c) Copyright 1998 - 2003 zsKnight, _Demo_, and pagefault
+
+  Super FX C emulator code
   (c) Copyright 1997 - 1999 Ivar and Gary Henderson.
 
 
 
- 
+
   Specific ports contains the works of other authors. See headers in
   individual files.
- 
+
   Snes9x homepage: http://www.snes9x.com
- 
+
   Permission to use, copy, modify and distribute Snes9x in both binary and
   source form, for non-commercial purposes, is hereby granted without fee,
   providing that this license information and copyright notice appear with
   all copies and any derived work.
- 
+
   This software is provided 'as-is', without any express or implied
   warranty. In no event shall the authors be held liable for any damages
   arising from the use of this software.
- 
+
   Snes9x is freeware for PERSONAL USE only. Commercial users should
   seek permission of the copyright holders first. Commercial use includes
   charging money for Snes9x or software derived from Snes9x.
- 
+
   The copyright holders request that bug fixes and improvements to the code
   should be forwarded to them so everyone can benefit from the modifications
   in future versions.
- 
+
   Super NES and Super Nintendo Entertainment System are trademarks of
   Nintendo Co., Limited and its subsidiary companies.
 *******************************************************************************/
@@ -232,7 +232,7 @@ static unsigned int _isqrt (unsigned long val)
 	  unsigned int temp, g=0;
 
 	  if (val >= 0x40000000) {
-	    g = 0x8000; 
+	    g = 0x8000;
 	    val -= 0x40000000;
 	  }
 
@@ -270,22 +270,22 @@ void C4TransfWireFrame ()
     c4x = C4WFXVal;
     c4y = C4WFYVal;
     c4z = C4WFZVal - 0x95;
-    
+
     // Rotate X
     tanval = -C4WFX2Val << 9;
     c4y2 = (c4y * C4_Cos(tanval) - c4z * C4_Sin(tanval)) >> 15;
     c4z2 = (c4y * C4_Sin(tanval) + c4z * C4_Cos(tanval)) >> 15;
-    
+
     // Rotate Y
     tanval = -C4WFY2Val << 9;
     c4x2 = (c4x * C4_Cos(tanval) + c4z2 * C4_Sin(tanval)) >> 15;
     c4z = (c4x * -C4_Sin(tanval) + c4z2 * C4_Cos(tanval)) >> 15;
-    
+
     // Rotate Z
     tanval = -C4WFDist << 9;
     c4x = (c4x2 * C4_Cos(tanval) - c4y2 * C4_Sin(tanval)) >> 15;
     c4y = (c4x2 * C4_Sin(tanval) + c4y2 * C4_Cos(tanval)) >> 15;
-    
+
     // Scale
     C4WFXVal = (short)(((long)c4x*C4WFScale*0x95)/(0x90*(c4z+0x95)));
     C4WFYVal = (short)(((long)c4y*C4WFScale*0x95)/(0x90*(c4z+0x95)));
@@ -297,22 +297,22 @@ void C4TransfWireFrame2 ()
     c4x = C4WFXVal;
     c4y = C4WFYVal;
     c4z = C4WFZVal;
-    
+
     // Rotate X
     tanval = -C4WFX2Val << 9;
     c4y2 = (c4y * C4_Cos(tanval) - c4z * C4_Sin(tanval)) >> 15;
     c4z2 = (c4y * C4_Sin(tanval) + c4z * C4_Cos(tanval)) >> 15;
-    
+
     // Rotate Y
     tanval = -C4WFY2Val << 9;
     c4x2 = (c4x * C4_Cos(tanval) + c4z2 * C4_Sin(tanval)) >> 15;
     c4z = (c4x * -C4_Sin(tanval) + c4z2 * C4_Cos(tanval)) >> 15;
-    
+
     // Rotate Z
     tanval = -C4WFDist << 9;
     c4x = (c4x2 * C4_Cos(tanval) - c4y2 * C4_Sin(tanval)) >> 15;
     c4y = (c4x2 * C4_Sin(tanval) + c4y2 * C4_Cos(tanval)) >> 15;
-    
+
     // Scale
     C4WFXVal =(short)(((long)c4x * C4WFScale) / 0x100);
     C4WFYVal =(short)(((long)c4y * C4WFScale) / 0x100);
@@ -329,21 +329,21 @@ void C4CalcWireFrame ()
         C4WFYVal = (short) ( ((long)C4WFYVal << 8) / _abs (C4WFXVal) );
         if (C4WFXVal < 0)
             C4WFXVal = -256;
-        else 
+        else
             C4WFXVal = 256;
     }
     else
     {
-        if (C4WFYVal != 0) 
+        if (C4WFYVal != 0)
         {
             C4WFDist = _abs(C4WFYVal)+1;
             C4WFXVal = (short) ( ((long)C4WFXVal << 8) / _abs (C4WFYVal) );
             if (C4WFYVal < 0)
                 C4WFYVal = -256;
-            else 
+            else
                 C4WFYVal = 256;
         }
-        else 
+        else
             C4WFDist = 0;
     }
 }
@@ -356,34 +356,34 @@ short C41FDistVal;
 
 void C4Op1F ()
 {
-    if (C41FXVal == 0) 
+    if (C41FXVal == 0)
     {
-        if (C41FYVal > 0) 
+        if (C41FYVal > 0)
             C41FAngleRes = 0x80;
-        else 
+        else
             C41FAngleRes = 0x180;
     }
-    else 
+    else
     {
         C41FAngleRes = (short)(_atan2(C41FYVal, C41FXVal) / 2);
-        if (C41FXVal< 0) 
+        if (C41FXVal< 0)
             C41FAngleRes += 0x100;
         C41FAngleRes &= 0x1FF;
     }
 /*
-    if (C41FXVal == 0) 
+    if (C41FXVal == 0)
     {
-        if (C41FYVal > 0) 
+        if (C41FYVal > 0)
             C41FAngleRes = 0x80;
-        else 
+        else
             C41FAngleRes = 0x180;
     }
-    else 
+    else
     {
         tanval = (double) C41FYVal / C41FXVal;
         C41FAngleRes = (short) (atan (tanval) / (3.141592675 * 2) * 512);
         C41FAngleRes = C41FAngleRes;
-        if (C41FXVal< 0) 
+        if (C41FXVal< 0)
             C41FAngleRes += 0x100;
         C41FAngleRes &= 0x1FF;
     }

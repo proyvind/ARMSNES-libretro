@@ -4,7 +4,7 @@
  * (c) Copyright 1996 - 2001 Gary Henderson (gary.henderson@ntlworld.com) and
  *                           Jerremy Koot (jkoot@snes9x.com)
  *
- * Super FX C emulator code 
+ * Super FX C emulator code
  * (c) Copyright 1997 - 1999 Ivar (ivar@snes9x.com) and
  *                           Gary Henderson.
  * Super FX assembler emulator code (c) Copyright 1998 zsKnight and _Demo_.
@@ -92,7 +92,7 @@ struct SGFX{
     int	   OBJList [129];
     uint32 Sizes [129];
     int    VPositions [129];
-    
+
 #ifdef GFX_MULTI_FORMAT
     uint32 PixelFormat;
     uint32 (*BuildPixel) (uint32 R, uint32 G, uint32 B);
@@ -124,7 +124,7 @@ struct SBG
     uint32 StartPalette;
     uint32 PaletteShift;
     uint32 PaletteMask;
-    
+
     uint8 *Buffer;
     uint8 *Buffered;
     bool8  DirectColourMode;
@@ -175,7 +175,7 @@ GFX.X2 [((((C1) & RGB_REMOVE_LOW_BITS_MASK) + \
 (GFX.X2 [((((C1) & RGB_REMOVE_LOW_BITS_MASK) + \
 	  ((C2) & RGB_REMOVE_LOW_BITS_MASK)) >> 1) + \
 	 ((C1) & (C2) & RGB_LOW_BITS_MASK)] | \
- (((C1) ^ (C2)) & RGB_LOW_BITS_MASK))	   
+ (((C1) ^ (C2)) & RGB_LOW_BITS_MASK))	
 #endif
 
 #define COLOR_ADD1_2(C1, C2) \
@@ -198,7 +198,7 @@ GFX.ZERO_OR_X2 [(((C1) | RGB_HI_BITS_MASKx2) - \
 GFX.ZERO [(((C1) | RGB_HI_BITS_MASKx2) - \
 	   ((C2) & RGB_REMOVE_LOW_BITS_MASK)) >> 1]
 
-typedef void (*NormalTileRenderer) (uint32 Tile, uint32 Offset, 
+typedef void (*NormalTileRenderer) (uint32 Tile, uint32 Offset,
 				    uint32 StartLine, uint32 LineCount);
 typedef void (*ClippedTileRenderer) (uint32 Tile, uint32 Offset,
 				     uint32 StartPixel, uint32 Width,

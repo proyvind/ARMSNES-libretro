@@ -4,7 +4,7 @@
  * (c) Copyright 1996 - 2001 Gary Henderson (gary.henderson@ntlworld.com) and
  *                           Jerremy Koot (jkoot@snes9x.com)
  *
- * Super FX C emulator code 
+ * Super FX C emulator code
  * (c) Copyright 1997 - 1999 Ivar (ivar@snes9x.com) and
  *                           Gary Henderson.
  * Super FX assembler emulator code (c) Copyright 1998 zsKnight and _Demo_.
@@ -1419,7 +1419,7 @@ void Apu2E ()
 // CBNE dp,rel
     uint8 Work8 = OP1;
     Relative2 ();
-    
+
     if (S9xAPUGetByteZ (Work8) != IAPU.YA.B.A)
     {
 	IAPU.PC = IAPU.RAM + (uint16) Int16;

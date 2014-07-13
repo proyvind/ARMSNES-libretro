@@ -19,81 +19,81 @@ extern uint8  Mode7Depths [2];
 
 static void DrawBGMode7Background16R3 (uint8 *Screen, int bg, int depth)
 {
-    int aa, cc;  
-    int startx; 
-    uint32 Left = 0; 
-    uint32 Right = 256; 
-    uint32 ClipCount = GFX.pCurrentClip->Count [0]; 
-    
-    int32 HOffset; 
-    int32 VOffset; 
-    int32 CentreX; 
+    int aa, cc;
+    int startx;
+    uint32 Left = 0;
+    uint32 Right = 256;
+    uint32 ClipCount = GFX.pCurrentClip->Count [0];
+
+    int32 HOffset;
+    int32 VOffset;
+    int32 CentreX;
     int32 CentreY;
     //uint8 *d;
     //uint16 *p;
     //int dir;
-    int yy; 
+    int yy;
     int yy3;
     int xx3;
-    int xx; 
-    int BB; 
-    int DD; 
+    int xx;
+    int BB;
+    int DD;
     uint32 Line;
-    uint32 clip; 
-    //uint8 b; 
+    uint32 clip;
+    //uint8 b;
     uint8 *Depth;
     unsigned int fixedColour = GFX.FixedColour;
 
     //int x, AA, CC, xx3;
 
-    if (!ClipCount) ClipCount = 1; 
+    if (!ClipCount) ClipCount = 1;
 
-    Screen += GFX.StartY * GFX_PITCH; 
+    Screen += GFX.StartY * GFX_PITCH;
     Depth = GFX.DB + GFX.StartY * GFX_PPL;
-    struct SLineMatrixData *l = &LineMatrixData [GFX.StartY]; 
+    struct SLineMatrixData *l = &LineMatrixData [GFX.StartY];
 
-    for (Line = GFX.StartY; Line <= GFX.EndY; Line++, Screen += GFX_PITCH, Depth += GFX_PPL, l++) { 
-	HOffset = ((int32) LineData[Line].BG[0].HOffset << M7) >> M7; 
-	VOffset = ((int32) LineData[Line].BG[0].VOffset << M7) >> M7; 
+    for (Line = GFX.StartY; Line <= GFX.EndY; Line++, Screen += GFX_PITCH, Depth += GFX_PPL, l++) {
+	HOffset = ((int32) LineData[Line].BG[0].HOffset << M7) >> M7;
+	VOffset = ((int32) LineData[Line].BG[0].VOffset << M7) >> M7;
 
-	CentreX = ((int32) l->CentreX << M7) >> M7; 
-	CentreY = ((int32) l->CentreY << M7) >> M7; 
+	CentreX = ((int32) l->CentreX << M7) >> M7;
+	CentreY = ((int32) l->CentreY << M7) >> M7;
 
-	if (PPU.Mode7VFlip) yy = 255 - (int) Line; 
-	else yy = Line; 
+	if (PPU.Mode7VFlip) yy = 255 - (int) Line;
+	else yy = Line;
 
 	yy += VOffset - CentreY;
 	xx = HOffset - CentreX;
 
-	BB = l->MatrixB * yy + (CentreX << 8); 
-	DD = l->MatrixD * yy + (CentreY << 8); 
+	BB = l->MatrixB * yy + (CentreX << 8);
+	DD = l->MatrixD * yy + (CentreY << 8);
 	
 	yy3 = ((yy + CentreY) & 7) << 4;
 
-	for (clip = 0; clip < ClipCount; clip++) 
-	{ 
-	    if (GFX.pCurrentClip->Count [0]){ 
-		Left = GFX.pCurrentClip->Left [clip][0]; 
-		Right = GFX.pCurrentClip->Right [clip][0]; 
-		if (Right <= Left) continue; 
+	for (clip = 0; clip < ClipCount; clip++)
+	{
+	    if (GFX.pCurrentClip->Count [0]){
+		Left = GFX.pCurrentClip->Left [clip][0];
+		Right = GFX.pCurrentClip->Right [clip][0];
+		if (Right <= Left) continue;
 	    }
-	    uint16 *p = (uint16 *) Screen + Left; 
+	    uint16 *p = (uint16 *) Screen + Left;
 	    uint8 *d = Depth + Left - 1;
 
-	    if (PPU.Mode7HFlip) { 
-			startx = Right - 1; 
-			aa = -l->MatrixA; 
+	    if (PPU.Mode7HFlip) {
+			startx = Right - 1;
+			aa = -l->MatrixA;
 			cc = -l->MatrixC;
-	    } else { 
-			startx = Left; 
-			aa = l->MatrixA; 
+	    } else {
+			startx = Left;
+			aa = l->MatrixA;
 			cc = l->MatrixC;
 	    }
 
 	    int x = (Right - Left);
 	    int AA = (l->MatrixA * (startx + xx) + BB);
 	    int CC = (l->MatrixC * (startx + xx) + DD);
-	    xx3 = (startx + HOffset); 
+	    xx3 = (startx + HOffset);
 
 #define M7R3(dir) \
 		asm volatile (\
@@ -195,36 +195,36 @@ static void DrawBGMode7Background16R3 (uint8 *Screen, int bg, int depth)
 	    if (!PPU.Mode7HFlip) {
 		M7R3(1)
 	    } else {
-		M7R3(-1) 
+		M7R3(-1)
 	    }
-	} 
+	}
     }
 
 }
 
 static void DrawBGMode7Background16R1R2 (uint8 *Screen, int bg, int depth)
 {
-    int aa, cc;  
-    int startx; 
-    uint32 Left = 0; 
-    uint32 Right = 256; 
-    uint32 ClipCount = GFX.pCurrentClip->Count [0]; 
-    
-    int32 HOffset; 
-    int32 VOffset; 
-    int32 CentreX; 
+    int aa, cc;
+    int startx;
+    uint32 Left = 0;
+    uint32 Right = 256;
+    uint32 ClipCount = GFX.pCurrentClip->Count [0];
+
+    int32 HOffset;
+    int32 VOffset;
+    int32 CentreX;
     int32 CentreY;
     uint8 *d;
     uint16 *p;
-    int yy; 
-    int xx; 
-    int BB; 
-    int DD; 
+    int yy;
+    int xx;
+    int BB;
+    int DD;
     uint32 Line;
-    uint32 clip; 
-    uint8 b; 
+    uint32 clip;
+    uint8 b;
     uint32 AndByY;
-    uint32 AndByX = 0xffffffff; 
+    uint32 AndByX = 0xffffffff;
     if (Settings.Dezaemon && PPU.Mode7Repeat == 2) AndByX = 0x7ff;
     AndByY = AndByX << 4;
     AndByX = AndByX << 1;
@@ -233,47 +233,47 @@ static void DrawBGMode7Background16R1R2 (uint8 *Screen, int bg, int depth)
 
     int x, AA, CC;
 
-    if (!ClipCount) ClipCount = 1; 
+    if (!ClipCount) ClipCount = 1;
 
-    Screen += GFX.StartY * GFX_PITCH; 
+    Screen += GFX.StartY * GFX_PITCH;
     Depth = GFX.DB + GFX.StartY * GFX_PPL;
 
-    struct SLineMatrixData *l = &LineMatrixData [GFX.StartY]; 
+    struct SLineMatrixData *l = &LineMatrixData [GFX.StartY];
 
-    for (Line = GFX.StartY; Line <= GFX.EndY; Line++, Screen += GFX_PITCH, Depth += GFX_PPL, l++) { 
-	HOffset = ((int32) LineData[Line].BG[0].HOffset << M7) >> M7; 
-	VOffset = ((int32) LineData[Line].BG[0].VOffset << M7) >> M7; 
+    for (Line = GFX.StartY; Line <= GFX.EndY; Line++, Screen += GFX_PITCH, Depth += GFX_PPL, l++) {
+	HOffset = ((int32) LineData[Line].BG[0].HOffset << M7) >> M7;
+	VOffset = ((int32) LineData[Line].BG[0].VOffset << M7) >> M7;
 
-	CentreX = ((int32) l->CentreX << M7) >> M7; 
-	CentreY = ((int32) l->CentreY << M7) >> M7; 
+	CentreX = ((int32) l->CentreX << M7) >> M7;
+	CentreY = ((int32) l->CentreY << M7) >> M7;
 
-	if (PPU.Mode7VFlip) yy = 255 - (int) Line; 
-	else yy = Line; 
+	if (PPU.Mode7VFlip) yy = 255 - (int) Line;
+	else yy = Line;
 
 	yy += VOffset - CentreY;
 	xx = HOffset - CentreX;
 
-	BB = l->MatrixB * yy + (CentreX << 8); 
-	DD = l->MatrixD * yy + (CentreY << 8); 
+	BB = l->MatrixB * yy + (CentreX << 8);
+	DD = l->MatrixD * yy + (CentreY << 8);
 	
-	for (clip = 0; clip < ClipCount; clip++) { 
-	    if (GFX.pCurrentClip->Count [0]){ 
-		Left = GFX.pCurrentClip->Left [clip][0]; 
-		Right = GFX.pCurrentClip->Right [clip][0]; 
-		if (Right <= Left) continue; 
-	    } 
-	    p = (uint16 *) Screen + Left; 
+	for (clip = 0; clip < ClipCount; clip++) {
+	    if (GFX.pCurrentClip->Count [0]){
+		Left = GFX.pCurrentClip->Left [clip][0];
+		Right = GFX.pCurrentClip->Right [clip][0];
+		if (Right <= Left) continue;
+	    }
+	    p = (uint16 *) Screen + Left;
 	    d = Depth + Left - 1;
 
-	    if (PPU.Mode7HFlip) { 
-			startx = Right - 1; 
-			aa = -l->MatrixA; 
+	    if (PPU.Mode7HFlip) {
+			startx = Right - 1;
+			aa = -l->MatrixA;
 			cc = -l->MatrixC;
-	    } else { 
-			startx = Left; 
-			aa = l->MatrixA; 
+	    } else {
+			startx = Left;
+			aa = l->MatrixA;
 			cc = l->MatrixC;
-	    } 
+	    }
 
 	    x = (Right - Left);
 	    AA = (l->MatrixA * (startx + xx) + BB);
@@ -286,15 +286,15 @@ static void DrawBGMode7Background16R1R2 (uint8 *Screen, int bg, int depth)
 		"	cmp	%[depth], r0			\n"
 		"	bls	2f				\n"
 		"	orrs	r3, r3, %[CC], asr #18		\n"			
-		"	bne	2f				\n" 
+		"	bne	2f				\n"
 		"						\n"
 		"	ldr	r1, %[AndByY]			\n"
 		"	ldr	r0, %[AndByX]			\n"
 		"	and	r1, r1, %[CC], asr #4		\n"
 		"	and	r0, r0, %[AA], asr #7	\n"
 		"						\n"
-		"	and	r3, r1, #0x7f			\n" 
-		"	sub	r3, r1, r3			\n" 
+		"	and	r3, r1, #0x7f			\n"
+		"	sub	r3, r1, r3			\n"
 		"	add	r3, r3, r0, asr #4		\n"
 		"	add	r3, r3, r3			\n"
 		"	ldrb	r3, [%[VRAM], r3]		\n"
@@ -349,85 +349,85 @@ static void DrawBGMode7Background16R1R2 (uint8 *Screen, int bg, int depth)
 		  [AndByX] "m" (AndByX),
 		  [AndByY] "m" (AndByY)
 		: "r0", "r1", "r3", "cc"
-		); 
+		);
  	 }
    }
 }
 
 
 static void DrawBGMode7Background16R0 (uint8 *Screen, int bg, int depth)
-{  
-    int aa, cc;  
-    int startx; 
-    uint32 Left; 
-    uint32 Right; 
-    uint32 ClipCount = GFX.pCurrentClip->Count [0]; 
-    
-    int32 HOffset; 
-    int32 VOffset; 
-    int32 CentreX; 
+{
+    int aa, cc;
+    int startx;
+    uint32 Left;
+    uint32 Right;
+    uint32 ClipCount = GFX.pCurrentClip->Count [0];
+
+    int32 HOffset;
+    int32 VOffset;
+    int32 CentreX;
     int32 CentreY;
     uint16 *p;
     uint8 *d;
-    int yy; 
-    int xx; 
-    int BB; 
-    int DD; 
+    int yy;
+    int xx;
+    int BB;
+    int DD;
     uint32 Line;
     uint32 clip;
     struct SLineMatrixData *l;
     uint8 *Depth;
     unsigned int fixedColour = GFX.FixedColour;
-     
+
     int x, AA, CC;
     unsigned int AndByY = (0x3ff << 4);
 
-    Left = 0; 
-    Right = 256; 
+    Left = 0;
+    Right = 256;
 
-    if (!ClipCount) ClipCount = 1; 
+    if (!ClipCount) ClipCount = 1;
 
 
     l = &LineMatrixData [GFX.StartY];
     Screen  += GFX.StartY * GFX_PITCH;
     Depth = GFX.DB + GFX.StartY * GFX_PPL;
 
-    for (Line = GFX.StartY; Line <= GFX.EndY; Line++, Screen += GFX_PITCH, Depth += GFX_PPL, l++) { 
-	HOffset = ((int32) LineData[Line].BG[0].HOffset << M7) >> M7; 
-	VOffset = ((int32) LineData[Line].BG[0].VOffset << M7) >> M7; 
+    for (Line = GFX.StartY; Line <= GFX.EndY; Line++, Screen += GFX_PITCH, Depth += GFX_PPL, l++) {
+	HOffset = ((int32) LineData[Line].BG[0].HOffset << M7) >> M7;
+	VOffset = ((int32) LineData[Line].BG[0].VOffset << M7) >> M7;
 
-	CentreX = ((int32) l->CentreX << M7) >> M7; 
-	CentreY = ((int32) l->CentreY << M7) >> M7; 
+	CentreX = ((int32) l->CentreX << M7) >> M7;
+	CentreY = ((int32) l->CentreY << M7) >> M7;
 
-	if (PPU.Mode7VFlip) yy = 255 - (int) Line; 
-	else yy = Line; 
+	if (PPU.Mode7VFlip) yy = 255 - (int) Line;
+	else yy = Line;
 
 	yy += (VOffset - CentreY) % 1023;
 	xx = (HOffset - CentreX) % 1023;
 
-	BB = l->MatrixB * yy + (CentreX << 8); 
-	DD = l->MatrixD * yy + (CentreY << 8); 
+	BB = l->MatrixB * yy + (CentreX << 8);
+	DD = l->MatrixD * yy + (CentreY << 8);
 
-	for (clip = 0; clip < ClipCount; clip++) 
-	{ 
-	    if (GFX.pCurrentClip->Count [0]){ 
-		Left = GFX.pCurrentClip->Left [clip][0]; 
-		Right = GFX.pCurrentClip->Right [clip][0]; 
-		if (Right <= Left) continue; 
-	    	} 
+	for (clip = 0; clip < ClipCount; clip++)
+	{
+	    if (GFX.pCurrentClip->Count [0]){
+		Left = GFX.pCurrentClip->Left [clip][0];
+		Right = GFX.pCurrentClip->Right [clip][0];
+		if (Right <= Left) continue;
+	    	}
 
-	    p = (uint16 *) Screen + Left; 
+	    p = (uint16 *) Screen + Left;
 	    d = Depth + Left -1;
 
-	    if (PPU.Mode7HFlip) { 
-			startx = Right - 1; 
-			aa = -l->MatrixA; 
+	    if (PPU.Mode7HFlip) {
+			startx = Right - 1;
+			aa = -l->MatrixA;
 			cc = -l->MatrixC;
-	    } else { 
-			startx = Left; 
-			aa = l->MatrixA; 
+	    } else {
+			startx = Left;
+			aa = l->MatrixA;
 			cc = l->MatrixC;
-	    } 
+	    }
   	    x = (Right - Left);
 	    AA = (l->MatrixA * (startx + xx) + BB);
 	    CC = (l->MatrixC * (startx + xx) + DD);
@@ -441,8 +441,8 @@ static void DrawBGMode7Background16R0 (uint8 *Screen, int bg, int depth)
 
 		"	and	r1, r3, %[CC], asr #4		\n"
 		"	and	r0, r3, %[AA], asr #4		\n"
-		"	and	r3, r1, #0x7f			\n" 
-		"	sub	r3, r1, r3			\n" 
+		"	and	r3, r1, #0x7f			\n"
+		"	sub	r3, r1, r3			\n"
 		"	add	r3, r3, r0, asr #7		\n"
 		"	add	r3, r3, r3			\n"
 		"	ldrb	r3, [%[VRAM], r3]		\n"
@@ -488,7 +488,7 @@ static void DrawBGMode7Background16R0 (uint8 *Screen, int bg, int depth)
 		: [daa] "r" (aa),
 		  [dcc] "r" (cc),
 		  [VRAM] "r" (Memory.VRAM),
-		  [colors] "r" (GFX.ScreenColors), 
+		  [colors] "r" (GFX.ScreenColors),
 		  //[zdelta] "r" (GFX.DepthDelta),
 		  //[delta] "r" (GFX.Delta << 1),
 		  [fixedcolour] "m" (fixedColour),
@@ -497,7 +497,7 @@ static void DrawBGMode7Background16R0 (uint8 *Screen, int bg, int depth)
 		: "r0", "r1", "r3", "cc"
 		);
 
-	} 
+	}
     }
 
 }
@@ -516,7 +516,7 @@ DEC_FMODE7(ROPNAME)
     } else  GFX.ScreenColors = IPPU.ScreenColors;
 
 	switch (PPU.Mode7Repeat) {
-		case 0: 
+		case 0:
 			DrawBGMode7Background16R0(Screen, bg, depth);
 			return;
 		case 3:
@@ -525,6 +525,6 @@ DEC_FMODE7(ROPNAME)
 		default:
 			DrawBGMode7Background16R1R2(Screen, bg, depth);
 			return;
-	} 
+	}
 }
 

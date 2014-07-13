@@ -4,7 +4,7 @@
  * (c) Copyright 1996 - 2001 Gary Henderson (gary.henderson@ntlworld.com) and
  *                           Jerremy Koot (jkoot@snes9x.com)
  *
- * Super FX C emulator code 
+ * Super FX C emulator code
  * (c) Copyright 1997 - 1999 Ivar (ivar@snes9x.com) and
  *                           Gary Henderson.
  * Super FX assembler emulator code (c) Copyright 1998 zsKnight and _Demo_.
@@ -81,7 +81,7 @@ extern uint32 TailMask [5];
 	"	addmi	" #to_lo ", " #to_lo ", #(1 << ( 8 + " #pix ")) \n" \
 	"	movs	" #from ", " #from ", lsl #2	\n"\
 	"	addcs	" #to_lo ", " #to_lo ", #(1 << (16 + " #pix ")) \n" \
-	"	addmi	" #to_lo ", " #to_lo ", #(1 << (24 + " #pix ")) \n" 
+	"	addmi	" #to_lo ", " #to_lo ", #(1 << (24 + " #pix ")) \n"
 
 uint8 ConvertTile8bpp (uint8 *pCache, uint32 TileAddr)
 {
@@ -117,8 +117,8 @@ uint8 ConvertTile8bpp (uint8 *pCache, uint32 TileAddr)
 
 	"	subs	r0, r0, #1	\n"
 	"	bne	1b		\n"
-		 
-	: [non_zero] "+r" (non_zero), 
+		
+	: [non_zero] "+r" (non_zero),
 	  [tp] "+r" (tp),
 	  [p] "+r" (p)
 	:
@@ -155,8 +155,8 @@ uint8 ConvertTile4bpp (uint8 *pCache, uint32 TileAddr)
 
 	"	subs	r0, r0, #1	\n"
 	"	bne	1b		\n"
-		 
-	: [non_zero] "+r" (non_zero), 
+		
+	: [non_zero] "+r" (non_zero),
 	  [tp] "+r" (tp),
 	  [p] "+r" (p)
 	:
@@ -191,8 +191,8 @@ uint8 ConvertTile2bpp (uint8 *pCache, uint32 TileAddr)
 
 	"	subs	r0, r0, #1	\n"
 	"	bne	1b		\n"
-		 
-	: [non_zero] "+r" (non_zero), 
+		
+	: [non_zero] "+r" (non_zero),
 	  [tp] "+r" (tp),
 	  [p] "+r" (p)
 	:
@@ -209,13 +209,13 @@ void SelectConvertTile() {
     {
 
     case 8:
-	ConvertTile = &ConvertTile8bpp; 
+	ConvertTile = &ConvertTile8bpp;
 	break;
     case 4:
-	ConvertTile = &ConvertTile4bpp; 
+	ConvertTile = &ConvertTile4bpp;
 	break;
     case 2:
-	ConvertTile = &ConvertTile2bpp; 
+	ConvertTile = &ConvertTile2bpp;
 	break;
 	}
 
@@ -224,7 +224,7 @@ void SelectConvertTile() {
 void SelectPalette() {
 	// GFX.ScreenColors = &GFX.ScreenColorsPre[(Tile & GFX.PaletteMask) >> GFX.PaletteShift];
 	if (BG.DirectColourMode) {
-               // GFX.ScreenColors = DirectColourMaps [(Tile >> 10) & BG.PaletteMask]; 
+               // GFX.ScreenColors = DirectColourMaps [(Tile >> 10) & BG.PaletteMask];
 
 		GFX.ScreenColorsPre = DirectColourMaps[0];
 	    	GFX.PaletteMask = BG.PaletteMask << 10;
@@ -236,7 +236,7 @@ void SelectPalette() {
 	    	GFX.PaletteMask = BG.PaletteMask << 10;
 	    	GFX.PaletteShift = 10 - BG.PaletteShift;
 	}
-    
+
 }
 
 inline void WRITE_4PIXELSHI16 (uint32 Offset, uint8 *Pixels)
@@ -368,7 +368,7 @@ INLINE void WRITE_4PIXELS16_FLIPPEDx2x2 (uint32 Offset, uint8 *Pixels)
 void DrawNoZTile16 (uint32 Tile, uint32 Offset, uint32 StartLine, uint32 LineCount)
 {
 
-     TILE_PREAMBLE 
+     TILE_PREAMBLE
 if (Tile & V_FLIP){
     if (!(Tile & H_FLIP)){
 		asm volatile (
@@ -393,8 +393,8 @@ if (Tile & V_FLIP){
 		FN(6)
 		// Loop	
 		"	sub	%[bp], %[bp], #8		\n"	
-		"	add	%[screen], %[screen], #640	\n" 
-		"	add	%[depth], %[depth], #320	\n" 
+		"	add	%[screen], %[screen], #640	\n"
+		"	add	%[depth], %[depth], #320	\n"
 		"	subs 	%[lcount], %[lcount], #1	\n"
 		"	bne	2b"
 		// output
@@ -431,8 +431,8 @@ if (Tile & V_FLIP){
 		FN1(6)	
 		// Loop	
 		"	sub	%[bp], %[bp], #8		\n"	
-		"	add	%[screen], %[screen], #640	\n" 
-		"	add	%[depth], %[depth], #320	\n" 
+		"	add	%[screen], %[screen], #640	\n"
+		"	add	%[depth], %[depth], #320	\n"
 		"	subs 	%[lcount], %[lcount], #1	\n"
 		"	bne	2b"
 		// output
@@ -457,8 +457,8 @@ if (Tile & V_FLIP){
 		FN(6)
 		// Loop	
 		"	add	%[bp], %[bp], #8		\n"	
-		"	add	%[screen], %[screen], #640	\n" 
-		"	add	%[depth], %[depth], #320	\n" 
+		"	add	%[screen], %[screen], #640	\n"
+		"	add	%[depth], %[depth], #320	\n"
 		"	subs 	%[lcount], %[lcount], #1	\n"
 		"	bne	2b"
 		// output
@@ -481,8 +481,8 @@ if (Tile & V_FLIP){
 		FN1(6)	
 		// Loop	
 		"	add	%[bp], %[bp], #8		\n"	
-		"	add	%[screen], %[screen], #640	\n" 
-		"	add	%[depth], %[depth], #320	\n" 
+		"	add	%[screen], %[screen], #640	\n"
+		"	add	%[depth], %[depth], #320	\n"
 		"	subs 	%[lcount], %[lcount], #1	\n"
 		"	bne	2b"
 		// output
@@ -508,7 +508,7 @@ if (Tile & V_FLIP){
 // DrawTile16 -----------------------------------------
 void DrawTile16 (uint32 Tile, uint32 Offset, uint32 StartLine, uint32 LineCount)
 {
-     TILE_PREAMBLE 
+     TILE_PREAMBLE
 
 if (Tile & V_FLIP){
     if (!(Tile & H_FLIP)){
@@ -540,8 +540,8 @@ if (Tile & V_FLIP){
 		FN(6)
 		// Loop	
 		"	sub	%[bp], %[bp], #8		\n"	
-		"	add	%[screen], %[screen], #640	\n" 
-		"	add	%[depth], %[depth], #320	\n" 
+		"	add	%[screen], %[screen], #640	\n"
+		"	add	%[depth], %[depth], #320	\n"
 		"	subs 	%[lcount], %[lcount], #1	\n"
 		"	bne	2b"
 		// output
@@ -585,8 +585,8 @@ if (Tile & V_FLIP){
 		FN1(6)	
 		// Loop	
 		"	sub	%[bp], %[bp], #8		\n"	
-		"	add	%[screen], %[screen], #640	\n" 
-		"	add	%[depth], %[depth], #320	\n" 
+		"	add	%[screen], %[screen], #640	\n"
+		"	add	%[depth], %[depth], #320	\n"
 		"	subs 	%[lcount], %[lcount], #1	\n"
 		"	bne	2b"
 		// output
@@ -612,8 +612,8 @@ if (Tile & V_FLIP){
 		FN(6)
 		// Loop	
 		"	add	%[bp], %[bp], #8		\n"	
-		"	add	%[screen], %[screen], #640	\n" 
-		"	add	%[depth], %[depth], #320	\n" 
+		"	add	%[screen], %[screen], #640	\n"
+		"	add	%[depth], %[depth], #320	\n"
 		"	subs 	%[lcount], %[lcount], #1	\n"
 		"	bne	2b"
 		// output
@@ -637,8 +637,8 @@ if (Tile & V_FLIP){
 		FN1(6)	
 		// Loop	
 		"	add	%[bp], %[bp], #8		\n"	
-		"	add	%[screen], %[screen], #640	\n" 
-		"	add	%[depth], %[depth], #320	\n" 
+		"	add	%[screen], %[screen], #640	\n"
+		"	add	%[depth], %[depth], #320	\n"
 		"	subs 	%[lcount], %[lcount], #1	\n"
 		"	bne	2b"
 		// output
@@ -672,7 +672,7 @@ if (Width == 8) {
 	return;
 	}	
 
-     TILE_PREAMBLE 
+     TILE_PREAMBLE
 Offset += StartPixel;
 
 #define FN(p)  \
@@ -708,8 +708,8 @@ if (Tile & V_FLIP){
 		// Loop	
 		"1:						\n"	
 		"	sub	%[bp], %[bp], #8		\n"	
-		"	add	%[screen], %[screen], #640	\n" 
-		"	add	%[depth], %[depth], #320	\n" 
+		"	add	%[screen], %[screen], #640	\n"
+		"	add	%[depth], %[depth], #320	\n"
 		"	subs 	%[lcount], %[lcount], #1	\n"
 		"	bne	2b"
 		// output
@@ -733,8 +733,8 @@ if (Tile & V_FLIP){
 		// Loop	
 		"1:						\n"	
 		"	sub	%[bp], %[bp], #8		\n"	
-		"	add	%[screen], %[screen], #640	\n" 
-		"	add	%[depth], %[depth], #320	\n" 
+		"	add	%[screen], %[screen], #640	\n"
+		"	add	%[depth], %[depth], #320	\n"
 		"	subs 	%[lcount], %[lcount], #1	\n"
 		"	bne	2b"
 		// output
@@ -760,8 +760,8 @@ if (Tile & V_FLIP){
 		// Loop	
 		"1:						\n"
 		"	add	%[bp], %[bp], #8		\n"	
-		"	add	%[screen], %[screen], #640	\n" 
-		"	add	%[depth], %[depth], #320	\n" 
+		"	add	%[screen], %[screen], #640	\n"
+		"	add	%[depth], %[depth], #320	\n"
 		"	subs 	%[lcount], %[lcount], #1	\n"
 		"	bne	2b"
 		// output
@@ -785,8 +785,8 @@ if (Tile & V_FLIP){
 		// Loop	
 		"1:						\n"	
 		"	add	%[bp], %[bp], #8		\n"	
-		"	add	%[screen], %[screen], #640	\n" 
-		"	add	%[depth], %[depth], #320	\n" 
+		"	add	%[screen], %[screen], #640	\n"
+		"	add	%[depth], %[depth], #320	\n"
 		"	subs 	%[lcount], %[lcount], #1	\n"
 		"	bne	2b"
 		// output
@@ -819,8 +819,8 @@ if (Tile & V_FLIP){
 		// Loop	
 		"1:						\n"	
 		"	sub	%[bp], %[bp], #8		\n"	
-		"	add	%[screen], %[screen], #640	\n" 
-		"	add	%[depth], %[depth], #320	\n" 
+		"	add	%[screen], %[screen], #640	\n"
+		"	add	%[depth], %[depth], #320	\n"
 		"	subs 	%[lcount], %[lcount], #1	\n"
 		"	bne	2b"
 		// output
@@ -846,8 +846,8 @@ if (Tile & V_FLIP){
 		// Loop	
 		"1:						\n"	
 		"	sub	%[bp], %[bp], #8		\n"	
-		"	add	%[screen], %[screen], #640	\n" 
-		"	add	%[depth], %[depth], #320	\n" 
+		"	add	%[screen], %[screen], #640	\n"
+		"	add	%[depth], %[depth], #320	\n"
 		"	subs 	%[lcount], %[lcount], #1	\n"
 		"	bne	2b"
 		// output
@@ -874,8 +874,8 @@ if (Tile & V_FLIP){
 		// Loop	
 		"1:						\n"
 		"	add	%[bp], %[bp], #8		\n"	
-		"	add	%[screen], %[screen], #640	\n" 
-		"	add	%[depth], %[depth], #320	\n" 
+		"	add	%[screen], %[screen], #640	\n"
+		"	add	%[depth], %[depth], #320	\n"
 		"	subs 	%[lcount], %[lcount], #1	\n"
 		"	bne	2b"
 		// output
@@ -900,8 +900,8 @@ if (Tile & V_FLIP){
 		// Loop	
 		"1:						\n"	
 		"	add	%[bp], %[bp], #8		\n"	
-		"	add	%[screen], %[screen], #640	\n" 
-		"	add	%[depth], %[depth], #320	\n" 
+		"	add	%[screen], %[screen], #640	\n"
+		"	add	%[depth], %[depth], #320	\n"
 		"	subs 	%[lcount], %[lcount], #1	\n"
 		"	bne	2b"
 		// output
@@ -936,8 +936,8 @@ if (Tile & V_FLIP){
 		// Loop	
 		"1:						\n"	
 		"	sub	%[bp], %[bp], #8		\n"	
-		"	add	%[screen], %[screen], #640	\n" 
-		"	add	%[depth], %[depth], #320	\n" 
+		"	add	%[screen], %[screen], #640	\n"
+		"	add	%[depth], %[depth], #320	\n"
 		"	subs 	%[lcount], %[lcount], #1	\n"
 		"	bne	2b"
 		// output
@@ -964,8 +964,8 @@ if (Tile & V_FLIP){
 		// Loop	
 		"1:						\n"	
 		"	sub	%[bp], %[bp], #8		\n"	
-		"	add	%[screen], %[screen], #640	\n" 
-		"	add	%[depth], %[depth], #320	\n" 
+		"	add	%[screen], %[screen], #640	\n"
+		"	add	%[depth], %[depth], #320	\n"
 		"	subs 	%[lcount], %[lcount], #1	\n"
 		"	bne	2b"
 		// output
@@ -993,8 +993,8 @@ if (Tile & V_FLIP){
 		// Loop	
 		"1:						\n"
 		"	add	%[bp], %[bp], #8		\n"	
-		"	add	%[screen], %[screen], #640	\n" 
-		"	add	%[depth], %[depth], #320	\n" 
+		"	add	%[screen], %[screen], #640	\n"
+		"	add	%[depth], %[depth], #320	\n"
 		"	subs 	%[lcount], %[lcount], #1	\n"
 		"	bne	2b"
 		// output
@@ -1020,8 +1020,8 @@ if (Tile & V_FLIP){
 		// Loop	
 		"1:						\n"	
 		"	add	%[bp], %[bp], #8		\n"	
-		"	add	%[screen], %[screen], #640	\n" 
-		"	add	%[depth], %[depth], #320	\n" 
+		"	add	%[screen], %[screen], #640	\n"
+		"	add	%[depth], %[depth], #320	\n"
 		"	subs 	%[lcount], %[lcount], #1	\n"
 		"	bne	2b"
 		// output
@@ -1043,7 +1043,7 @@ if (Tile & V_FLIP){
    }
 
 		break;
-	case 4: 
+	case 4:
 // -- Width = 4 ------
 if (Tile & V_FLIP){
     if (!(Tile & H_FLIP)){
@@ -1057,8 +1057,8 @@ if (Tile & V_FLIP){
 		// Loop	
 		"1:						\n"	
 		"	sub	%[bp], %[bp], #8		\n"	
-		"	add	%[screen], %[screen], #640	\n" 
-		"	add	%[depth], %[depth], #320	\n" 
+		"	add	%[screen], %[screen], #640	\n"
+		"	add	%[depth], %[depth], #320	\n"
 		"	subs 	%[lcount], %[lcount], #1	\n"
 		"	bne	2b"
 		// output
@@ -1086,8 +1086,8 @@ if (Tile & V_FLIP){
 		// Loop	
 		"1:						\n"	
 		"	sub	%[bp], %[bp], #8		\n"	
-		"	add	%[screen], %[screen], #640	\n" 
-		"	add	%[depth], %[depth], #320	\n" 
+		"	add	%[screen], %[screen], #640	\n"
+		"	add	%[depth], %[depth], #320	\n"
 		"	subs 	%[lcount], %[lcount], #1	\n"
 		"	bne	2b"
 		// output
@@ -1116,8 +1116,8 @@ if (Tile & V_FLIP){
 		// Loop	
 		"1:						\n"
 		"	add	%[bp], %[bp], #8		\n"	
-		"	add	%[screen], %[screen], #640	\n" 
-		"	add	%[depth], %[depth], #320	\n" 
+		"	add	%[screen], %[screen], #640	\n"
+		"	add	%[depth], %[depth], #320	\n"
 		"	subs 	%[lcount], %[lcount], #1	\n"
 		"	bne	2b"
 		// output
@@ -1144,8 +1144,8 @@ if (Tile & V_FLIP){
 		// Loop	
 		"1:						\n"	
 		"	add	%[bp], %[bp], #8		\n"	
-		"	add	%[screen], %[screen], #640	\n" 
-		"	add	%[depth], %[depth], #320	\n" 
+		"	add	%[screen], %[screen], #640	\n"
+		"	add	%[depth], %[depth], #320	\n"
 		"	subs 	%[lcount], %[lcount], #1	\n"
 		"	bne	2b"
 		// output
@@ -1178,12 +1178,12 @@ if (Tile & V_FLIP){
 		FN(1)
 		FN(2)
 		FN(3)
-		FN(4) 
+		FN(4)
 		// Loop	
 		"1:						\n"	
 		"	sub	%[bp], %[bp], #8		\n"	
-		"	add	%[screen], %[screen], #640	\n" 
-		"	add	%[depth], %[depth], #320	\n" 
+		"	add	%[screen], %[screen], #640	\n"
+		"	add	%[depth], %[depth], #320	\n"
 		"	subs 	%[lcount], %[lcount], #1	\n"
 		"	bne	2b"
 		// output
@@ -1208,12 +1208,12 @@ if (Tile & V_FLIP){
 		FN1(1)
 		FN1(2)
 		FN1(3)
-		FN1(4) 
+		FN1(4)
 		// Loop	
 		"1:						\n"	
 		"	sub	%[bp], %[bp], #8		\n"	
-		"	add	%[screen], %[screen], #640	\n" 
-		"	add	%[depth], %[depth], #320	\n" 
+		"	add	%[screen], %[screen], #640	\n"
+		"	add	%[depth], %[depth], #320	\n"
 		"	subs 	%[lcount], %[lcount], #1	\n"
 		"	bne	2b"
 		// output
@@ -1239,12 +1239,12 @@ if (Tile & V_FLIP){
 		FN(1)
 		FN(2)
 		FN(3)
-		FN(4) 
+		FN(4)
 		// Loop	
 		"1:						\n"
 		"	add	%[bp], %[bp], #8		\n"	
-		"	add	%[screen], %[screen], #640	\n" 
-		"	add	%[depth], %[depth], #320	\n" 
+		"	add	%[screen], %[screen], #640	\n"
+		"	add	%[depth], %[depth], #320	\n"
 		"	subs 	%[lcount], %[lcount], #1	\n"
 		"	bne	2b"
 		// output
@@ -1268,12 +1268,12 @@ if (Tile & V_FLIP){
 		FN1(1)
 		FN1(2)
 		FN1(3)
-		FN1(4) 
+		FN1(4)
 		// Loop	
 		"1:						\n"	
 		"	add	%[bp], %[bp], #8		\n"	
-		"	add	%[screen], %[screen], #640	\n" 
-		"	add	%[depth], %[depth], #320	\n" 
+		"	add	%[screen], %[screen], #640	\n"
+		"	add	%[depth], %[depth], #320	\n"
 		"	subs 	%[lcount], %[lcount], #1	\n"
 		"	bne	2b"
 		// output
@@ -1293,7 +1293,7 @@ if (Tile & V_FLIP){
 
 	}
    }
- 
+
 		break;
 	case 6:
 // -- Width = 6 ------
@@ -1306,13 +1306,13 @@ if (Tile & V_FLIP){
 		FN(1)
 		FN(2)
 		FN(3)
-		FN(4) 
+		FN(4)
 		FN(5)
 		// Loop	
 		"1:						\n"	
 		"	sub	%[bp], %[bp], #8		\n"	
-		"	add	%[screen], %[screen], #640	\n" 
-		"	add	%[depth], %[depth], #320	\n" 
+		"	add	%[screen], %[screen], #640	\n"
+		"	add	%[depth], %[depth], #320	\n"
 		"	subs 	%[lcount], %[lcount], #1	\n"
 		"	bne	2b"
 		// output
@@ -1337,13 +1337,13 @@ if (Tile & V_FLIP){
 		FN1(1)
 		FN1(2)
 		FN1(3)
-		FN1(4) 
+		FN1(4)
 		FN1(5)
 		// Loop	
 		"1:						\n"	
 		"	sub	%[bp], %[bp], #8		\n"	
-		"	add	%[screen], %[screen], #640	\n" 
-		"	add	%[depth], %[depth], #320	\n" 
+		"	add	%[screen], %[screen], #640	\n"
+		"	add	%[depth], %[depth], #320	\n"
 		"	subs 	%[lcount], %[lcount], #1	\n"
 		"	bne	2b"
 		// output
@@ -1369,13 +1369,13 @@ if (Tile & V_FLIP){
 		FN(1)
 		FN(2)
 		FN(3)
-		FN(4) 
+		FN(4)
 		FN(5)
 		// Loop	
 		"1:						\n"
 		"	add	%[bp], %[bp], #8		\n"	
-		"	add	%[screen], %[screen], #640	\n" 
-		"	add	%[depth], %[depth], #320	\n" 
+		"	add	%[screen], %[screen], #640	\n"
+		"	add	%[depth], %[depth], #320	\n"
 		"	subs 	%[lcount], %[lcount], #1	\n"
 		"	bne	2b"
 		// output
@@ -1399,13 +1399,13 @@ if (Tile & V_FLIP){
 		FN1(1)
 		FN1(2)
 		FN1(3)
-		FN1(4) 
+		FN1(4)
 		FN1(5)
 		// Loop	
 		"1:						\n"	
 		"	add	%[bp], %[bp], #8		\n"	
-		"	add	%[screen], %[screen], #640	\n" 
-		"	add	%[depth], %[depth], #320	\n" 
+		"	add	%[screen], %[screen], #640	\n"
+		"	add	%[depth], %[depth], #320	\n"
 		"	subs 	%[lcount], %[lcount], #1	\n"
 		"	bne	2b"
 		// output
@@ -1427,7 +1427,7 @@ if (Tile & V_FLIP){
    }
 
 		break;
-	case 7: 
+	case 7:
 // -- Width = 7 ------
 if (Tile & V_FLIP){
     if (!(Tile & H_FLIP)){
@@ -1438,14 +1438,14 @@ if (Tile & V_FLIP){
 		FN(1)
 		FN(2)
 		FN(3)
-		FN(4) 
+		FN(4)
 		FN(5)
-		FN(6) 
+		FN(6)
 		// Loop	
 		"1:						\n"	
 		"	sub	%[bp], %[bp], #8		\n"	
-		"	add	%[screen], %[screen], #640	\n" 
-		"	add	%[depth], %[depth], #320	\n" 
+		"	add	%[screen], %[screen], #640	\n"
+		"	add	%[depth], %[depth], #320	\n"
 		"	subs 	%[lcount], %[lcount], #1	\n"
 		"	bne	2b"
 		// output
@@ -1470,14 +1470,14 @@ if (Tile & V_FLIP){
 		FN1(1)
 		FN1(2)
 		FN1(3)
-		FN1(4) 
+		FN1(4)
 		FN1(5)
-		FN1(6) 
+		FN1(6)
 		// Loop	
 		"1:						\n"	
 		"	sub	%[bp], %[bp], #8		\n"	
-		"	add	%[screen], %[screen], #640	\n" 
-		"	add	%[depth], %[depth], #320	\n" 
+		"	add	%[screen], %[screen], #640	\n"
+		"	add	%[depth], %[depth], #320	\n"
 		"	subs 	%[lcount], %[lcount], #1	\n"
 		"	bne	2b"
 		// output
@@ -1503,14 +1503,14 @@ if (Tile & V_FLIP){
 		FN(1)
 		FN(2)
 		FN(3)
-		FN(4) 
+		FN(4)
 		FN(5)
-		FN(6) 
+		FN(6)
 		// Loop	
 		"1:						\n"
 		"	add	%[bp], %[bp], #8		\n"	
-		"	add	%[screen], %[screen], #640	\n" 
-		"	add	%[depth], %[depth], #320	\n" 
+		"	add	%[screen], %[screen], #640	\n"
+		"	add	%[depth], %[depth], #320	\n"
 		"	subs 	%[lcount], %[lcount], #1	\n"
 		"	bne	2b"
 		// output
@@ -1534,14 +1534,14 @@ if (Tile & V_FLIP){
 		FN1(1)
 		FN1(2)
 		FN1(3)
-		FN1(4) 
+		FN1(4)
 		FN1(5)
-		FN1(6) 
+		FN1(6)
 		// Loop	
 		"1:						\n"	
 		"	add	%[bp], %[bp], #8		\n"	
-		"	add	%[screen], %[screen], #640	\n" 
-		"	add	%[depth], %[depth], #320	\n" 
+		"	add	%[screen], %[screen], #640	\n"
+		"	add	%[depth], %[depth], #320	\n"
 		"	subs 	%[lcount], %[lcount], #1	\n"
 		"	bne	2b"
 		// output
@@ -1586,7 +1586,7 @@ if (Width == 8) {
 	return;
 	}	
 
-     TILE_PREAMBLE 
+     TILE_PREAMBLE
 Offset += StartPixel;
 // sizeof(FN) = 32 bytes
 #define SIZEOF_FN	(8 * 4)
@@ -1630,8 +1630,8 @@ if (Tile & V_FLIP){
 		// Loop	
 		"1:						\n"	
 		"	sub	%[bp], %[bp], #8		\n"	
-		"	add	%[screen], %[screen], #640	\n" 
-		"	add	%[depth], %[depth], #320	\n" 
+		"	add	%[screen], %[screen], #640	\n"
+		"	add	%[depth], %[depth], #320	\n"
 		"	subs 	%[lcount], %[lcount], #1	\n"
 		"	bxne	%[width]		\n"
 		// output
@@ -1663,8 +1663,8 @@ if (Tile & V_FLIP){
 		// Loop	
 		"1:						\n"	
 		"	sub	%[bp], %[bp], #8		\n"	
-		"	add	%[screen], %[screen], #640	\n" 
-		"	add	%[depth], %[depth], #320	\n" 
+		"	add	%[screen], %[screen], #640	\n"
+		"	add	%[depth], %[depth], #320	\n"
 		"	subs 	%[lcount], %[lcount], #1	\n"
 		"	bxne	%[width]		\n"
 		// output
@@ -1698,8 +1698,8 @@ if (Tile & V_FLIP){
 		// Loop	
 		"1:						\n"
 		"	add	%[bp], %[bp], #8		\n"	
-		"	add	%[screen], %[screen], #640	\n" 
-		"	add	%[depth], %[depth], #320	\n" 
+		"	add	%[screen], %[screen], #640	\n"
+		"	add	%[depth], %[depth], #320	\n"
 		"	subs 	%[lcount], %[lcount], #1	\n"
 		"	bxne	%[width]		\n"
 		// output
@@ -1731,8 +1731,8 @@ if (Tile & V_FLIP){
 		// Loop	
 		"1:						\n"	
 		"	add	%[bp], %[bp], #8		\n"	
-		"	add	%[screen], %[screen], #640	\n" 
-		"	add	%[depth], %[depth], #320	\n" 
+		"	add	%[screen], %[screen], #640	\n"
+		"	add	%[depth], %[depth], #320	\n"
 		"	subs 	%[lcount], %[lcount], #1	\n"
 		"	bxne	%[width]		\n"
 		// output
@@ -1759,7 +1759,7 @@ void DrawTile16x2 (uint32 Tile, uint32 Offset, uint32 StartLine,
 {
     TILE_PREAMBLE
     register uint8 *bp;
-        uint32 l; 
+        uint32 l;
 
     RENDER_TILE(WRITE_4PIXELS16x2, WRITE_4PIXELS16_FLIPPEDx2, 8)
 }
@@ -1770,7 +1770,7 @@ void DrawClippedTile16x2 (uint32 Tile, uint32 Offset,
 {
     TILE_PREAMBLE
     register uint8 *bp;
-        uint32 l; 
+        uint32 l;
 
     TILE_CLIP_PREAMBLE
     RENDER_CLIPPED_TILE(WRITE_4PIXELS16x2, WRITE_4PIXELS16_FLIPPEDx2, 8)
@@ -1781,7 +1781,7 @@ void DrawTile16x2x2 (uint32 Tile, uint32 Offset, uint32 StartLine,
 {
     TILE_PREAMBLE
     register uint8 *bp;
-        uint32 l; 
+        uint32 l;
 
     RENDER_TILE(WRITE_4PIXELS16x2x2, WRITE_4PIXELS16_FLIPPEDx2x2, 8)
 }
@@ -1792,7 +1792,7 @@ void DrawClippedTile16x2x2 (uint32 Tile, uint32 Offset,
 {
     TILE_PREAMBLE
     register uint8 *bp;
-        uint32 l; 
+        uint32 l;
 
     TILE_CLIP_PREAMBLE
     RENDER_CLIPPED_TILE(WRITE_4PIXELS16x2x2, WRITE_4PIXELS16_FLIPPEDx2x2, 8)
@@ -1803,7 +1803,7 @@ void DrawLargePixel16 (uint32 Tile, uint32 Offset,
 		       uint32 StartLine, uint32 LineCount)
 {
     TILE_PREAMBLE
-        uint32 l; 
+        uint32 l;
 
     register uint16 *sp = (uint16 *) GFX.S + Offset;
     uint8  *Depth = GFX.DB + Offset;
@@ -1820,7 +1820,7 @@ void DrawLargePixel16Add (uint32 Tile, uint32 Offset,
 			  uint32 StartLine, uint32 LineCount)
 {
     TILE_PREAMBLE
-        uint32 l; 
+        uint32 l;
 
     register uint16 *sp = (uint16 *) GFX.S + Offset;
     uint8  *Depth = GFX.ZBuffer + Offset;
@@ -1831,7 +1831,7 @@ void DrawLargePixel16Add (uint32 Tile, uint32 Offset,
 			       COLOR_ADD (p, *(s + GFX.Delta))    : \
 			       COLOR_ADD (p, GFX.FixedColour)) \
 			    : p)
-			      
+			
     RENDER_TILE_LARGE (GFX.ScreenColors [pixel], LARGE_ADD_PIXEL)
 }
 
@@ -1840,7 +1840,7 @@ void DrawLargePixel16Add1_2 (uint32 Tile, uint32 Offset,
 			     uint32 StartLine, uint32 LineCount)
 {
     TILE_PREAMBLE
-        uint32 l; 
+        uint32 l;
 
     register uint16 *sp = (uint16 *) GFX.S + Offset;
     uint8  *Depth = GFX.ZBuffer + Offset;
@@ -1851,7 +1851,7 @@ void DrawLargePixel16Add1_2 (uint32 Tile, uint32 Offset,
 			       COLOR_ADD1_2 (p, *(s + GFX.Delta))    : \
 			       COLOR_ADD (p, GFX.FixedColour)) \
 			    : p))
-			      
+			
     RENDER_TILE_LARGE (GFX.ScreenColors [pixel], LARGE_ADD_PIXEL1_2)
 }
 
@@ -1860,7 +1860,7 @@ void DrawLargePixel16Sub (uint32 Tile, uint32 Offset,
 			  uint32 StartLine, uint32 LineCount)
 {
     TILE_PREAMBLE
-        uint32 l; 
+        uint32 l;
 
 
     register uint16 *sp = (uint16 *) GFX.S + Offset;
@@ -1872,7 +1872,7 @@ void DrawLargePixel16Sub (uint32 Tile, uint32 Offset,
 			       COLOR_SUB (p, *(s + GFX.Delta))    : \
 			       COLOR_SUB (p, GFX.FixedColour)) \
 			    : p)
-			      
+			
     RENDER_TILE_LARGE (GFX.ScreenColors [pixel], LARGE_SUB_PIXEL)
 }
 
@@ -1881,7 +1881,7 @@ void DrawLargePixel16Sub1_2 (uint32 Tile, uint32 Offset,
 			     uint32 StartLine, uint32 LineCount)
 {
     TILE_PREAMBLE
-        uint32 l; 
+        uint32 l;
 
     register uint16 *sp = (uint16 *) GFX.S + Offset;
     uint8  *Depth = GFX.ZBuffer + Offset;
@@ -1892,7 +1892,7 @@ void DrawLargePixel16Sub1_2 (uint32 Tile, uint32 Offset,
 			       COLOR_SUB1_2 (p, *(s + GFX.Delta))    : \
 			       COLOR_SUB (p, GFX.FixedColour)) \
 			    : p)
-			      
+			
     RENDER_TILE_LARGE (GFX.ScreenColors [pixel], LARGE_SUB_PIXEL1_2)
 }
 
@@ -1900,7 +1900,7 @@ void DrawHiResTile16 (uint32 Tile, uint32 Offset, uint32 StartLine,
 	         uint32 LineCount)
 {
     TILE_PREAMBLE
-        uint32 l; 
+        uint32 l;
 
     register uint8 *bp;
 
@@ -1913,7 +1913,7 @@ void DrawHiResClippedTile16 (uint32 Tile, uint32 Offset,
 {
     TILE_PREAMBLE
     register uint8 *bp;
-        uint32 l; 
+        uint32 l;
 
     TILE_CLIP_PREAMBLE
     RENDER_CLIPPED_TILEHI(WRITE_4PIXELSHI16, WRITE_4PIXELSHI16_FLIPPED, 4)

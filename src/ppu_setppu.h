@@ -1255,7 +1255,7 @@ static void SetPPU_2132_delayedRasterFx (uint8 Byte, uint16 Address)
 	if (Byte != Memory.FillRAM[Address])
 	{
 			
-		if (!(Settings.os9x_hack & PPU_IGNORE_FIXEDCOLCHANGES)) ADD_ROP(ROP_FIXEDCOLOUR, Byte); 
+		if (!(Settings.os9x_hack & PPU_IGNORE_FIXEDCOLCHANGES)) ADD_ROP(ROP_FIXEDCOLOUR, Byte);
 		Memory.FillRAM[Address] = Byte;
 	}
 }
@@ -1335,7 +1335,7 @@ static void SetPPU_APU (uint8 Byte, uint16 Address)
 #ifdef SPC700_SHUTDOWN
 	CPU.APU_APUExecuting = Settings.APUEnabled;
 	IAPU.WaitCounter++;
-#endif 
+#endif
 #endif // SPCTOOL
 }
 
@@ -1376,16 +1376,16 @@ static void (*SetPPU[])(uint8 Byte, uint16 Address) = {
 	SetPPU_2118, SetPPU_2119, SetPPU_211A, SetPPU_211B, SetPPU_211C, SetPPU_211D, SetPPU_211E, SetPPU_211F,
 	SetPPU_2120, SetPPU_2121, SetPPU_2122, SetPPU_2123, SetPPU_2124, SetPPU_2125, SetPPU_2126, SetPPU_2127,
 	SetPPU_2128, SetPPU_2129, SetPPU_212A, SetPPU_212B, SetPPU_212C, SetPPU_212D, SetPPU_212E, SetPPU_212F,
-	SetPPU_2130, SetPPU_2131, SetPPU_2132, SetPPU_2133, SetPPU_NOP,  SetPPU_NOP,  SetPPU_NOP,  SetPPU_NOP, 
-	SetPPU_NOP,  SetPPU_NOP,  SetPPU_NOP,  SetPPU_NOP,  SetPPU_NOP,  SetPPU_NOP,  SetPPU_NOP,  SetPPU_NOP, 
-	SetPPU_APU,  SetPPU_APU,  SetPPU_APU,  SetPPU_APU,  SetPPU_APU,  SetPPU_APU,  SetPPU_APU,  SetPPU_APU, 
-	SetPPU_APU,  SetPPU_APU,  SetPPU_APU,  SetPPU_APU,  SetPPU_APU,  SetPPU_APU,  SetPPU_APU,  SetPPU_APU, 
-	SetPPU_APU,  SetPPU_APU,  SetPPU_APU,  SetPPU_APU,  SetPPU_APU,  SetPPU_APU,  SetPPU_APU,  SetPPU_APU, 
-	SetPPU_APU,  SetPPU_APU,  SetPPU_APU,  SetPPU_APU,  SetPPU_APU,  SetPPU_APU,  SetPPU_APU,  SetPPU_APU, 
-	SetPPU_APU,  SetPPU_APU,  SetPPU_APU,  SetPPU_APU,  SetPPU_APU,  SetPPU_APU,  SetPPU_APU,  SetPPU_APU, 
-	SetPPU_APU,  SetPPU_APU,  SetPPU_APU,  SetPPU_APU,  SetPPU_APU,  SetPPU_APU,  SetPPU_APU,  SetPPU_APU, 
-	SetPPU_APU,  SetPPU_APU,  SetPPU_APU,  SetPPU_APU,  SetPPU_APU,  SetPPU_APU,  SetPPU_APU,  SetPPU_APU, 
-	SetPPU_APU,  SetPPU_APU,  SetPPU_APU,  SetPPU_APU,  SetPPU_APU,  SetPPU_APU,  SetPPU_APU,  SetPPU_APU, 
+	SetPPU_2130, SetPPU_2131, SetPPU_2132, SetPPU_2133, SetPPU_NOP,  SetPPU_NOP,  SetPPU_NOP,  SetPPU_NOP,
+	SetPPU_NOP,  SetPPU_NOP,  SetPPU_NOP,  SetPPU_NOP,  SetPPU_NOP,  SetPPU_NOP,  SetPPU_NOP,  SetPPU_NOP,
+	SetPPU_APU,  SetPPU_APU,  SetPPU_APU,  SetPPU_APU,  SetPPU_APU,  SetPPU_APU,  SetPPU_APU,  SetPPU_APU,
+	SetPPU_APU,  SetPPU_APU,  SetPPU_APU,  SetPPU_APU,  SetPPU_APU,  SetPPU_APU,  SetPPU_APU,  SetPPU_APU,
+	SetPPU_APU,  SetPPU_APU,  SetPPU_APU,  SetPPU_APU,  SetPPU_APU,  SetPPU_APU,  SetPPU_APU,  SetPPU_APU,
+	SetPPU_APU,  SetPPU_APU,  SetPPU_APU,  SetPPU_APU,  SetPPU_APU,  SetPPU_APU,  SetPPU_APU,  SetPPU_APU,
+	SetPPU_APU,  SetPPU_APU,  SetPPU_APU,  SetPPU_APU,  SetPPU_APU,  SetPPU_APU,  SetPPU_APU,  SetPPU_APU,
+	SetPPU_APU,  SetPPU_APU,  SetPPU_APU,  SetPPU_APU,  SetPPU_APU,  SetPPU_APU,  SetPPU_APU,  SetPPU_APU,
+	SetPPU_APU,  SetPPU_APU,  SetPPU_APU,  SetPPU_APU,  SetPPU_APU,  SetPPU_APU,  SetPPU_APU,  SetPPU_APU,
+	SetPPU_APU,  SetPPU_APU,  SetPPU_APU,  SetPPU_APU,  SetPPU_APU,  SetPPU_APU,  SetPPU_APU,  SetPPU_APU,
 	SetPPU_2180, SetPPU_2181, SetPPU_2182, SetPPU_2183
 };
 #endif
@@ -1397,16 +1397,16 @@ static void (*SetPPU_delayedRasterFx[])(uint8 Byte, uint16 Address) = {
 	SetPPU_2118, SetPPU_2119, SetPPU_211A_delayedRasterFx, SetPPU_211B, SetPPU_211C, SetPPU_211D, SetPPU_211E, SetPPU_211F,
 	SetPPU_2120, SetPPU_2121, SetPPU_2122, SetPPU_2123_delayedRasterFx, SetPPU_2124_delayedRasterFx, SetPPU_2125_delayedRasterFx, SetPPU_2126_delayedRasterFx, SetPPU_2127_delayedRasterFx,
 	SetPPU_2128_delayedRasterFx, SetPPU_2129_delayedRasterFx, SetPPU_212A_delayedRasterFx, SetPPU_212B_delayedRasterFx, SetPPU_212C_delayedRasterFx, SetPPU_212D_delayedRasterFx, SetPPU_212E_delayedRasterFx, SetPPU_212F_delayedRasterFx,
-	SetPPU_2130_delayedRasterFx, SetPPU_2131_delayedRasterFx, SetPPU_2132_delayedRasterFx, SetPPU_2133, SetPPU_NOP,  SetPPU_NOP,  SetPPU_NOP,  SetPPU_NOP, 
-	SetPPU_NOP,  SetPPU_NOP,  SetPPU_NOP,  SetPPU_NOP,  SetPPU_NOP,  SetPPU_NOP,  SetPPU_NOP,  SetPPU_NOP, 
-	SetPPU_APU,  SetPPU_APU,  SetPPU_APU,  SetPPU_APU,  SetPPU_APU,  SetPPU_APU,  SetPPU_APU,  SetPPU_APU, 
-	SetPPU_APU,  SetPPU_APU,  SetPPU_APU,  SetPPU_APU,  SetPPU_APU,  SetPPU_APU,  SetPPU_APU,  SetPPU_APU, 
-	SetPPU_APU,  SetPPU_APU,  SetPPU_APU,  SetPPU_APU,  SetPPU_APU,  SetPPU_APU,  SetPPU_APU,  SetPPU_APU, 
-	SetPPU_APU,  SetPPU_APU,  SetPPU_APU,  SetPPU_APU,  SetPPU_APU,  SetPPU_APU,  SetPPU_APU,  SetPPU_APU, 
-	SetPPU_APU,  SetPPU_APU,  SetPPU_APU,  SetPPU_APU,  SetPPU_APU,  SetPPU_APU,  SetPPU_APU,  SetPPU_APU, 
-	SetPPU_APU,  SetPPU_APU,  SetPPU_APU,  SetPPU_APU,  SetPPU_APU,  SetPPU_APU,  SetPPU_APU,  SetPPU_APU, 
-	SetPPU_APU,  SetPPU_APU,  SetPPU_APU,  SetPPU_APU,  SetPPU_APU,  SetPPU_APU,  SetPPU_APU,  SetPPU_APU, 
-	SetPPU_APU,  SetPPU_APU,  SetPPU_APU,  SetPPU_APU,  SetPPU_APU,  SetPPU_APU,  SetPPU_APU,  SetPPU_APU, 
+	SetPPU_2130_delayedRasterFx, SetPPU_2131_delayedRasterFx, SetPPU_2132_delayedRasterFx, SetPPU_2133, SetPPU_NOP,  SetPPU_NOP,  SetPPU_NOP,  SetPPU_NOP,
+	SetPPU_NOP,  SetPPU_NOP,  SetPPU_NOP,  SetPPU_NOP,  SetPPU_NOP,  SetPPU_NOP,  SetPPU_NOP,  SetPPU_NOP,
+	SetPPU_APU,  SetPPU_APU,  SetPPU_APU,  SetPPU_APU,  SetPPU_APU,  SetPPU_APU,  SetPPU_APU,  SetPPU_APU,
+	SetPPU_APU,  SetPPU_APU,  SetPPU_APU,  SetPPU_APU,  SetPPU_APU,  SetPPU_APU,  SetPPU_APU,  SetPPU_APU,
+	SetPPU_APU,  SetPPU_APU,  SetPPU_APU,  SetPPU_APU,  SetPPU_APU,  SetPPU_APU,  SetPPU_APU,  SetPPU_APU,
+	SetPPU_APU,  SetPPU_APU,  SetPPU_APU,  SetPPU_APU,  SetPPU_APU,  SetPPU_APU,  SetPPU_APU,  SetPPU_APU,
+	SetPPU_APU,  SetPPU_APU,  SetPPU_APU,  SetPPU_APU,  SetPPU_APU,  SetPPU_APU,  SetPPU_APU,  SetPPU_APU,
+	SetPPU_APU,  SetPPU_APU,  SetPPU_APU,  SetPPU_APU,  SetPPU_APU,  SetPPU_APU,  SetPPU_APU,  SetPPU_APU,
+	SetPPU_APU,  SetPPU_APU,  SetPPU_APU,  SetPPU_APU,  SetPPU_APU,  SetPPU_APU,  SetPPU_APU,  SetPPU_APU,
+	SetPPU_APU,  SetPPU_APU,  SetPPU_APU,  SetPPU_APU,  SetPPU_APU,  SetPPU_APU,  SetPPU_APU,  SetPPU_APU,
 	SetPPU_2180, SetPPU_2181, SetPPU_2182, SetPPU_2183
 };
 
@@ -1424,7 +1424,7 @@ void S9xSetPPU (uint8 Byte, uint16 Address)
 #ifdef __OLD_RASTER_FX__
 
 		if (!snesMenuOptions.delayedRasterFX) SetPPU[Address - 0x2100]( Byte, Address );
-		else 
+		else
 #endif
 			SetPPU_delayedRasterFx[Address - 0x2100]( Byte, Address );
 		return;

@@ -303,7 +303,7 @@
 		S9xSetByteLow	\reg
 		SUB		reg_s,reg_s,#1
 .endm
-.macro		PushWLow	reg 
+.macro		PushWLow	reg
 		SUB		rscratch,reg_s,#1
 		S9xSetWordLow	\reg
 		SUB		reg_s,reg_s,#2
@@ -411,7 +411,7 @@
 
 
 /*****************************************************************
-	FLAGS  
+	FLAGS
 *****************************************************************/
 
 .macro		UPDATE_C
@@ -474,7 +474,7 @@
 		ADD 	rscratch3, rscratch3, rscratch
 		@  if R2 > 9
 		CMP 	rscratch3, #0x09000000
-		@  then R2 -= 10@ 
+		@  then R2 -= 10@
 		SUBGT 	rscratch3, rscratch3, #0x0A000000
 		@  then SetCarry()
 		ORRGT 	rstatus, rstatus, #MASK_CARRY @  1 : OR mask 00000100000 : set C to one
@@ -494,10 +494,10 @@
 		BNE 	1112f
 		@  (Work8 ^ Ans8)
 		EORS 	rscratch3, rscratch2, rscratch
-		@  & 0x80 
+		@  & 0x80
 		TSTNE	rscratch3,#0x80000000
 		BICEQ 	rstatus, rstatus, #MASK_OVERFLOW @  0 : AND mask 11111011111 : set V to zero
-		ORRNE 	rstatus, rstatus, #MASK_OVERFLOW @  1 : OR mask 00000100000 : set V to one 
+		ORRNE 	rstatus, rstatus, #MASK_OVERFLOW @  1 : OR mask 00000100000 : set V to one
 1112:
 		MOVS reg_a, rscratch2
 		UPDATE_ZN
@@ -505,7 +505,7 @@
 1111:
 		S9xGetByteLow
 		MOVS rscratch2, rstatus, LSR #MASK_SHIFTER_CARRY
-		SUBCS rscratch, rscratch, #0x100 
+		SUBCS rscratch, rscratch, #0x100
 		ADCS reg_a, reg_a, rscratch, ROR #8
 		@ OverFlow
 		ORRVS rstatus, rstatus, #MASK_OVERFLOW
@@ -516,12 +516,12 @@
 		ANDS reg_a, reg_a, #0xFF000000
 		@ Update flag
 		UPDATE_ZN
-1113: 
+1113:
 .endm
 /* TO TEST */
-.macro ADC16 
+.macro ADC16
 		TST rstatus, #MASK_DECIMAL
-		BEQ 1111f 
+		BEQ 1111f
 		S9xGetWord
 		
 		@ rscratch = W3W2W1W0........
@@ -529,7 +529,7 @@
 		@  rscratch2 = xxW2xxW0xxxxxx
 		@  rscratch3 = xxW3xxW1xxxxxx
 		AND 	rscratch2, rscratch4, rscratch
-		AND 	rscratch3, rscratch4, rscratch, LSR #4 
+		AND 	rscratch3, rscratch4, rscratch, LSR #4
 		@  rscratch2 = xxW3xxW1xxW2xxW0
 		ORR 	rscratch2, rscratch3, rscratch2, LSR #16 		
 		@  rscratch3 = xxA2xxA0xxxxxx
@@ -568,9 +568,9 @@
 		@ ClearCarry
 		BICLS 	rstatus, rstatus, #MASK_CARRY
 		@ rscratch2 = xxR3xxR1xxR2xxR0
-		@ Pack result 
-		@ rscratch3 = xxR3xxR1xxxxxxxx 
-		AND 	rscratch3, rscratch4, rscratch2 
+		@ Pack result
+		@ rscratch3 = xxR3xxR1xxxxxxxx
+		AND 	rscratch3, rscratch4, rscratch2
 		@ rscratch2 = xxR2xxR0xxxxxxxx
 		AND 	rscratch2, rscratch4, rscratch2,LSL #16
 		@ rscratch2 = R3R2R1R0xxxxxxxx
@@ -578,34 +578,34 @@
 @ only last bit
 		AND 	rscratch,rscratch,#0x80000000
 		@  (register.AL ^ Work8)
-		EORS 	rscratch3, reg_a, rscratch 
+		EORS 	rscratch3, reg_a, rscratch
 		BICNE 	rstatus, rstatus, #MASK_OVERFLOW @  0 : AND mask 11111011111 : set V to zero
 		BNE 	1112f
 		@  (Work8 ^ Ans8)
-		EORS 	rscratch3, rscratch2, rscratch 
+		EORS 	rscratch3, rscratch2, rscratch
 		TSTNE	rscratch3,#0x80000000
 		BICEQ 	rstatus, rstatus, #MASK_OVERFLOW @  0 : AND mask 11111011111 : set V to zero
-		ORRNE 	rstatus, rstatus, #MASK_OVERFLOW @  1 : OR mask 00000100000 : set V to one 
+		ORRNE 	rstatus, rstatus, #MASK_OVERFLOW @  1 : OR mask 00000100000 : set V to one
 1112:
 		MOVS 	reg_a, rscratch2
 		UPDATE_ZN
 		B 	1113f
 1111:
 		S9xGetWordLow
-		MOVS rscratch2, rstatus, LSR #MASK_SHIFTER_CARRY 
-		SUBCS rscratch, rscratch, #0x10000 
+		MOVS rscratch2, rstatus, LSR #MASK_SHIFTER_CARRY
+		SUBCS rscratch, rscratch, #0x10000
 		ADCS reg_a, reg_a,rscratch, ROR #16
-		@ OverFlow 
+		@ OverFlow
 		ORRVS rstatus, rstatus, #MASK_OVERFLOW
 		BICVC rstatus, rstatus, #MASK_OVERFLOW
 		MOV reg_a, reg_a, LSR #16
 		@ Carry
 		UPDATE_C
-		@ clear lower parts 
+		@ clear lower parts
 		MOVS reg_a, reg_a, LSL #16
 		@ Update flag
 		UPDATE_ZN
-1113: 
+1113:
 .endm
 
 
@@ -1049,19 +1049,19 @@
 		BEQ 	1112f
 		@  (register.A.W ^ Ans8)
 		EORS 	rscratch3, reg_a, rscratch2
-		@  & 0x80 
+		@  & 0x80
 		TSTNE	rscratch3,#0x80000000
 		BICEQ   rstatus, rstatus, #MASK_OVERFLOW @  0 : AND mask 11111011111 : set V to zero		
-		ORRNE 	rstatus, rstatus, #MASK_OVERFLOW @  1 : OR mask 00000100000 : set V to one 
+		ORRNE 	rstatus, rstatus, #MASK_OVERFLOW @  1 : OR mask 00000100000 : set V to one
 1112:
 		MOVS 	reg_a, rscratch2
 		UPDATE_ZN 		
 		B 1113f
 1111:
-		S9xGetWordLow 
+		S9xGetWordLow
 		MOVS rscratch2,rstatus,LSR #MASK_SHIFTER_CARRY
-		SBCS reg_a, reg_a, rscratch, LSL #16 
-		@ OverFlow 
+		SBCS reg_a, reg_a, rscratch, LSL #16
+		@ OverFlow
 		ORRVS rstatus, rstatus, #MASK_OVERFLOW
 		BICVC rstatus, rstatus, #MASK_OVERFLOW
 		MOV reg_a, reg_a, LSR #16
@@ -1071,10 +1071,10 @@
 		@ Update flag
 		UPDATE_ZN
 1113:
-.endm 
+.endm
 
 .macro SBC8
-		TST rstatus, #MASK_DECIMAL 
+		TST rstatus, #MASK_DECIMAL
 		BEQ 1111f		
 		S9xGetByte					
 		STMFD 	R13!,{rscratch}		
@@ -1101,7 +1101,7 @@
 		SUB 	rscratch3, rscratch3, rscratch
 		@  if R2 > 9
 		CMP 	rscratch3, #0x09000000
-		@  then R2 -= 10@ 
+		@  then R2 -= 10@
 		ADDHI 	rscratch3, rscratch3, #0x0A000000
 		@  then SetCarry()
 		BICHI 	rstatus, rstatus, #MASK_CARRY @  1 : OR mask 00000100000 : set C to one
@@ -1123,28 +1123,28 @@
 		BEQ 	1112f
 		@  (register.AL ^ Ans8)
 		EORS 	rscratch3, reg_a, rscratch2
-		@  & 0x80 
+		@  & 0x80
 		TSTNE	rscratch3,#0x80000000
 		BICEQ rstatus, rstatus, #MASK_OVERFLOW @  0 : AND mask 11111011111 : set V to zero
-		ORRNE rstatus, rstatus, #MASK_OVERFLOW @  1 : OR mask 00000100000 : set V to one 
+		ORRNE rstatus, rstatus, #MASK_OVERFLOW @  1 : OR mask 00000100000 : set V to one
 1112:
 		MOVS reg_a, rscratch2
-		UPDATE_ZN 
+		UPDATE_ZN
 		B 1113f
 1111:
 		S9xGetByteLow
 		MOVS rscratch2,rstatus,LSR #MASK_SHIFTER_CARRY
-		SBCS reg_a, reg_a, rscratch, LSL #24 
-		@ OverFlow 
+		SBCS reg_a, reg_a, rscratch, LSL #24
+		@ OverFlow
 		ORRVS rstatus, rstatus, #MASK_OVERFLOW
-		BICVC rstatus, rstatus, #MASK_OVERFLOW 
+		BICVC rstatus, rstatus, #MASK_OVERFLOW
 		@ Carry
-		UPDATE_C 
+		UPDATE_C
 		@ Update flag
 		ANDS reg_a, reg_a, #0xFF000000
 		UPDATE_ZN
 1113:
-.endm 
+.endm
 
 .macro		STA16
 		S9xSetWord	reg_a
@@ -1286,7 +1286,7 @@
                 ADD 		rpc, rscratch, regpcbase @  rpc = OpAddress + PCBase
                 ADD1CYCLEX	1
                 CPUShutdown
-1111:                
+1111:
 .endm
 .macro		Op50   /*BVC*/
 		asmRelative
@@ -1296,7 +1296,7 @@
                 ADD 		rpc, rscratch, regpcbase @  rpc = OpAddress + PCBase
                 ADD1CYCLEX	1
                 CPUShutdown
-1111:                
+1111:
 .endm
 .macro		Op70   /*BVS*/
 		asmRelative
@@ -1306,14 +1306,14 @@
                 ADD 		rpc, rscratch, regpcbase @  rpc = OpAddress + PCBase
                 ADD1CYCLEX	1
                 CPUShutdown
-1111:                
+1111:
 .endm
 .macro		Op80   /*BRA*/
 		asmRelative				
                 ADD 		rpc, rscratch, regpcbase @  rpc = OpAddress + PCBase
                 ADD1CYCLEX	1
                 CPUShutdown
-1111:                
+1111:
 .endm
 /*******************************************************************************************/
 /************************************************************/
@@ -1349,7 +1349,7 @@
 .endm
 .macro		OpB8 /*CLV*/		
 		BIC 		rstatus, rstatus, #MASK_OVERFLOW
-		ADD1CYCLE     
+		ADD1CYCLE
 .endm
 
 /******************************************************************************************/
@@ -1792,7 +1792,7 @@
     TST		rstatus,#MASK_CARRY
     BEQ		1111f
     @ CARRY is set
-    TST		rstatus,#MASK_EMUL    
+    TST		rstatus,#MASK_EMUL
     BNE		1112f
     @ EMUL is cleared
     BIC		rstatus,rstatus,#(MASK_CARRY)
@@ -1808,9 +1808,9 @@
     MOVEQ	reg_a,reg_a,LSL #8
     ORR		rstatus,rstatus,#(MASK_EMUL|MASK_MEM|MASK_INDEX)
     AND		reg_s,reg_s,#0xFF
-    ORR		reg_s,reg_s,#0x100    
-    B		1113f    
-1112:    
+    ORR		reg_s,reg_s,#0x100
+    B		1113f
+1112:
     @ EMUL is set
     TST		rstatus,#MASK_INDEX
     @ X & Y were 16bits before
@@ -1824,9 +1824,9 @@
     MOVEQ	reg_a,reg_a,LSL #8
     ORR		rstatus,rstatus,#(MASK_CARRY|MASK_MEM|MASK_INDEX)
     AND		reg_s,reg_s,#0xFF
-    ORR		reg_s,reg_s,#0x100    
+    ORR		reg_s,reg_s,#0x100
     B		1113f
-1111:    
+1111:
     @ CARRY is cleared
     TST		rstatus,#MASK_EMUL
     BEQ		1115f
@@ -1840,9 +1840,9 @@
     @  A is now 16bits
     MOVEQ	reg_a,reg_a,LSR #8	
     @ restore AH
-    LDREQB	rscratch,[reg_cpu_var,#RAH_ofs]    
+    LDREQB	rscratch,[reg_cpu_var,#RAH_ofs]
     ORREQ	reg_a,reg_a,rscratch,LSL #24
-1115:    
+1115:
     BIC		rstatus,rstatus,#(MASK_EMUL)
     ORR		rstatus,rstatus,#(MASK_CARRY)
 1113:
@@ -2029,7 +2029,7 @@ void asm_S9xOpcode_NMI(void)
         Registers.PB = 0;
         S9xSetPCBase (S9xGetWord (0xFFFA));
         CPU.Cycles += ONE_CYCLE;
-    }    
+    }
 }
 */
 
@@ -2141,7 +2141,7 @@ void asm_S9xOpcode_NMI(void)
 		Absolute		
 		BIC		rscratch, rscratch, #0xFF0000		
 		ORR 		rscratch, rscratch, reg_p_bank, LSL #16
-		S9xSetPCBase 
+		S9xSetPCBase
 		ADD1CYCLE
 .endm
 .macro		OpFCX0
@@ -2161,7 +2161,7 @@ void asm_S9xOpcode_NMI(void)
 		PushWlow	rscratch2	
 		AbsoluteIndexedIndirectX1
 		ORR 		rscratch, rscratch, reg_p_bank, LSL #16
-		S9xSetPCBase 
+		S9xSetPCBase
 		ADD1CYCLE
 .endm
 .macro		Op60			
@@ -2169,7 +2169,7 @@ void asm_S9xOpcode_NMI(void)
 		ADD 		rscratch, rpc, #1		
 		BIC		rscratch, rscratch,#0x10000		
 		ORR		rscratch, rscratch, reg_p_bank, LSL #16		
-		S9xSetPCBase 
+		S9xSetPCBase
 		ADD3CYCLE
 .endm
 
@@ -2183,8 +2183,8 @@ void asm_S9xOpcode_NMI(void)
 		@ Restore RegStatus = reg_d_bank >> 24
 		ORR		reg_d_bank, reg_d_bank, rscratch, LSL #16
 		MOV		rscratch    , reg_x, LSR #24		
-                ORR		rscratch    , rscratch, rscratch2, LSL #16                
-		S9xGetByteLow 
+                ORR		rscratch    , rscratch, rscratch2, LSL #16
+		S9xGetByteLow
 		MOV		rscratch2, rscratch
 		MOV		rscratch   , reg_y, LSR #24
 		ORR		rscratch   , rscratch, reg_d_bank, LSL #16		
@@ -2201,7 +2201,7 @@ void asm_S9xOpcode_NMI(void)
                 @ update AH
                 MOV		rscratch, reg_a, LSR #24
                 MOV		reg_a,reg_a,LSL #8
-                STRB		rscratch,[reg_cpu_var,#RAH_ofs]                
+                STRB		rscratch,[reg_cpu_var,#RAH_ofs]
                 ADD2CYCLE2MEM
 .endm
 .macro		Op54X1M0
@@ -2212,8 +2212,8 @@ void asm_S9xOpcode_NMI(void)
 		@ Restore RegStatus = reg_d_bank >> 24
 		ORR		reg_d_bank, reg_d_bank, rscratch, LSL #16
 		MOV		rscratch    , reg_x, LSR #24		
-                ORR		rscratch    , rscratch, rscratch2, LSL #16                
-		S9xGetByteLow 
+                ORR		rscratch    , rscratch, rscratch2, LSL #16
+		S9xGetByteLow
 		MOV		rscratch2, rscratch
 		MOV		rscratch   , reg_y, LSR #24
 		ORR		rscratch   , rscratch, reg_d_bank, LSL #16		
@@ -2233,8 +2233,8 @@ void asm_S9xOpcode_NMI(void)
 		@ Restore RegStatus = reg_d_bank >> 24
 		ORR		reg_d_bank, reg_d_bank, rscratch, LSL #16
 		MOV		rscratch    , reg_x, LSR #16
-                ORR		rscratch    , rscratch, rscratch2, LSL #16                
-		S9xGetByteLow 
+                ORR		rscratch    , rscratch, rscratch2, LSL #16
+		S9xGetByteLow
 		MOV		rscratch2, rscratch
 		MOV		rscratch   , reg_y, LSR #16
 		ORR		rscratch   , rscratch, reg_d_bank, LSL #16		
@@ -2247,11 +2247,11 @@ void asm_S9xOpcode_NMI(void)
 		SUB		reg_a, reg_a, #0x00010000
 		ADD		reg_y, reg_y, #0x00010000				
                 CMP		reg_a, #0xFFFF0000
-                SUBNE		rpc, rpc, #3                
+                SUBNE		rpc, rpc, #3
                 @ update AH
                 MOV		rscratch, reg_a, LSR #24
                 MOV		reg_a,reg_a,LSL #8
-                STRB		rscratch,[reg_cpu_var,#RAH_ofs]                
+                STRB		rscratch,[reg_cpu_var,#RAH_ofs]
                 ADD2CYCLE2MEM
 .endm
 .macro		Op54X0M0
@@ -2262,8 +2262,8 @@ void asm_S9xOpcode_NMI(void)
 		@ Restore RegStatus = reg_d_bank >> 24
 		ORR		reg_d_bank, reg_d_bank, rscratch, LSL #16
 		MOV		rscratch    , reg_x, LSR #16
-                ORR		rscratch    , rscratch, rscratch2, LSL #16                
-		S9xGetByteLow 
+                ORR		rscratch    , rscratch, rscratch2, LSL #16
+		S9xGetByteLow
 		MOV		rscratch2, rscratch
 		MOV		rscratch   , reg_y, LSR #16
 		ORR		rscratch   , rscratch, reg_d_bank, LSL #16		
@@ -2284,8 +2284,8 @@ void asm_S9xOpcode_NMI(void)
 		@ Restore RegStatus = reg_d_bank >> 24
 		ORR		reg_d_bank, reg_d_bank, rscratch, LSL #16
 		MOV		rscratch    , reg_x, LSR #24		
-                ORR		rscratch    , rscratch, rscratch2, LSL #16                
-		S9xGetByteLow 
+                ORR		rscratch    , rscratch, rscratch2, LSL #16
+		S9xGetByteLow
 		MOV		rscratch2, rscratch
 		MOV		rscratch   , reg_y, LSR #24
 		ORR		rscratch   , rscratch, reg_d_bank, LSL #16		
@@ -2302,7 +2302,7 @@ void asm_S9xOpcode_NMI(void)
                 @ update AH
                 MOV		rscratch, reg_a, LSR #24
                 MOV		reg_a,reg_a,LSL #8
-                STRB		rscratch,[reg_cpu_var,#RAH_ofs]                
+                STRB		rscratch,[reg_cpu_var,#RAH_ofs]
                 ADD2CYCLE2MEM
 .endm
 .macro		Op44X1M0
@@ -2313,8 +2313,8 @@ void asm_S9xOpcode_NMI(void)
 		@ Restore RegStatus = reg_d_bank >> 24
 		ORR		reg_d_bank, reg_d_bank, rscratch, LSL #16
 		MOV		rscratch    , reg_x, LSR #24		
-                ORR		rscratch    , rscratch, rscratch2, LSL #16                
-		S9xGetByteLow 
+                ORR		rscratch    , rscratch, rscratch2, LSL #16
+		S9xGetByteLow
 		MOV		rscratch2, rscratch
 		MOV		rscratch   , reg_y, LSR #24
 		ORR		rscratch   , rscratch, reg_d_bank, LSL #16		
@@ -2334,8 +2334,8 @@ void asm_S9xOpcode_NMI(void)
 		@ Restore RegStatus = reg_d_bank >> 24
 		ORR		reg_d_bank, reg_d_bank, rscratch, LSL #16
 		MOV		rscratch    , reg_x, LSR #16
-                ORR		rscratch    , rscratch, rscratch2, LSL #16                
-		S9xGetByteLow 
+                ORR		rscratch    , rscratch, rscratch2, LSL #16
+		S9xGetByteLow
 		MOV		rscratch2, rscratch
 		MOV		rscratch   , reg_y, LSR #16
 		ORR		rscratch   , rscratch, reg_d_bank, LSL #16		
@@ -2352,7 +2352,7 @@ void asm_S9xOpcode_NMI(void)
                 @ update AH
                 MOV		rscratch, reg_a, LSR #24
                 MOV		reg_a,reg_a,LSL #8
-                STRB		rscratch,[reg_cpu_var,#RAH_ofs]                
+                STRB		rscratch,[reg_cpu_var,#RAH_ofs]
                 ADD2CYCLE2MEM
 .endm
 .macro		Op44X0M0
@@ -2363,8 +2363,8 @@ void asm_S9xOpcode_NMI(void)
 		@ Restore RegStatus = reg_d_bank >> 24
 		ORR		reg_d_bank, reg_d_bank, rscratch, LSL #16
 		MOV		rscratch    , reg_x, LSR #16
-                ORR		rscratch    , rscratch, rscratch2, LSL #16                
-		S9xGetByteLow 
+                ORR		rscratch    , rscratch, rscratch2, LSL #16
+		S9xGetByteLow
 		MOV		rscratch2, rscratch
 		MOV		rscratch   , reg_y, LSR #16
 		ORR		rscratch   , rscratch, reg_d_bank, LSL #16		
@@ -2615,7 +2615,7 @@ void asm_S9xOpcode_NMI(void)
 	MOV		rscratch,#1
 	SUB		rpc,rpc,#1
 /*		
-	    CPU.Cycles = CPU.NextEvent;	    
+	    CPU.Cycles = CPU.NextEvent;	
 */		
 	STRB		rscratch,[reg_cpu_var,#WaitingForInterrupt_ofs]
 	LDR		reg_cycles,[reg_cpu_var,#NextEvent_ofs]
@@ -2637,11 +2637,11 @@ void asm_S9xOpcode_NMI(void)
 
 1234:	
 .endm
-.macro		OpDB	/*STP*/    
+.macro		OpDB	/*STP*/
     		SUB	rpc,rpc,#1
     		@ CPU.Flags |= DEBUG_MODE_FLAG;
 .endm
-.macro		Op42   /*Reserved Snes9X*/ 
+.macro		Op42   /*Reserved Snes9X*/
 /* Used for speedhacks in snesadvance.dat */
 
 		@mov	rscratch, #0
@@ -2663,12 +2663,12 @@ void asm_S9xOpcode_NMI(void)
 		sub	rscratch3, rpc, regpcbase
 		add	rscratch, rscratch3, rscratch
 		bic	rscratch, rscratch, #0x00ff0000
-		bic	rscratch, rscratch, #0xff000000 
+		bic	rscratch, rscratch, #0xff000000
 
 		mov	rscratch2, rscratch2, lsr #4
 
 		ldr	pc, [pc, rscratch2, lsl #2]
-		mov	r0, r0	@ nop 
+		mov	r0, r0	@ nop
 		.word	Op42_none
 		.word	Op42_10
 		.word	Op42_none
@@ -2687,7 +2687,7 @@ void asm_S9xOpcode_NMI(void)
 		.word	Op42_F0	
 .endm	
 	
-Op42_none: 
+Op42_none:
 		NEXTOPCODE	
 Op42_10: @ BPL
 		BranchCheck1
@@ -2804,7 +2804,7 @@ nob_F0:
 .macro		Op49M0		
                 LDRB	rscratch2 , [rpc, #1]
                 LDRB	rscratch , [rpc], #2
-		ORR	rscratch, rscratch, rscratch2,LSL #8                
+		ORR	rscratch, rscratch, rscratch2,LSL #8
 		EORS    reg_a, reg_a, rscratch,LSL #16
 		UPDATE_ZN
 		ADD2MEM
@@ -2812,7 +2812,7 @@ nob_F0:
 
 		
 .macro		Op49M1		
-                LDRB	rscratch , [rpc], #1                
+                LDRB	rscratch , [rpc], #1
 		EORS    reg_a, reg_a, rscratch,LSL #24
 		UPDATE_ZN
 		ADD1MEM
@@ -2836,7 +2836,7 @@ nob_F0:
 /**********************************************************************************************/
 /* BIT *************************************************************************************** */
 .macro		Op89M1		
-                LDRB	rscratch , [rpc], #1                
+                LDRB	rscratch , [rpc], #1
 		TST     reg_a, rscratch, LSL #24
 		UPDATE_Z
 		ADD1MEM
@@ -2844,7 +2844,7 @@ nob_F0:
 .macro		Op89M0		
                 LDRB	rscratch2 , [rpc, #1]
                 LDRB	rscratch , [rpc], #2
-		ORR	rscratch, rscratch, rscratch2, LSL #8                
+		ORR	rscratch, rscratch, rscratch2, LSL #8
 		TST     reg_a, rscratch, LSL #16
 		UPDATE_Z
 		ADD2MEM
@@ -2858,7 +2858,7 @@ nob_F0:
 /**********************************************************************************************/
 /* LDY *************************************************************************************** */
 .macro		OpA0X1
-                LDRB	rscratch , [rpc], #1                
+                LDRB	rscratch , [rpc], #1
                 MOVS    reg_y, rscratch, LSL #24
 		UPDATE_ZN
 		ADD1MEM
@@ -2866,7 +2866,7 @@ nob_F0:
 .macro		OpA0X0		
                 LDRB	rscratch2 , [rpc, #1]
                 LDRB	rscratch , [rpc], #2
-		ORR	rscratch, rscratch, rscratch2, LSL #8                
+		ORR	rscratch, rscratch, rscratch2, LSL #8
                 MOVS    reg_y, rscratch, LSL #16
 		UPDATE_ZN
 		ADD2MEM
@@ -2875,7 +2875,7 @@ nob_F0:
 /**********************************************************************************************/
 /* LDX *************************************************************************************** */		
 .macro		OpA2X1		
-                LDRB	rscratch , [rpc], #1                
+                LDRB	rscratch , [rpc], #1
                 MOVS    reg_x, rscratch, LSL #24
 		UPDATE_ZN
 		ADD1MEM
@@ -2883,7 +2883,7 @@ nob_F0:
 .macro		OpA2X0		
                 LDRB	rscratch2 , [rpc, #1]
                 LDRB	rscratch , [rpc], #2
-		ORR	rscratch, rscratch, rscratch2, LSL #8                
+		ORR	rscratch, rscratch, rscratch2, LSL #8
                 MOVS    reg_x, rscratch, LSL #16
 		UPDATE_ZN
 		ADD2MEM
@@ -2900,8 +2900,8 @@ nob_F0:
 .macro		OpA9M0		
                 LDRB	rscratch2 , [rpc, #1]
                 LDRB	rscratch , [rpc], #2
-		ORR	rscratch, rscratch, rscratch2, LSL #8                
-                MOVS    reg_a, rscratch, LSL #16                
+		ORR	rscratch, rscratch, rscratch2, LSL #8
+                MOVS    reg_a, rscratch, LSL #16
 		UPDATE_ZN
 		ADD2MEM
 .endm

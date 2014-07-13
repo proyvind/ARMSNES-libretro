@@ -4,7 +4,7 @@
  * (c) Copyright 1996 - 2001 Gary Henderson (gary.henderson@ntlworld.com) and
  *                           Jerremy Koot (jkoot@snes9x.com)
  *
- * Super FX C emulator code 
+ * Super FX C emulator code
  * (c) Copyright 1997 - 1999 Ivar (ivar@snes9x.com) and
  *                           Gary Henderson.
  * Super FX assembler emulator code (c) Copyright 1998 zsKnight and _Demo_.
@@ -95,7 +95,7 @@ INLINE void S9xAPUSetByteZ (uint8 val, uint8 Address)
 INLINE uint8 S9xAPUGetByte (uint32 Address)
 {
     Address &= 0xffff;
-    
+
     if (Address <= 0xff && Address >= 0xf3)
     {
 	if (Address == 0xf3) return (S9xGetAPUDSP ());
@@ -112,7 +112,7 @@ INLINE uint8 S9xAPUGetByte (uint32 Address)
 INLINE void S9xAPUSetByte (uint8 val, uint32 Address)
 {
     Address &= 0xffff;
-    
+
     if (Address <= 0xff && Address >= 0xf0)
     {
 	if (Address == 0xf3)

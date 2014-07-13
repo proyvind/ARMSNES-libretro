@@ -4,7 +4,7 @@
  * (c) Copyright 1996 - 2001 Gary Henderson (gary.henderson@ntlworld.com) and
  *                           Jerremy Koot (jkoot@snes9x.com)
  *
- * Super FX C emulator code 
+ * Super FX C emulator code
  * (c) Copyright 1997 - 1999 Ivar (ivar@snes9x.com) and
  *                           Gary Henderson.
  * Super FX assembler emulator code (c) Copyright 1998 zsKnight and _Demo_.
@@ -68,7 +68,7 @@ INLINE uint8 S9xGetByte (uint32 Address)
     uint8 *GetAddress = Memory.Map [block = (Address >> MEMMAP_SHIFT) & MEMMAP_MASK];
 #else
     uint8 *GetAddress = Memory.Map [(Address >> MEMMAP_SHIFT) & MEMMAP_MASK];
-#endif    
+#endif
     if (GetAddress >= (uint8 *) CMemory::MAP_LAST)
     {
 #ifdef VAR_CYCLES
@@ -126,7 +126,7 @@ INLINE uint8 S9xGetByte (uint32 Address)
 //#ifndef __GP32__
     case CMemory::MAP_C4:
 	return (S9xGetC4 (Address & 0xffff));
-//#endif    
+//#endif
     default:
     case CMemory::MAP_NONE:
 #ifdef VAR_CYCLES
@@ -159,7 +159,7 @@ INLINE uint16 S9xGetWord (uint32 Address)
     uint8 *GetAddress = Memory.Map [block = (Address >> MEMMAP_SHIFT) & MEMMAP_MASK];
 #else
     uint8 *GetAddress = Memory.Map [(Address >> MEMMAP_SHIFT) & MEMMAP_MASK];
-#endif    
+#endif
     if (GetAddress >= (uint8 *) CMemory::MAP_LAST)
     {
 #ifdef VAR_CYCLES
@@ -182,7 +182,7 @@ INLINE uint16 S9xGetWord (uint32 Address)
 	return (S9xGetPPU (Address & 0xffff) |
 		(S9xGetPPU ((Address + 1) & 0xffff) << 8));
     case CMemory::MAP_CPU:
-#ifdef VAR_CYCLES   
+#ifdef VAR_CYCLES
 	CPU.Cycles += TWO_CYCLES;
 #endif
 	return (S9xGetCPU (Address & 0xffff) |
@@ -228,7 +228,7 @@ INLINE uint16 S9xGetWord (uint32 Address)
     case CMemory::MAP_C4:
 	return (S9xGetC4 (Address & 0xffff) |	
 		(S9xGetC4 ((Address + 1) & 0xffff) << 8));
-//#endif    
+//#endif
     default:
     case CMemory::MAP_NONE:
 #ifdef VAR_CYCLES
@@ -296,7 +296,7 @@ INLINE void S9xSetByte (uint8 Byte, uint32 Address)
 	return;
 
     case CMemory::MAP_CPU:
-#ifdef VAR_CYCLES   
+#ifdef VAR_CYCLES
 	CPU.Cycles += ONE_CYCLE;
 #endif
 	S9xSetCPU (Byte, Address & 0xffff);
@@ -361,7 +361,7 @@ INLINE void S9xSetByte (uint8 Byte, uint32 Address)
 //#endif	
     default:
     case CMemory::MAP_NONE:
-#ifdef VAR_CYCLES    
+#ifdef VAR_CYCLES
 	CPU.Cycles += SLOW_ONE_CYCLE;
 #endif	
 #ifdef DEBUGGER
@@ -423,7 +423,7 @@ INLINE void S9xSetWord (uint16 Word, uint32 Address)
 	return;
 
     case CMemory::MAP_CPU:
-#ifdef VAR_CYCLES   
+#ifdef VAR_CYCLES
 	CPU.Cycles += TWO_CYCLES;
 #endif
 	S9xSetCPU ((uint8) Word, (Address & 0xffff));
@@ -456,10 +456,10 @@ INLINE void S9xSetWord (uint16 Word, uint32 Address)
 #endif
 	if (CPU.Memory_SRAMMask)
 	{
-	    *(Memory.SRAM + 
+	    *(Memory.SRAM +
 	      (((Address & 0x7fff) - 0x6000 +
 		((Address & 0xf0000) >> MEMMAP_SHIFT) & CPU.Memory_SRAMMask))) = (uint8) Word;
-	    *(Memory.SRAM + 
+	    *(Memory.SRAM +
 	      ((((Address + 1) & 0x7fff) - 0x6000 +
 		(((Address + 1) & 0xf0000) >> MEMMAP_SHIFT) & CPU.Memory_SRAMMask))) = (uint8) (Word >> 8);
 	    CPU.SRAMModified = TRUE;
@@ -498,7 +498,7 @@ INLINE void S9xSetWord (uint16 Word, uint32 Address)
 //#endif	
     default:
     case CMemory::MAP_NONE:
-#ifdef VAR_CYCLES    
+#ifdef VAR_CYCLES
 	CPU.Cycles += SLOW_ONE_CYCLE * 2;
 #endif
 #ifdef DEBUGGER
@@ -592,7 +592,7 @@ INLINE void S9xSetPCBase (uint32 Address)
     uint8 *GetAddress = Memory.Map [block = (Address >> MEMMAP_SHIFT) & MEMMAP_MASK];
 #else
     uint8 *GetAddress = Memory.Map [(Address >> MEMMAP_SHIFT) & MEMMAP_MASK];
-#endif    
+#endif
     if (GetAddress >= (uint8 *) CMemory::MAP_LAST)
     {
 #ifdef VAR_CYCLES
@@ -616,7 +616,7 @@ INLINE void S9xSetPCBase (uint32 Address)
 	return;
 	
     case CMemory::MAP_CPU:
-#ifdef VAR_CYCLES   
+#ifdef VAR_CYCLES
 	CPU.MemSpeed = ONE_CYCLE;
 	CPU.MemSpeedx2 = TWO_CYCLES;
 #endif

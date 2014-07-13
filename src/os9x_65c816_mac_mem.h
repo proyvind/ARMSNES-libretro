@@ -40,7 +40,7 @@
 #endif		
 .endm
 .macro		S9xGetWordRegStatus	reg
-		// in  : rscratch (0x00hhmmll) 
+		// in  : rscratch (0x00hhmmll)
 		// out : reg      (0xhhll0000)
 		// flags have to be updated with read value
 #ifdef  _C_GW_
@@ -58,7 +58,7 @@
 #endif		
 .endm
 .macro		S9xGetWordRegNS	reg
-		// in  : rscratch (0x00hhmmll) 
+		// in  : rscratch (0x00hhmmll)
 		// out : reg (0xhhll0000)
 		// DOES NOT DESTROY rscratch (R0)
 #ifdef  _C_GW_
@@ -78,7 +78,7 @@
 #endif		
 .endm			
 .macro		S9xGetWordLowRegNS	reg
-		// in  : rscratch (0x00hhmmll) 
+		// in  : rscratch (0x00hhmmll)
 		// out : reg (0xhhll0000)
 		// DOES NOT DESTROY rscratch (R0)
 #ifdef  _C_GW_
@@ -116,7 +116,7 @@
 #endif		
 .endm
 .macro		S9xGetByteLow
-		// in  : rscratch (0x00hhmmll) 
+		// in  : rscratch (0x00hhmmll)
 		// out : rscratch (0x000000ll)		
 #ifdef  _C_GB_		
 		STR	regCycles,[regCPUvar,#Cycles_ofs]
@@ -149,7 +149,7 @@
 #endif		
 .endm
 .macro		S9xGetByteRegNS	reg
-		// in  : rscratch (0x00hhmmll) 
+		// in  : rscratch (0x00hhmmll)
 		// out : reg      (0xll000000)
 		// DOES NOT DESTROY rscratch (R0)
 #ifdef  _C_GB_		
@@ -169,7 +169,7 @@
 #endif		
 .endm
 .macro		S9xGetByteLowRegNS	reg
-		// in  : rscratch (0x00hhmmll) 
+		// in  : rscratch (0x00hhmmll)
 		// out : reg      (0x000000ll)
 		// DOES NOT DESTROY rscratch (R0)
 #ifdef  _C_GB_		
@@ -595,7 +595,7 @@
 		S9xSetByteLow	\reg
 		SUB		regS,regS,#1
 .endm
-.macro		PushWLow	reg 
+.macro		PushWLow	reg
 		SUB		rscratch,regS,#1
 		S9xSetWordLow	\reg
 		SUB		regS,regS,#2
@@ -813,7 +813,7 @@ GB7SRM:
 GBHSRAM:
 	ADD		regCycles,regCycles,#SLOW_ONE_CYCLE	//update Cycles		
 	
-	MOV		R1,R0,LSL #17  
+	MOV		R1,R0,LSL #17
 	AND		R2,R0,#0xF0000
 	MOV		R1,R1,LSR #17	//Address&0x7FFF	
 	MOV		R2,R2,LSR #3 //(Address&0xF0000 >> 3)
@@ -847,7 +847,7 @@ GBC4:
 	LDMFD		R13!,{PC} //Return
 GBDEBUG:	
 GBBWRAM:
-	MOV		R0,R0,LSL #17  
+	MOV		R0,R0,LSL #17
 	ADD		regCycles,regCycles,#SLOW_ONE_CYCLE	//update Cycles	
 	MOV		R0,R0,LSR #17	//Address&0x7FFF			
 	LDR		R1,[regCPUvar,#BWRAM]	
@@ -1043,7 +1043,7 @@ GWHSRAM:
 	TST		R0,#1
 	BNE		GW_Not_Aligned3
 	
-	MOV		R1,R0,LSL #17  
+	MOV		R1,R0,LSL #17
 	AND		R2,R0,#0xF0000
 	MOV		R1,R1,LSR #17	//Address&0x7FFF	
 	MOV		R2,R2,LSR #3 //(Address&0xF0000 >> 3)
@@ -1056,14 +1056,14 @@ GWHSRAM:
 	LDMFD		R13!,{PC}		//return
 	
 GW_Not_Aligned3:	
-	MOV		R3,R0,LSL #17  
+	MOV		R3,R0,LSL #17
 	AND		R2,R0,#0xF0000
 	MOV		R3,R3,LSR #17	//Address&0x7FFF	
 	MOV		R2,R2,LSR #3 //(Address&0xF0000 >> 3)	
 	ADD		R2,R2,R3						
 	ADD		R0,R0,#1	
 	SUB		R2,R2,#0x6000 //((Address & 0x7fff) - 0x6000 + ((Address & 0xf0000) >> 3))
-	MOV		R3,R0,LSL #17  
+	MOV		R3,R0,LSL #17
 	AND		R0,R0,#0xF0000
 	MOV		R3,R3,LSR #17	//(Address+1)&0x7FFF	
 	MOV		R0,R0,LSR #3 //((Address+1)&0xF0000 >> 3)	
@@ -1110,7 +1110,7 @@ GWC4:
 GWBWRAM:
 	TST		R0,#1
 	BNE		GW_Not_Aligned4
-	MOV		R0,R0,LSL #17  
+	MOV		R0,R0,LSL #17
 	ADD		regCycles,regCycles,#(SLOW_ONE_CYCLE*2)	//update Cycles
 	MOV		R0,R0,LSR #17	//Address&0x7FFF
 	LDR		R1,[regCPUvar,#BWRAM]		
@@ -1213,7 +1213,7 @@ SBPPU:
 	LDMFD		R13!,{PC} //Return
 SBCPU:	
 	ADD		regCycles,regCycles,#ONE_CYCLE	//update Cycles	
-	MOV		R0,R0,LSL #16 
+	MOV		R0,R0,LSL #16
 	STR		regCycles,[regCPUvar,#Cycles_ofs] //Save Cycles
 	MOV		R0,R0,LSR #16	//Address&0xFFFF
 		PREPARE_C_CALL
@@ -1226,7 +1226,7 @@ SBCPU:
 	LDMFD		R13!,{PC} //Return
 SBDSP:
 	ADD		regCycles,regCycles,#SLOW_ONE_CYCLE	//update Cycles	
-	MOV		R0,R0,LSL #16 
+	MOV		R0,R0,LSL #16
 	STR		regCycles,[regCPUvar,#Cycles_ofs] //Save Cycles
 	MOV		R0,R0,LSR #16	//Address&0xFFFF
 		PREPARE_C_CALL
@@ -1253,7 +1253,7 @@ SB7SRM:
 SBHSRAM:
 	ADD		regCycles,regCycles,#SLOW_ONE_CYCLE	//update Cycles		
 	
-	MOV		R3,R0,LSL #17  
+	MOV		R3,R0,LSL #17
 	AND		R2,R0,#0xF0000
 	MOV		R3,R3,LSR #17	//Address&0x7FFF	
 	MOV		R2,R2,LSR #3 //(Address&0xF0000 >> 3)	
@@ -1279,7 +1279,7 @@ SBDEBUG:
 	LDMFD		R13!,{PC}
 SBC4:
 	ADD		regCycles,regCycles,#SLOW_ONE_CYCLE	//update Cycles	
-	MOV		R0,R0,LSL #16 
+	MOV		R0,R0,LSL #16
 	STR		regCycles,[regCPUvar,#Cycles_ofs] //Save Cycles
 	MOV		R0,R0,LSR #16	//Address&0xFFFF	
 		PREPARE_C_CALL
@@ -1291,7 +1291,7 @@ SBC4:
 	LDR		regCycles,[regCPUvar,#Cycles_ofs] //Load Cycles	
 	LDMFD		R13!,{PC} //Return
 SBBWRAM:
-	MOV		R0,R0,LSL #17  
+	MOV		R0,R0,LSL #17
 	ADD		regCycles,regCycles,#SLOW_ONE_CYCLE	//update Cycles
 	MOV		R0,R0,LSR #17	//Address&0x7FFF			
 	LDR		R2,[regCPUvar,#BWRAM]	
@@ -1432,7 +1432,7 @@ SWPPU:
 	LDMFD		R13!,{PC} //Return
 SWCPU:	
 	ADD		regCycles,regCycles,#(ONE_CYCLE*2)	//update Cycles	
-	MOV		R0,R0,LSL #16 
+	MOV		R0,R0,LSL #16
 	STR		regCycles,[regCPUvar,#Cycles_ofs] //Save Cycles
 	MOV		R0,R0,LSR #16	//Address&0xFFFF
 	MOV		R2,R1
@@ -1450,7 +1450,7 @@ SWCPU:
 	LDMFD		R13!,{PC} //Return
 SWDSP:
 	ADD		regCycles,regCycles,#SLOW_ONE_CYCLE	//update Cycles	
-	MOV		R0,R0,LSL #16 
+	MOV		R0,R0,LSL #16
 	STR		regCycles,[regCPUvar,#Cycles_ofs] //Save Cycles
 	MOV		R0,R0,LSR #16	//Address&0xFFFF
 	MOV		R2,R1
@@ -1503,7 +1503,7 @@ SWHSRAM:
 	TST		R0,#1
 	BNE		SW_not_aligned3	
 	//aligned
-	MOV		R3,R0,LSL #17  
+	MOV		R3,R0,LSL #17
 	AND		R2,R0,#0xF0000
 	MOV		R3,R3,LSR #17	//Address&0x7FFF	
 	MOV		R2,R2,LSR #3 //(Address&0xF0000 >> 3)	
@@ -1517,7 +1517,7 @@ SWHSRAM:
 	STRB		R0,[regCPUvar,#SRAMModified_ofs]		
 	LDMFD		R13!,{PC}	//return		
 SW_not_aligned3:	
-	MOV		R3,R0,LSL #17  
+	MOV		R3,R0,LSL #17
 	AND		R2,R0,#0xF0000
 	MOV		R3,R3,LSR #17	//Address&0x7FFF	
 	MOV		R2,R2,LSR #3 //(Address&0xF0000 >> 3)	
@@ -1525,7 +1525,7 @@ SW_not_aligned3:
 	SUB		R2,R2,#0x6000 //((Address & 0x7fff) - 0x6000 + ((Address & 0xf0000) >> 3))
 	
 	ADD		R0,R0,#1	
-	MOV		R3,R0,LSL #17  
+	MOV		R3,R0,LSL #17
 	AND		R0,R0,#0xF0000
 	MOV		R3,R3,LSR #17	//(Address+1)&0x7FFF	
 	MOV		R0,R0,LSR #3 //((Address+1)&0xF0000 >> 3)	
@@ -1551,7 +1551,7 @@ SWDEBUG:
 	LDMFD		R13!,{PC}	//return
 SWC4:
 	ADD		regCycles,regCycles,#(SLOW_ONE_CYCLE*2)	//update Cycles	
-	MOV		R0,R0,LSL #16 
+	MOV		R0,R0,LSL #16
 	STR		regCycles,[regCPUvar,#Cycles_ofs] //Save Cycles
 	MOV		R0,R0,LSR #16	//Address&0xFFFF	
 	MOV		R2,R1
