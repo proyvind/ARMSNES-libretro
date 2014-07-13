@@ -2,22 +2,22 @@
 #define _ASMMEMFUNCS_H_
 
 #define memset32(_dst, _c, _count) \
-({ uint32_t *dst = (_dst); uint32_t c = (_c); int count = (_count); uint32_t dummy0, dummy1, dummy2; \
+({ uint32_t *dst = (_dst); uint32_t c = (_c); int count = (_count); \
     __asm__ __volatile__ ( \
         "      cmp   %[count], #4\n" \
 	"      blt   2f\n" \
-        "      mov   %[dummy0], %[c]\n" \
+        "      mov   r5, %[c]\n" \
 	"      tst   %[dst], #4\n" \
 	"      strne %[c], [%[dst]], #4\n" \
 	"      subne %[count], %[count], #1\n" \
 	"      tst   %[dst], #8\n" \
-	"      stmneia %[dst]!, {%[dummy0], %[c]}\n" \
+	"      stmneia %[dst]!, {%[c], r5}\n" \
 	"      subne %[count], %[count], #2\n" \
-        "      mov   %[dummy1], %[c]\n" \
-        "      mov   %[dummy2], %[c]\n" \
+        "      mov   r6, %[c]\n" \
+        "      mov   r7, %[c]\n" \
 	"1:\n"\
 	"      subs  %[count], %[count], #4\n" \
-	"      stmgeia %[dst]!, {%[dummy0], %[dummy1], %[dummy2], %[c]}\n" \
+	"      stmgeia %[dst]!, {%[c], r5-r7}\n" \
 	"      bge   1b\n" \
 	"      add   %[count], %[count], #4\n" \
 	"2:\n"\
@@ -28,14 +28,14 @@
 	"      subs  %[count], %[count], #1\n" \
 	"      strge %[c], [%[dst]], #4\n" \
 	"\n" \
-	: [dst] "+&r" (dst), [count] "+&r" (count), [dummy0] "=&r" (dummy0), [dummy1] "=&r" (dummy1), [dummy2] "=&r" (dummy2), [c] "+&r" (c) \
+	: [dst] "+&r" (dst), [count] "+&r" (count), [c] "+&r" (c) \
 	: \
-	: "cc", "memory" \
+	: "r5", "r6", "r7", "cc", "memory" \
     ); _dst; \
 })
 
 #define memset16(_dst, _c, _count) \
-({ uint16_t *dst = (_dst); uint16_t c = (_c); int count = (_count); uint32_t dummy0, dummy1, dummy2; \
+({ uint16_t *dst = (_dst); uint16_t c = (_c); int count = (_count); \
     __asm__ __volatile__ ( \
         "      cmp   %[count], #2\n" \
 	"      blt   3f\n" \
@@ -45,26 +45,26 @@
 	"      subne  %[count], %[count], #1\n" \
 	/* Now we are 32-bit aligned (need to upgrade 'c' to 32-bit )*/ \
         "      orr    %[c], %[c], %[c], asl #16\n" \
-        "      mov   %[dummy0], %[c]\n" \
+        "      mov   r5, %[c]\n" \
         "      cmp   %[count], #8\n" \
 	"      blt   2f\n" \
 	"      tst   %[dst], #4\n" \
 	"      strne %[c], [%[dst]], #4\n" \
 	"      subne %[count], %[count], #2\n" \
 	"      tst   %[dst], #8\n" \
-	"      stmneia %[dst]!, {%[dummy0], %[c]}\n" \
+	"      stmneia %[dst]!, {%[c], r5}\n" \
 	"      subne %[count], %[count], #4\n" \
 	/* Now we are 128-bit aligned */ \
-        "      mov   %[dummy1], %[c]\n" \
-        "      mov   %[dummy2], %[c]\n" \
+        "      mov   r6, %[c]\n" \
+        "      mov   r7, %[c]\n" \
 	"1:\n" /* Copy 4 32-bit values per loop iteration */ \
 	"      subs  %[count], %[count], #8\n" \
-	"      stmgeia %[dst]!, {%[dummy0], %[dummy1], %[dummy2], %[c]}\n" \
+	"      stmgeia %[dst]!, {%[c], r5-r7}\n" \
 	"      bge   1b\n" \
 	"      add   %[count], %[count], #8\n" \
 	"2:\n" /* Copy up to 3 remaining 32-bit values */ \
 	"      tst   %[count], #4\n" \
-	"      stmneia %[dst]!, {%[dummy0], %[c]}\n" \
+	"      stmneia %[dst]!, {%[c], r5}\n" \
 	"      tst   %[count], #2\n" \
 	"      strne %[c], [%[dst]], #4\n" \
 	"      and  %[count], %[count], #1\n" \
@@ -72,9 +72,9 @@
 	"      subs  %[count], %[count], #1\n" \
 	"      strgeh %[c], [%[dst]], #2\n" \
 	"\n" \
-	: [dst] "+&r" (dst), [count] "+&r" (count), [dummy0] "=&r" (dummy0), [dummy1] "=&r" (dummy1), [dummy2] "=&r" (dummy2), [c] "+&r" (c) \
+	: [dst] "+&r" (dst), [count] "+&r" (count), [c] "+&r" (c) \
 	: \
-	: "cc", "memory" \
+	: "r5", "r6", "r7", "cc", "memory" \
     ); _dst;\
 })
 
