@@ -100,9 +100,6 @@ typedef short		int16_32;
 #define LSB_FIRST
 #define FAST_LSB_WORD_ACCESS
 #define SUPER_FX
-#ifdef ASMCPU
-	#define ASM_SPC700
-#endif
 
 EXTERN_C void S9xGenerateSound ();
 
