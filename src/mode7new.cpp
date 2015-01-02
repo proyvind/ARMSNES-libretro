@@ -14,7 +14,7 @@ extern uint8  Mode7Depths [2];
 
 #ifdef __DEBUG__
 
-	#define DMSG(rop) printf("Rendering Mode7, ROp: " rop ", R:%d, r2130: %d\n", PPU.Mode7Repeat, GFX.r2130 & 1)			
+	#define DMSG(rop) printf("Rendering Mode7, ROp: " rop ", R:%d, r2130: %d\n", PPU.Mode7Repeat, GFX.r2130 & 1)
 #else
 	#define DMSG(rop)
 #endif
@@ -96,7 +96,7 @@ void DrawBGMode7Background16NewR3 (uint8 *Screen)
 	DD = l->MatrixD * yy + (CentreY << 8);
 
 	yy3 = ((yy + CentreY) & 7) << 4;
-	
+
 	for (clip = 0; clip < ClipCount; clip++)
 	{
 	    if (GFX.pCurrentClip->Count [0]){
@@ -132,7 +132,7 @@ void DrawBGMode7Background16NewR3 (uint8 *Screen)
 		asm volatile (
 		"1:						\n"
 		"	mov	r3, %[AA], asr #18		\n"
-		"	orrs	r3, r3, %[CC], asr #18		\n"			
+		"	orrs	r3, r3, %[CC], asr #18		\n"
 		"	bne	2f				\n"
 		"						\n"
 		"	mov	r3, %[CC], asr #11		\n"
@@ -149,10 +149,12 @@ void DrawBGMode7Background16NewR3 (uint8 *Screen)
 		"						\n"
 		"	ldrb	r0, [r3, #1]			\n"
 		"	add	%[AA], %[AA], %[daa]		\n"
-		"	movs	r0, r0, lsl #2			\n"		
-		"	ldrne	r1, [%[colors], r0]		\n"	
+		"	movs	r0, r0, lsl #2			\n"
+  " IT ne\n" \
+		"	ldrne	r1, [%[colors], r0]		\n"
 		"	add	%[xx3], %[xx3], #1		\n"
-		"	strneh	r1, [%[p]]			\n"		
+  " IT ne\n" \
+		"	strneh	r1, [%[p]]			\n"
 		"						\n"
 		"	add	%[CC], %[CC], %[dcc]		\n"
 		"	add	%[p], %[p], #2			\n"
@@ -166,10 +168,12 @@ void DrawBGMode7Background16NewR3 (uint8 *Screen)
 		"	add	r3, %[VRAM], r3			\n"
 		"	ldrb	r0, [r3, #1]			\n"
 		"	add	%[AA], %[AA], %[daa]		\n"
-		"	movs	r0, r0, lsl #2			\n"		
-		"	ldrne	r1, [%[colors], r0]		\n"	
+		"	movs	r0, r0, lsl #2			\n"
+  " IT ne\n" \
+		"	ldrne	r1, [%[colors], r0]		\n"
 		"	add	%[xx3], %[xx3], #1		\n"
-		"	strneh	r1, [%[p]]			\n"		
+  " IT ne\n" \
+		"	strneh	r1, [%[p]]			\n"
 		"						\n"
 		"	add	%[CC], %[CC], %[dcc]		\n"
 		"	add	%[p], %[p], #2			\n"
@@ -186,7 +190,7 @@ void DrawBGMode7Background16NewR3 (uint8 *Screen)
 		  [dcc] "r" (cc),
 		  [VRAM] "r" (Memory.VRAM),
 		  [colors] "r" (GFX.ScreenColors)
-		  //[dir] "r" (dir) 	
+		  //[dir] "r" (dir)
 		: "r0", "r1", "r3", "cc"
 		);
 		}
@@ -195,7 +199,7 @@ void DrawBGMode7Background16NewR3 (uint8 *Screen)
 		asm volatile (
 		"1:						\n"
 		"	mov	r3, %[AA], asr #18		\n"
-		"	orrs	r3, r3, %[CC], asr #18		\n"			
+		"	orrs	r3, r3, %[CC], asr #18		\n"
 		"	bne	2f				\n"
 		"						\n"
 		"	mov	r3, %[CC], asr #11		\n"
@@ -212,10 +216,12 @@ void DrawBGMode7Background16NewR3 (uint8 *Screen)
 		"						\n"
 		"	ldrb	r0, [r3, #1]			\n"
 		"	add	%[AA], %[AA], %[daa]		\n"
-		"	movs	r0, r0, lsl #2			\n"		
-		"	ldrne	r1, [%[colors], r0]		\n"	
+		"	movs	r0, r0, lsl #2			\n"
+  " IT ne\n" \
+		"	ldrne	r1, [%[colors], r0]		\n"
 		"	add	%[xx3], %[xx3], #-1		\n"
-		"	strneh	r1, [%[p]]			\n"		
+  " IT ne\n" \
+		"	strneh	r1, [%[p]]			\n"
 		"						\n"
 		"	add	%[CC], %[CC], %[dcc]		\n"
 		"	add	%[p], %[p], #2			\n"
@@ -229,10 +235,12 @@ void DrawBGMode7Background16NewR3 (uint8 *Screen)
 		"	add	r3, %[VRAM], r3			\n"
 		"	ldrb	r0, [r3, #1]			\n"
 		"	add	%[AA], %[AA], %[daa]		\n"
-		"	movs	r0, r0, lsl #2			\n"		
-		"	ldrne	r1, [%[colors], r0]		\n"	
+		"	movs	r0, r0, lsl #2			\n"
+  " IT ne\n" \
+		"	ldrne	r1, [%[colors], r0]		\n"
 		"	add	%[xx3], %[xx3], #-1		\n"
-		"	strneh	r1, [%[p]]			\n"		
+  " IT ne\n" \
+		"	strneh	r1, [%[p]]			\n"
 		"						\n"
 		"	add	%[CC], %[CC], %[dcc]		\n"
 		"	add	%[p], %[p], #2			\n"
@@ -249,7 +257,7 @@ void DrawBGMode7Background16NewR3 (uint8 *Screen)
 		  [dcc] "r" (cc),
 		  [VRAM] "r" (Memory.VRAM),
 		  [colors] "r" (GFX.ScreenColors)
-		  //[dir] "r" (dir) 	
+		  //[dir] "r" (dir)
 		: "r0", "r1", "r3", "cc"
 		);
 		}
@@ -306,7 +314,7 @@ void DrawBGMode7Background16NewR1R2 (uint8 *Screen)
 
 	BB = l->MatrixB * yy + (CentreX << 8);
 	DD = l->MatrixD * yy + (CentreY << 8);
-	
+
 	for (clip = 0; clip < ClipCount; clip++) {
 	    if (GFX.pCurrentClip->Count [0]){
 			Left = GFX.pCurrentClip->Left [clip][0];
@@ -327,7 +335,7 @@ void DrawBGMode7Background16NewR1R2 (uint8 *Screen)
 		asm volatile (
 		"1:						\n"
 		"	mov	r3, %[AA], asr #18		\n"
-		"	orrs	r3, r3, %[CC], asr #18		\n"			
+		"	orrs	r3, r3, %[CC], asr #18		\n"
 		"	bne	2f				\n"
 		"						\n"
 		"	and	r1, %[AndByY], %[CC], asr #4	\n"
@@ -348,14 +356,16 @@ void DrawBGMode7Background16NewR1R2 (uint8 *Screen)
 		"						\n"
 		"	ldrb	r0, [r3, #1]			\n"
 		"	add	%[AA], %[AA], %[daa]		\n"
-		"	movs	r0, r0, lsl #2			\n"		
-		"	ldrne	r1, [%[colors], r0]		\n"	
+		"	movs	r0, r0, lsl #2			\n"
+  " IT ne\n" \
+		"	ldrne	r1, [%[colors], r0]		\n"
 		"	add	%[CC], %[CC], %[dcc]		\n"
+  " IT ne\n" \
 		"	strneh	r1, [%[p]]			\n"
 		"	add	%[p], %[p], #2			\n"
 		"	subs	%[x], %[x], #1			\n"
 		"	bne	1b				\n"
-		"	b	3f				\n"		
+		"	b	3f				\n"
 		"2:						\n"
 		"	add	%[AA], %[AA], %[daa]		\n"
 		"	add	%[CC], %[CC], %[dcc]		\n"
@@ -432,7 +442,7 @@ uint8 *z;
 
 	yy += ((VOffset - CentreY) << (32-10+1)) >> (32-10+1) ;
 	xx = ((HOffset - CentreX) << (32-10+1)) >> (32-10+1);
-	
+
 	BB = l->MatrixB * yy + (CentreX << 8);
 	DD = l->MatrixD * yy + (CentreY << 8);
 
@@ -445,7 +455,7 @@ uint8 *z;
 	    	}
 
 	    p = (uint16 *) Screen + Left;
-	
+
 
 	    if (PPU.Mode7HFlip) {
 			startx = Right - 1;
@@ -476,11 +486,13 @@ uint8 *z;
 		"						\n"
 		"	ldrb	r0, [r3, #1]			\n"
 		"	add	%[AA], %[AA], %[daa]		\n"
-		"	movs	r0, r0, lsl #2			\n"		
+		"	movs	r0, r0, lsl #2			\n"
 		"	add	%[CC], %[CC], %[dcc]		\n"
-		"	ldrne	r1, [%[colors], r0]		\n"	
+  " IT ne\n" \
+		"	ldrne	r1, [%[colors], r0]		\n"
 		"	add	%[p], %[p], #2			\n"
-		"	strneh	r1, [%[p]]			\n"		
+  " IT ne\n" \
+		"	strneh	r1, [%[p]]			\n"
 		"						\n"
 		"	subs	%[x], %[x], #1			\n"
 		"	bne	1b				\n"

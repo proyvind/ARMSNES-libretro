@@ -554,7 +554,7 @@ void S9xBuildDirectColourMaps ()
 }
 
 void S9xStartScreenRefresh ()
-{	
+{
     RESET_ROPS(0);
 
     if (IPPU.RenderThisFrame)
@@ -739,7 +739,7 @@ INLINE void SelectTileRenderer (bool8_32 normal, bool NoZ = false)
 		"Sub", "Sub", "FixedSub1_2", "Sub1_2",
 		"Normal"
 	};
-	printf("SelectTileRenderer: %s\n", TRName[TileRenderer]);	
+	printf("SelectTileRenderer: %s\n", TRName[TileRenderer]);
 #endif
 
 #ifdef __FAST_OBJS__
@@ -813,7 +813,7 @@ void S9xSetupOBJ ()
 	{
 #ifndef __FAST_OBJS__
 	    GFX.OBJList[C++] = S;
-#else		
+#else
 	    int x = 0;
 	    int a, b;
 		// -- Sort objects (from low to high priority)
@@ -821,18 +821,18 @@ void S9xSetupOBJ ()
 		a = GFX.OBJList[x];
 		if (PPU.OBJ[a].Priority >= PPU.OBJ[S].Priority) break;
 		x++;
-		} 		
-	
+		}
+
 	    GFX.OBJList[x] = S;
 	    x++; C++;
-		
+
 	    while (x < C) {
 		b = GFX.OBJList[x];
 		GFX.OBJList[x] = a;
 		a = b;
 		x++;
 		}
-#endif	
+#endif
 		// --
 	    GFX.Sizes[S] = Size;
 	    GFX.VPositions[S] = VPos;
@@ -901,13 +901,13 @@ void DrawOBJS (bool8_32 OnMain = FALSE, uint8 D = 0)
 	    BaseTile += ((Size >> 3) - 1) | H_FLIP;
 	    TileInc = -1;
 	}
-	
+
 	if (PPU.OBJ[S].VFlip) BaseTile |= V_FLIP;
 	//BaseTile |= PPU.OBJ[S].VFlip << 15;
 
 	int clipcount = GFX.pCurrentClip->Count [4];
 	if (!clipcount) clipcount = 1;
-	
+
 	GFX.Z2 = (PPU.OBJ[S].Priority + 1) * 4 + D;
 
 	for (int clip = 0; clip < clipcount; clip++)
@@ -937,7 +937,7 @@ void DrawOBJS (bool8_32 OnMain = FALSE, uint8 D = 0)
 		    int TileLine;
 		    int LineCount;
 		    int Last;
-		
+
 		    if ((StartLine = VPos + Y) < (int) GFX.StartY)
 		    {
 			StartLine = GFX.StartY - StartLine;
@@ -976,7 +976,7 @@ void DrawOBJS (bool8_32 OnMain = FALSE, uint8 D = 0)
 			    //if (Tile & 0x100) BG.TileAddress = bg_ta_ns;
 			    //else BG.TileAddress = bg_ta;
 			    (*DrawClippedTilePtr) (Tile, O, Offset, W, TileLine, LineCount);
-			
+
 			    if (W >= Width)
 				continue;
 			    Tile += TileInc;
@@ -1017,7 +1017,7 @@ void DrawOBJS (bool8_32 OnMain = FALSE, uint8 D = 0)
 void DrawBackgroundMosaic (uint32 BGMode, uint32 bg, uint8 Z1, uint8 Z2)
 {
 #ifdef __DEBUG__
-	printf("DrawBackgroundMosaic(%i, %i, %i, %i)\n", BGMode, bg, Z1, Z2);	
+	printf("DrawBackgroundMosaic(%i, %i, %i, %i)\n", BGMode, bg, Z1, Z2);
 #endif
     CHECK_SOUND();
 
@@ -1087,13 +1087,13 @@ void DrawBackgroundMosaic (uint32 BGMode, uint32 bg, uint8 Z1, uint8 Z2)
 	    if ((VOffset != LineData [Y + Lines].BG[bg].VOffset) ||
 		(HOffset != LineData [Y + Lines].BG[bg].HOffset))
 		break;
-	
+
 	uint32 MosaicLine = VOffset + Y - MosaicOffset;
 
 	if (Y + Lines > GFX.EndY)
 	    Lines = GFX.EndY + 1 - Y;
 	uint32 VirtAlign = (MosaicLine & 7) << 3;
-	
+
 	uint16 *b1;
 	uint16 *b2;
 
@@ -1243,7 +1243,7 @@ void DrawBackgroundMosaic (uint32 BGMode, uint32 bg, uint8 Z1, uint8 Z2)
 void DrawBackgroundOffset (uint32 BGMode, uint32 bg, uint8 Z1, uint8 Z2)
 {
 #ifdef __DEBUG__
-	printf("DrawBackgroundOffset(%i, %i, %i, %i)\n", BGMode, bg, Z1, Z2);	
+	printf("DrawBackgroundOffset(%i, %i, %i, %i)\n", BGMode, bg, Z1, Z2);
 #endif
 
     CHECK_SOUND();
@@ -1287,7 +1287,7 @@ void DrawBackgroundOffset (uint32 BGMode, uint32 bg, uint8 Z1, uint8 Z2)
 	SC1 = SC0 + 1024;
     else
 	SC1 = SC0;
-	
+
 	if(((uint8*)SC1-Memory.VRAM)>=0x10000)
 		SC1-=0x08000;
 
@@ -1305,7 +1305,7 @@ void DrawBackgroundOffset (uint32 BGMode, uint32 bg, uint8 Z1, uint8 Z2)
 	SC3 = SC2 + 1024;
     else
 	SC3 = SC2;
-	
+
 	if(((uint8*)SC3-Memory.VRAM)>=0x10000)
 		SC3-=0x08000;
 
@@ -1345,7 +1345,7 @@ void DrawBackgroundOffset (uint32 BGMode, uint32 bg, uint8 Z1, uint8 Z2)
 
 	s1 += (ScreenLine & 0x1f) << 5;
 	s2 += (ScreenLine & 0x1f) << 5;
-		
+
 		if(BGMode != 4)
 		{
 			if((ScreenLine & 0x1f) == 0x1f)
@@ -1531,7 +1531,7 @@ void DrawBackgroundOffset (uint32 BGMode, uint32 bg, uint8 Z1, uint8 Z2)
 void DrawBackgroundMode5 (uint32 /* BGMODE */, uint32 bg, uint8 Z1, uint8 Z2)
 {
 #ifdef __DEBUG__
-	printf("DrawBackgroundMode5(?, %i, %i, %i)\n", bg, Z1, Z2);	
+	printf("DrawBackgroundMode5(?, %i, %i, %i)\n", bg, Z1, Z2);
 #endif
 
     CHECK_SOUND();
@@ -1554,14 +1554,14 @@ void DrawBackgroundMode5 (uint32 /* BGMODE */, uint32 bg, uint8 Z1, uint8 Z2)
 	SC1 = SC0 + 1024;
     else
 	SC1 = SC0;
-	
+
 	if((SC1-(unsigned short*)Memory.VRAM)>0x10000)
 		SC1=(uint16*)&Memory.VRAM[(((uint8*)SC1)-Memory.VRAM)%0x10000];
-	
+
     if ((PPU.BG[bg].SCSize & 2))
 	SC2 = SC1 + 1024;
     else SC2 = SC0;
-	
+
 	if(((uint8*)SC2-Memory.VRAM)>=0x10000)
 		SC2-=0x08000;
 
@@ -1594,7 +1594,7 @@ void DrawBackgroundMode5 (uint32 /* BGMODE */, uint32 bg, uint8 Z1, uint8 Z2)
 	uint32 VOffset = LineData [Y].BG[bg].VOffset;
 	uint32 HOffset = LineData [Y].BG[bg].HOffset;
 	int VirtAlign = (Y + VOffset) & 7;
-	
+
 	for (Lines = 1; Lines < 8 - VirtAlign; Lines++)
 	    if ((VOffset != LineData [Y + Lines].BG[bg].VOffset) ||
 		(HOffset != LineData [Y + Lines].BG[bg].HOffset))
@@ -1603,7 +1603,7 @@ void DrawBackgroundMode5 (uint32 /* BGMODE */, uint32 bg, uint8 Z1, uint8 Z2)
 	HOffset <<= 1;
 	if (Y + Lines > endy)
 	    Lines = endy + 1 - Y;
-	
+
 	int ScreenLine = (VOffset + Y) >> VOffsetShift;
 	int t1;
 	int t2;
@@ -1655,7 +1655,7 @@ void DrawBackgroundMode5 (uint32 /* BGMODE */, uint32 bg, uint8 Z1, uint8 Z2)
 
 	    uint32 Quot = HPos >> 3;
 	    uint32 Count = 0;
-	
+
 	    uint16 *t;
 	    if (Quot > 63)
 		t = b2 + ((Quot >> 1) & 0x1f);
@@ -1852,7 +1852,7 @@ void DrawBackgroundMode5 (uint32 /* BGMODE */, uint32 bg, uint8 Z1, uint8 Z2)
 void DrawBackground_8(uint32 BGMode, uint32 bg, uint8 Z1, uint8 Z2)
 {
 #ifdef __DEBUG__
-	printf("DrawBackground_8(%i, %i, %i, %i)\n", BGMode, bg, Z1, Z2);	
+	printf("DrawBackground_8(%i, %i, %i, %i)\n", BGMode, bg, Z1, Z2);
 #endif
     //uint32 Tile;
     uint16 *SC0;
@@ -1862,26 +1862,26 @@ void DrawBackground_8(uint32 BGMode, uint32 bg, uint8 Z1, uint8 Z2)
     uint32 depths [2] = {Z1, Z2};
 
     SC0 = (uint16 *) &Memory.VRAM[PPU.BG[bg].SCBase << 1];
-	
+
     SC1 = SC0 + ((PPU.BG[bg].SCSize & 1) << 10);
 
     if(SC1 >= (unsigned short*)(Memory.VRAM+0x10000)) SC1 = (uint16*)&Memory.VRAM[((uint8*)SC1-&Memory.VRAM[0]) & 0xffff];
-	
+
     if (PPU.BG[bg].SCSize & 2)
 		SC2 = SC1 + 1024;
     else
 		SC2 = SC0;
-	
+
     if(((uint8*)SC2-Memory.VRAM)>=0x10000)	SC2 -= 0x08000;
 
     SC3 = SC2 + ((PPU.BG[bg].SCSize & 1) << 10);
 
     if(((uint8*)SC3-Memory.VRAM)>=0x10000)	SC3 -= 0x08000;
-	
+
     int Lines;
-	
+
 	int oc = PPU.BG[bg].OffsetsChanged;
-	uint32 VOffset, HOffset;	
+	uint32 VOffset, HOffset;
 	if (!oc) {
 		VOffset = LineData [GFX.StartY].BG[bg].VOffset;
 		HOffset = LineData [GFX.StartY].BG[bg].HOffset;
@@ -1894,48 +1894,48 @@ void DrawBackground_8(uint32 BGMode, uint32 bg, uint8 Z1, uint8 Z2)
 			HOffset = LineData [Y].BG[bg].HOffset;
 			}
 		int VirtAlign = (Y + VOffset) & 7;
-		
+
 		int maxLines = GFX.EndY - Y + 1;
 		if ((8 - VirtAlign) < maxLines) maxLines = (8 - VirtAlign);
-				
+
 		if (oc) {
 			for (Lines = 1; Lines < maxLines; Lines++)
 				if ((VOffset != LineData [Y + Lines].BG[bg].VOffset) ||
 					(HOffset != LineData [Y + Lines].BG[bg].HOffset))
 					break;
-		} else Lines = maxLines;		
-			
+		} else Lines = maxLines;
+
 			VirtAlign <<= 3;
-			
+
 			uint32 ScreenLine = (VOffset + Y) >> 3;
 			uint16 *b1;
 			uint16 *b2;
-			
+
 			if (ScreenLine & 0x20)
 				b1 = SC2, b2 = SC3;
 			else
 				b1 = SC0, b2 = SC1;
-			
+
 			b1 += (ScreenLine & 0x1f) << 5;
 			b2 += (ScreenLine & 0x1f) << 5;
 
 			uint32 Left;
 			uint32 Right;
-			int clip = 0;			
+			int clip = 0;
 			int clipcount = GFX.pCurrentClip->Count [bg];
 			if (!clipcount) {
 				Left = 0;
 				Right = 256;
 				}
-			
+
 			do {
 				if (clipcount) {
 					Left = GFX.pCurrentClip->Left [clip][bg];
 					Right = GFX.pCurrentClip->Right [clip][bg];
-					
+
 					if (Right <= Left) {clip++; continue;}
 				}
-				
+
 				uint32 s = Left + y_ppl;
 				uint32 HPos = (HOffset + Left) & 0x1ff;
 				uint32 Quot = HPos >> 3;
@@ -1957,7 +1957,7 @@ void DrawBackground_8(uint32 BGMode, uint32 bg, uint8 Z1, uint8 Z2)
 
 				// Left hand edge clipped tile
 				uint32 Offset = (HPos & 7);
-				if (Offset){					
+				if (Offset){
 					Count = 8 - Offset;
 					if (Count > Width) Count = Width;
 					s -= Offset;
@@ -1973,7 +1973,7 @@ void DrawBackground_8(uint32 BGMode, uint32 bg, uint8 Z1, uint8 Z2)
 					Quot++;
 					s += 8;
 				}
-				
+
 				// Middle, unclipped tiles
 				Count = Width - Count;
 				for (int C = Count >> 3; C > 0; s += 8, Quot++, C--){
@@ -2006,7 +2006,7 @@ void DrawBackground_8(uint32 BGMode, uint32 bg, uint8 Z1, uint8 Z2)
 void DrawBackground_16 (uint32 BGMode, uint32 bg, uint8 Z1, uint8 Z2)
 {
 #ifdef __DEBUG__
-	printf("DrawBackground_16(%i, %i, %i, %i)\n", BGMode, bg, Z1, Z2);	
+	printf("DrawBackground_16(%i, %i, %i, %i)\n", BGMode, bg, Z1, Z2);
 #endif
     //uint32 Tile;
     uint16 *SC0;
@@ -2016,31 +2016,31 @@ void DrawBackground_16 (uint32 BGMode, uint32 bg, uint8 Z1, uint8 Z2)
     uint32 depths [2] = {Z1, Z2};
 
     SC0 = (uint16 *) &Memory.VRAM[PPU.BG[bg].SCBase << 1];
-	
+
     SC1 = SC0 + ((PPU.BG[bg].SCSize & 1) << 10);
 
     if(SC1 >= (unsigned short*)(Memory.VRAM+0x10000)) SC1 = (uint16*)&Memory.VRAM[((uint8*)SC1-&Memory.VRAM[0]) & 0xffff];
-	
+
     if (PPU.BG[bg].SCSize & 2)
 		SC2 = SC1 + 1024;
     else
 		SC2 = SC0;
-	
+
     if(((uint8*)SC2-Memory.VRAM)>=0x10000)	SC2 -= 0x08000;
 
     SC3 = SC2 + ((PPU.BG[bg].SCSize & 1) << 10);
 
     if(((uint8*)SC3-Memory.VRAM)>=0x10000)	SC3 -= 0x08000;
-	
+
     int Lines;
 
 	int oc = PPU.BG[bg].OffsetsChanged;
-	uint32 VOffset, HOffset;	
+	uint32 VOffset, HOffset;
 	if (!oc) {
 		VOffset = LineData [GFX.StartY].BG[bg].VOffset;
 		HOffset = LineData [GFX.StartY].BG[bg].HOffset;
 		}
-	
+
 	TileBlank = 0xFFFFFFFF;
 	unsigned int tb1 = 0xffffffff;
 	unsigned int tb2 = 0xffffffff;
@@ -2051,7 +2051,7 @@ void DrawBackground_16 (uint32 BGMode, uint32 bg, uint8 Z1, uint8 Z2)
 			HOffset = LineData [Y].BG[bg].HOffset;
 			}
 		int VirtAlign = (Y + VOffset) & 7;
-		
+
 		int maxLines = GFX.EndY - Y + 1;
 		if ((8 - VirtAlign) < maxLines) maxLines = (8 - VirtAlign);
 
@@ -2061,39 +2061,39 @@ void DrawBackground_16 (uint32 BGMode, uint32 bg, uint8 Z1, uint8 Z2)
 					(HOffset != LineData [Y + Lines].BG[bg].HOffset))
 					break;
 		} else Lines = maxLines;
-			
+
 			VirtAlign <<= 3;
-			
+
 			uint32 ScreenLine = (VOffset + Y) >> 4;
 			int    tx_index = ( ((VOffset + Y) & 15) <= 7 ) << 3;
 			uint16 *b1;
 			uint16 *b2;
-			
+
 			if (ScreenLine & 0x20)
 				b1 = SC2, b2 = SC3;
 			else
 				b1 = SC0, b2 = SC1;
-			
+
 			b1 += (ScreenLine & 0x1f) << 5;
 			b2 += (ScreenLine & 0x1f) << 5;
 
 			uint32 Left;
 			uint32 Right;
-			int clip = 0;			
+			int clip = 0;
 			int clipcount = GFX.pCurrentClip->Count [bg];
 			if (!clipcount) {
 				Left = 0;
 				Right = 256;
 				}
-			
+
 			do {
 				if (clipcount) {
 					Left = GFX.pCurrentClip->Left [clip][bg];
 					Right = GFX.pCurrentClip->Right [clip][bg];
-					
+
 					if (Right <= Left) {clip++; continue;}
 				}
-				
+
 				uint32 s = Left + y_ppl;
 				uint32 HPos = (HOffset + Left) & 0x3ff;
 				uint32 Quot = HPos >> 3;
@@ -2120,10 +2120,10 @@ void DrawBackground_16 (uint32 BGMode, uint32 bg, uint8 Z1, uint8 Z2)
 					Tile += tx_table[tx_index + ((Tile & (H_FLIP | V_FLIP)) >> 13)];
 					GFX.Z1 = GFX.Z2 = depths [(Tile & 0x2000) >> 13];
 					}
-				
+
 				// Left hand edge clipped tile
 				uint32 Offset = (HPos & 7);
-				if (Offset){					
+				if (Offset){
 					Count = 8 - Offset;
 					if (Count > Width) Count = Width;
 					s -= Offset;
@@ -2148,7 +2148,7 @@ void DrawBackground_16 (uint32 BGMode, uint32 bg, uint8 Z1, uint8 Z2)
 					Quot++;
 					s += 8;
 				}
-				
+
 				// Middle, unclipped tiles
 				Count = Width - Count;
 				for (int C = Count >> 3; C > 0; s += 8, Quot++, C--){
@@ -2159,7 +2159,7 @@ void DrawBackground_16 (uint32 BGMode, uint32 bg, uint8 Z1, uint8 Z2)
 						if (Tile != tb1){
 							(*DrawTilePtr) (Tile, s, VirtAlign, Lines);
 							tb1 = TileBlank;
-							}					
+							}
 						}
 					else {
 						if (Tile & H_FLIP) Tile--;
@@ -2167,8 +2167,8 @@ void DrawBackground_16 (uint32 BGMode, uint32 bg, uint8 Z1, uint8 Z2)
 						if (Quot == 63) t = b;
 						if (Tile != tb2){
 							(*DrawTilePtr) (Tile, s, VirtAlign, Lines);
-							tb2 = TileBlank;	
-							}					
+							tb2 = TileBlank;
+							}
 						}
 				}
 
@@ -2211,11 +2211,11 @@ inline void DrawBackground (uint32 BGMode, uint32 bg, uint8 Z1, uint8 Z2)
     DBG("Draw Background.\n");
 
     if (IPPU.DirectColourMapsNeedRebuild && BG.DirectColourMode) S9xBuildDirectColourMaps ();
-	
+
     if (PPU.BGMosaic [bg] && PPU.Mosaic > 1){
 		DrawBackgroundMosaic (BGMode, bg, Z1, Z2);
 		return;
-		
+
     }
     switch (BGMode)
     {
@@ -2223,7 +2223,7 @@ inline void DrawBackground (uint32 BGMode, uint32 bg, uint8 Z1, uint8 Z2)
     case 4: // Used by Puzzle Bobble
         DrawBackgroundOffset (BGMode, bg, Z1, Z2);
 	break;
-		
+
     case 5:
     case 6: // XXX: is also offset per tile.
 	DrawBackgroundMode5 (BGMode, bg, Z1, Z2);
@@ -2231,11 +2231,11 @@ inline void DrawBackground (uint32 BGMode, uint32 bg, uint8 Z1, uint8 Z2)
     case 0:
     case 1:
     case 3:
-    	CHECK_SOUND();	
+    	CHECK_SOUND();
 
 	if (BGMode == 0) BG.StartPalette = bg << 5;
     	else BG.StartPalette = 0;
-    	SelectPalette();	
+    	SelectPalette();
 
     	if (BG.TileSize == 8) DrawBackground_8 (BGMode, bg, Z1, Z2);
 	else DrawBackground_16 (BGMode, bg, Z1, Z2);
@@ -2561,7 +2561,7 @@ static void S9xUpdateScreenTransparency () // ~30-50ms! (called from FLUSH_REDRA
 			pClip = &IPPU.Clip [1];
 
 			// Clear the z-buffer
-			
+
 		    if (pClip->Count [5])
 		    {
 
@@ -2584,11 +2584,11 @@ static void S9xUpdateScreenTransparency () // ~30-50ms! (called from FLUSH_REDRA
 					for (uint32 c = 0; c < pClip->Count [5]; c++)
 					{
 						int width = pClip->Right [c][5] - pClip->Left [c][5];
-						if (width > 0) {				
+						if (width > 0) {
 
 						//if (pClip->Right [c][5] > pClip->Left [c][5])
 						//{
-							memset (GFX.SubZBuffer + y * GFX_ZPITCH + pClip->Left [c][5],	
+							memset (GFX.SubZBuffer + y * GFX_ZPITCH + pClip->Left [c][5],
 								1, width); //pClip->Right [c][5] - pClip->Left [c][5]);
 
 							if (IPPU.Clip [0].Count [5])
@@ -2598,7 +2598,7 @@ static void S9xUpdateScreenTransparency () // ~30-50ms! (called from FLUSH_REDRA
 							// because there is a colour window in effect clipping
 							// the main screen that will allow the sub-screen
 							// 'underneath' to show through.
-			
+
 				asm volatile (
 				"    mov     r0, %[fixedcolour]		\n"
 				"    subs    %[width], %[width], #8	\n"
@@ -2613,9 +2613,11 @@ static void S9xUpdateScreenTransparency () // ~30-50ms! (called from FLUSH_REDRA
 
 				"2:	\n"
 				"    tst     %[width], #1		\n"
+  " IT ne\n" \
 				"    strneh  %[fixedcolour], [%[p]], #2	\n"
 
 				"    tst     %[width], #2		\n"
+  " IT ne\n" \
 				"    strne   %[fixedcolour], [%[p]], #4	\n"
 
 				"    tst     %[width], #4		\n"
@@ -2627,7 +2629,7 @@ static void S9xUpdateScreenTransparency () // ~30-50ms! (called from FLUSH_REDRA
 				: "r0", "r1", "r2", "cc"
 				);
 				//}
-						 	}	
+						 	}
 						}
 					}
 				}
@@ -2644,15 +2646,15 @@ static void S9xUpdateScreenTransparency () // ~30-50ms! (called from FLUSH_REDRA
 				// Clear the Zbuffer
 				memset32 ((uint32_t*)(GFX.ZBuffer + y * GFX_ZPITCH),0, (256>>2));
 			    	// clear the sub Zbuffer to 1
-				memset32 ((uint32_t*)(GFX.SubZBuffer + y * GFX_ZPITCH), 0x01010101, (256>>2));		
-			    	
+				memset32 ((uint32_t*)(GFX.SubZBuffer + y * GFX_ZPITCH), 0x01010101, (256>>2));
+
 				if (IPPU.Clip [0].Count [5]) {
 				// Blast, have to clear the sub-screen to the fixed-colour
 				// because there is a colour window in effect clipping
 				// the main screen that will allow the sub-screen
 				// 'underneath' to show through.
 					memset32 ((uint32_t*)(GFX.SubScreen + y * GFX_PITCH), fixedColour, (256>>1));
-				}		
+				}
 			}
 		}
 
@@ -2677,22 +2679,26 @@ static void S9xUpdateScreenTransparency () // ~30-50ms! (called from FLUSH_REDRA
 				"	ldrb	r3, [%[d]], #1		\n"
 
 				"	bics	r0, r0, #1		\n"
+  " IT ne\n" \
 				"	ldrneh	r0, [%[p], %[delta]]	\n"
 
 				"	bics	r3, r3, #1		\n"
+  " IT ne\n" \
 				"	ldrneh	r3, [%[p], %[delta2]]	\n"
-	
+
 				"	strh	r0, [%[p]], #2		\n"
 				"	ldrb	r0, [%[d]], #1		\n"
 				"	strh	r3, [%[p]], #2		\n"
 				"	ldrb	r3, [%[d]], #1		\n"
 
 				"	bics	r0, r0, #1		\n"
+  " IT ne\n" \
 				"	ldrneh	r0, [%[p], %[delta]]	\n"
 
 				"	bics	r3, r3, #1		\n"
+  " IT ne\n" \
 				"	ldrneh	r3, [%[p], %[delta2]]	\n"
-	
+
 				"	strh	r0, [%[p]], #2		\n"
 				"	strh	r3, [%[p]], #2		\n"
 
@@ -2700,7 +2706,9 @@ static void S9xUpdateScreenTransparency () // ~30-50ms! (called from FLUSH_REDRA
 				"	bne	2b			\n"
 				"3:		\n"
 				"	subs	%[lines], %[lines], #1	\n"
+  " IT ne\n" \
 				"	addne	%[p], %[p], #(640 - 512)	\n"
+  " IT ne\n" \
 				"	addne	%[d], %[d], #(320 - 256)	\n"
 				"	bne	1b			\n"
 				"4:		\n"
@@ -2716,7 +2724,7 @@ static void S9xUpdateScreenTransparency () // ~30-50ms! (called from FLUSH_REDRA
 			}
 
 		    DBG("Rendering the Main Screen...\n");
-	
+
 		    GFX.DB = GFX.ZBuffer;
 		    RenderScreen (GFX.Screen, FALSE, FALSE, MAIN_SCREEN_DEPTH);
 
@@ -2780,10 +2788,12 @@ asm volatile (\
 "71:		\n"\
 \
 "	movs	r0, r0			\n"\
+  " IT eq\n" \
 "	ldreqb	r1, [%[d], %[zdelta]]	\n"\
 "	bne	72f			\n"\
 \
 "	cmp	r1, #1			\n"\
+  " IT hi\n" \
 "	ldrhih	r1, [%[p], %[delta]]	\n"\
 "	bls	74f			\n"\
 \
@@ -2792,13 +2802,17 @@ _ROP_##rop##half \
 "72:		\n"\
 "	add	%[p], %[p], #2		\n"\
 "	subs	%[c], %[c], #1		\n"\
+  " IT ne\n" \
 "	ldrneb	r0, [%[d], #1]!		\n"\
 "	bne	71b			\n"\
 "	b	75f			\n"\
 "74:		\n"\
+  " IT eq\n" \
 "	streqh	%[fixedcolour], [%[p]], #2 		\n"\
+  " IT lo\n" \
 "	strloh	%[back], [%[p]], #2 	\n"\
 "	subs	%[c], %[c], #1		\n"\
+  " IT ne\n" \
 "	ldrneb	r0, [%[d], #1]!		\n"\
 "	bne	71b			\n"\
 "75:	\n"\
@@ -2845,22 +2859,28 @@ _ROP_##rop##half \
 						asm volatile (
 						"	ldrb	r0, [%[d]] 		\n"
 						"31:		\n"
-					
+
 						"	movs	r0, r0			\n"
+  " IT eq\n" \
 						"	ldreqb	r1, [%[d], %[zdelta]]	\n"
 						"	bne	32f			\n"
 
 						"	cmp	r1, #1			\n"
+  " IT hi\n" \
 						"	ldrhih	r0, [%[p], %[delta]]	\n"
+  " IT lo\n" \
 						"	strloh	%[back], [%[p]]		\n"
+  " IT eq\n" \
 						"	streqh	%[fixedcolour], [%[p]]	\n"
+  " IT hi\n" \
 						"	strhih	r0, [%[p]]  		\n"
-						
+
 						"32:		\n"
 						"	subs	%[c], %[c], #1		\n"
-						"	add	%[p], %[p], #2		\n"						
+						"	add	%[p], %[p], #2		\n"
+  " IT ne\n" \
 						"	ldrneb	r0, [%[d], #1]!		\n"
-						"	bne	31b			\n"					
+						"	bne	31b			\n"
 						"	\n"
 						:
 						:[p] "r" ((uint16 *) (GFX.Screen + y * GFX_PITCH) + Left),
@@ -2869,10 +2889,10 @@ _ROP_##rop##half \
 						 [back] "r" (back),
 						 [delta] "r" (GFX.Delta << 1),
 					         [fixedcolour] "r" (GFX.FixedColour),
-						 [c] "r" (Right - Left)	
+						 [c] "r" (Right - Left)
 						: "r0", "r1", "cc"
 
-						);	
+						);
 
 				   		}
 					}
@@ -2901,13 +2921,14 @@ _ROP_##rop##half \
 							uint32 Right = pClip->Right [b][5];
 							if (Left >= Right) continue;
 						asm volatile (
-						
+
 						"	tst	%[c], #1		\n"
 						"	bne	21f			\n"
 
 						"	ldrb	r0, [%[d]], #1 		\n"
 						"	add	%[p], %[p], #2		\n"
 						"	movs	r0, r0			\n"
+  " IT eq\n" \
 						"	streqh	%[back], [%[p], #-2]  	\n"
 						"	subs	%[c], %[c], #1		\n"
 						"	beq	22f			\n"
@@ -2915,26 +2936,28 @@ _ROP_##rop##half \
 						"21:		\n"
 
 						"	ldrb	r0, [%[d]], #1 		\n"
-						"	ldrb	r1, [%[d]], #1		\n"						
+						"	ldrb	r1, [%[d]], #1		\n"
 						"	add	%[p], %[p], #4		\n"
 
 						"	movs	r0, r0			\n"
+  " IT eq\n" \
 						"	streqh	%[back], [%[p], #-4]  	\n"
 
 						"	movs	r1, r1			\n"
-						"	streqh	%[back], [%[p], #-2]  	\n"			
+  " IT eq\n" \
+						"	streqh	%[back], [%[p], #-2]  	\n"
 
-						"	subs	%[c], %[c], #2		\n"			
-						"	bhi	21b			\n"					
+						"	subs	%[c], %[c], #2		\n"
+						"	bhi	21b			\n"
 						"22:	\n"
 						:
 						:[p] "r" ((uint16 *) (GFX.Screen + y * GFX_PITCH) + Left),
 						 [d] "r" (GFX.ZBuffer + y * GFX_ZPITCH + Left),
 						 [back] "r" (back),
-						 [c] "r" (Right - Left)	
+						 [c] "r" (Right - Left)
 						: "r0", "r1", "cc"
 
-						);	
+						);
 						}
 					}
 				}
@@ -2950,35 +2973,43 @@ _ROP_##rop##half \
 						"	ldr	r0, [%[d]], #4 		\n"
 
 						"	add	%[p], %[p], #8		\n"
-											
+
 						"	tst	r0, #0x0ff		\n"
+  " IT eq\n" \
 						"	streqh	%[back], [%[p], #-8]  	\n"
 
 						"	tst	r0, #0x0ff00		\n"
+  " IT eq\n" \
 						"	streqh	%[back], [%[p], #-6]  	\n"
 
 						"	tst	r0, #0x0ff0000		\n"
+  " IT eq\n" \
 						"	streqh	%[back], [%[p], #-4]  	\n"
 
 						"	tst	r0, #0x0ff000000	\n"
+  " IT eq\n" \
 						"	streqh	%[back], [%[p], #-2]  	\n"
-					
+
 						"	ldr	r0, [%[d]], #4 		\n"
 
 						"	add	%[p], %[p], #8		\n"
-											
+
 						"	tst	r0, #0x0ff		\n"
+  " IT eq\n" \
 						"	streqh	%[back], [%[p], #-8]  	\n"
 
 						"	tst	r0, #0x0ff00		\n"
+  " IT eq\n" \
 						"	streqh	%[back], [%[p], #-6]  	\n"
 
 						"	tst	r0, #0x0ff0000		\n"
+  " IT eq\n" \
 						"	streqh	%[back], [%[p], #-4]  	\n"
 
 						"	tst	r0, #0x0ff000000	\n"
+  " IT eq\n" \
 						"	streqh	%[back], [%[p], #-2]  	\n"
-					
+
 						"	subs	r1, r1, #1 		\n"
 						"	bne	1112b			\n"
 
@@ -2993,11 +3024,11 @@ _ROP_##rop##half \
 						 [back] "r" (back),
 						 [lines] "r" (endy - starty + 1)
 						: "r0", "r1", "cc"
-						);	
+						);
 				}
 		    }
 
-		}	
+		}
 		else
 		{
 		    DBG("No transparency effects in use.\n");
@@ -3012,7 +3043,7 @@ _ROP_##rop##half \
 		    // if forceblanking in use then use black instead of the back color
 			if (PPU.ForcedBlanking)
 				back = black;
-			
+
 			// not sure what Clip is used for yet
 			// could be a check to see if there is any clipping present?
 		    if (IPPU.Clip [0].Count[5])
@@ -3031,8 +3062,8 @@ _ROP_##rop##half \
 						{
 							//if (IPPU.Clip [0].Right [c][5] > IPPU.Clip [0].Left [c][5])
 							//{
-				register int width = IPPU.Clip [0].Right [c][5] - IPPU.Clip [0].Left [c][5];				
-				if (width <= 0) continue; 				
+				register int width = IPPU.Clip [0].Right [c][5] - IPPU.Clip [0].Left [c][5];
+				if (width <= 0) continue;
 
 				asm volatile (
 				"    mov     r0, %[back]		\n"
@@ -3048,9 +3079,11 @@ _ROP_##rop##half \
 
 				"2:	\n"
 				"    tst     %[width], #1		\n"
+  " IT ne\n" \
 				"    strneh  %[back], [%[p]], #2	\n"
 
 				"    tst     %[width], #2		\n"
+  " IT ne\n" \
 				"    strne   %[back], [%[p]], #4	\n"
 
 				"    tst     %[width], #4		\n"
@@ -3077,7 +3110,7 @@ _ROP_##rop##half \
 				}
 
 		    }
-			
+
 			// If Forced blanking is not in effect
 		    if (!PPU.ForcedBlanking)
 		    {
@@ -3125,7 +3158,7 @@ static void S9xUpdateScreenNoTransparency () // ~30-50ms! (called from FLUSH_RED
 										// FALSE means use best renderer based on current
 										// graphics register settings
 		}
-		
+
 		// now clear all graphics lines which are being updated using the back colour
 		for (register uint32 y = starty; y <= endy; y++)
 		{
@@ -3243,12 +3276,12 @@ void S9xUpdateScreen () // ~30-50ms! (called from FLUSH_REDRAW())
 	CurrentROp = 0;
 	CurrentLine = StartY;
 #ifdef __DEBUG__
-	printf("Start screen update. ROPCount: %d, StartY: %d, EndY: %d\n", ROpCount, StartY, EndY);	
+	printf("Start screen update. ROPCount: %d, StartY: %d, EndY: %d\n", ROpCount, StartY, EndY);
 #endif
 	do {
 		while ((CurrentROp < ROpCount) && ((rops[CurrentROp].line == CurrentLine) || (!wouldRasterAlterStatus(&rops[CurrentROp])))) {
 			#ifdef __DEBUG__
-			printf("Processing ROP %d/%d. Line: %d\n", CurrentROp, ROpCount, CurrentLine);	
+			printf("Processing ROP %d/%d. Line: %d\n", CurrentROp, ROpCount, CurrentLine);
 			#endif
 			doRaster(&rops[CurrentROp]);
 			CurrentROp++;
@@ -3259,7 +3292,7 @@ void S9xUpdateScreen () // ~30-50ms! (called from FLUSH_REDRAW())
 		else GFX.EndY = EndY;
 
 		#ifdef __DEBUG__
-		printf("Partial screen update. ROPCount: %d, StartY: %d, EndY: %d\n", ROpCount, GFX.StartY, GFX.EndY);	
+		printf("Partial screen update. ROPCount: %d, StartY: %d, EndY: %d\n", ROpCount, GFX.StartY, GFX.EndY);
 		#endif
 
 		// get local copies of vid registers to be used later
@@ -3281,14 +3314,14 @@ void S9xUpdateScreen () // ~30-50ms! (called from FLUSH_REDRAW())
 		// refresh the sprites.
 		if (IPPU.OBJChanged) {
 			#ifdef __DEBUG__
-			printf("Objects changed !! setting up Objects...\n");	
+			printf("Objects changed !! setting up Objects...\n");
 			#endif
 			S9xSetupOBJ();
 			}
 
 		if (PPU.RecomputeClipWindows) {
 			#ifdef __DEBUG__
-			printf("Clipping changed !! recalculating clipping...\n");	
+			printf("Clipping changed !! recalculating clipping...\n");
 			#endif
 			ComputeClipWindows();
 			}
@@ -3298,14 +3331,14 @@ void S9xUpdateScreen () // ~30-50ms! (called from FLUSH_REDRAW())
 		CurrentLine = GFX.EndY + 1;
 
 		#ifdef __DEBUG__
-		printf("Finished partial screen update.\n", ROpCount, StartY, EndY);	
+		printf("Finished partial screen update.\n", ROpCount, StartY, EndY);
 		#endif
 
 
 	} while ((CurrentROp < ROpCount) && (CurrentLine <= EndY));
 
 #ifdef __DEBUG__
-	printf("End screen update. ROPCount: %d, CurrentROp: %d, StartY: %d, EndY: %d\n", ROpCount, CurrentROp, StartY, EndY);		
+	printf("End screen update. ROPCount: %d, CurrentROp: %d, StartY: %d, EndY: %d\n", ROpCount, CurrentROp, StartY, EndY);
 #endif
 
 	RESET_ROPS(CurrentROp);
@@ -3330,7 +3363,7 @@ static void S9xUpdateScreen_normalRasterFx () // ~30-50ms! (called from FLUSH_RE
 	GFX.S = GFX.Screen;
 
 #ifdef __DEBUG__
-	printf("Start screen update. StartY: %d, EndY: %d\n", GFX.StartY, GFX.EndY);	
+	printf("Start screen update. StartY: %d, EndY: %d\n", GFX.StartY, GFX.EndY);
 #endif
 	// get local copies of vid registers to be used later
 	GFX.r2131 = GFX.r2131_s; // ADDITION/SUBTRACTION & SUBTRACTION DESIGNATION FOR EACH SCREEN
@@ -3351,14 +3384,14 @@ static void S9xUpdateScreen_normalRasterFx () // ~30-50ms! (called from FLUSH_RE
 	// refresh the sprites.
 	if (IPPU.OBJChanged) {
 		#ifdef __DEBUG__
-		printf("Objects changed !! setting up Objects...\n");	
+		printf("Objects changed !! setting up Objects...\n");
 		#endif
 		S9xSetupOBJ();
 		}
 
 	if (PPU.RecomputeClipWindows) {
 		#ifdef __DEBUG__
-		printf("Clipping changed !! recalculating clipping...\n");	
+		printf("Clipping changed !! recalculating clipping...\n");
 		#endif
 		ComputeClipWindows();
 		}
@@ -3367,7 +3400,7 @@ static void S9xUpdateScreen_normalRasterFx () // ~30-50ms! (called from FLUSH_RE
 	else S9xUpdateScreenNoTransparency();
 
 #ifdef __DEBUG__
-	printf("End screen update. StartY: %d, EndY: %d\n", GFX.StartY, GFX.EndY);		
+	printf("End screen update. StartY: %d, EndY: %d\n", GFX.StartY, GFX.EndY);
 #endif
 	PPU.BG[0].OffsetsChanged = 0;
 	PPU.BG[1].OffsetsChanged = 0;

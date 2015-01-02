@@ -18,6 +18,7 @@
 			"7:\n" \
 			\
 			"	cmp	%[gfx_z1], r8			\n"\
+  " IT hi\n" \
 			"	ldrhib	r9, [%[bp]]		\n"\
 			"	bls	3f				\n"\
 										\
@@ -40,6 +41,7 @@
 			"	add	%[bp], %[bp], #1		\n"\
 			"	add	%[screen], %[screen], #2	\n"\
 			"	subs	r10, r10, #1			\n"\
+  " IT ne\n" \
 			"	ldrneb	r8, [%[depth]], #1		\n"\
 			"	bne	7b				\n"
 
@@ -49,6 +51,7 @@
 			"7:\n" \
 			\
 			"	cmp	%[gfx_z1], r8			\n"\
+  " IT hi\n" \
 			"	ldrhib	r9, [%[bp]]			\n"\
 			"	bls	3f				\n"\
 										\
@@ -71,6 +74,7 @@
 			"	sub	%[bp], %[bp], #1  		\n"\
 			"	add	%[screen], %[screen], #2	\n"\
 			"	subs	r10, r10, #1			\n"\
+  " IT ne\n" \
 			"	ldrneb	r8, [%[depth]], #1		\n"\
 			"	bne	7b				\n"
 
@@ -92,7 +96,7 @@ DEC_DRAW(ROPNAME)
 
 		ROW("#8")
 
-		"	sub	%[bp], %[bp], #(8+8)		\n"	
+		"	sub	%[bp], %[bp], #(8+8)		\n"
 		"	add	%[screen], %[screen], #(640-16)	\n"
 		"	add	%[depth], %[depth], #(320-8)	\n"
 		"	subs 	%[lcount], %[lcount], #1	\n"
@@ -110,7 +114,7 @@ DEC_DRAW(ROPNAME)
 		  [subdepth] "r" (GFX.DepthDelta - 1),
  		  [bp] "r" (pCache + 56 - StartLine)
 		// clobbered
-		: "r8", "r9", "r10", "cc" 				
+		: "r8", "r9", "r10", "cc"
 		);
 	} else {
 		asm volatile (
@@ -134,7 +138,7 @@ DEC_DRAW(ROPNAME)
 		  [subdepth] "r" (GFX.DepthDelta - 1),
 		  [bp] "r" (pCache + 56 - StartLine + 7)
 		// clobbered
-		: "r8", "r9", "r10", "cc" 				
+		: "r8", "r9", "r10", "cc"
 		);
 	}
 } else {
@@ -160,14 +164,14 @@ DEC_DRAW(ROPNAME)
 		  [subdepth] "r" (GFX.DepthDelta - 1),
 		  [bp] "r" (pCache + StartLine)
 		// clobbered
-		: "r8", "r9", "r10", "cc" 				
+		: "r8", "r9", "r10", "cc"
 		);
 	} else {
 		asm volatile (
 		"2:						\n"
 		ROW1("#8")
 
-		"	add	%[bp], %[bp], #(8+8)		\n"	
+		"	add	%[bp], %[bp], #(8+8)		\n"
 		"	add	%[screen], %[screen], #(640-16)	\n"
 		"	add	%[depth], %[depth], #(320-8)	\n"
 		"	subs 	%[lcount], %[lcount], #1	\n"
@@ -186,7 +190,7 @@ DEC_DRAW(ROPNAME)
 		  [subdepth] "r" (GFX.DepthDelta - 1),
 		  [bp] "r" (pCache + StartLine + 7)
 		// clobbered
-		: "r8", "r9", "r10", "cc" 				
+		: "r8", "r9", "r10", "cc"
 		);
 
 	}
@@ -208,8 +212,8 @@ if (Tile & V_FLIP){
 
 		ROW("%[width]")
 
-		// Loop	
-		"1:						\n"	
+		// Loop
+		"1:						\n"
 		"	sub	%[bp], %[bp], #8		\n"
 		"	add	%[screen], %[screen], #640	\n"
 		"	add	%[depth], %[depth], #320	\n"
@@ -221,7 +225,7 @@ if (Tile & V_FLIP){
 		"	subs 	%[lcount], %[lcount], #1	\n"
 		"	bne	2b"
 		// output
-		: [lcount] "+r" (LineCount)	
+		: [lcount] "+r" (LineCount)
 		// input
 		: [gfx_z1] "r" (GFX.Z1),
 		  [gfx_z2] "r" (GFX.Z2),
@@ -234,15 +238,15 @@ if (Tile & V_FLIP){
 		  [subdepth] "r" (GFX.DepthDelta - 1),
 		  [bp] "r" (pCache + 56 - StartLine + StartPixel)
 		// clobbered
-		: "r8", "r9", "r10", "cc" 				
+		: "r8", "r9", "r10", "cc"
 		);
 	} else {
 		asm volatile (
 		"2:					\n"
 		ROW1("%[width]")
-		// Loop	
-		"1:						\n"	
-		"	sub	%[bp], %[bp], #8		\n"	
+		// Loop
+		"1:						\n"
+		"	sub	%[bp], %[bp], #8		\n"
 		"	add	%[screen], %[screen], #640	\n"
 		"	add	%[depth], %[depth], #320	\n"
 		// --
@@ -266,7 +270,7 @@ if (Tile & V_FLIP){
 		  [subdepth] "r" (GFX.DepthDelta - 1),
 		  [bp] "r" (pCache + 56 - StartLine - StartPixel + 7)
 		// clobbered
-		: "r8", "r9", "r10", "cc" 				
+		: "r8", "r9", "r10", "cc"
 		);
 	}
 } else {
@@ -274,9 +278,9 @@ if (Tile & V_FLIP){
 		asm volatile (
 		"2:					\n"
 		ROW("%[width]")
-		// Loop	
+		// Loop
 		"1:						\n"
-		"	add	%[bp], %[bp], #8		\n"	
+		"	add	%[bp], %[bp], #8		\n"
 		"	add	%[screen], %[screen], #640	\n"
 		"	add	%[depth], %[depth], #320	\n"
 		// --
@@ -298,24 +302,24 @@ if (Tile & V_FLIP){
 		  [screen] "r" ((uint16 *) GFX.S + Offset),
 		  [depth] "r" (GFX.ZBuffer + Offset),
 		  [subdepth] "r" (GFX.DepthDelta - 1),
-		  [bp] "r" (pCache + StartLine + StartPixel)	
+		  [bp] "r" (pCache + StartLine + StartPixel)
 		// clobbered
-		: "r8", "r9", "r10", "cc" 				
+		: "r8", "r9", "r10", "cc"
 		);
 	} else {
 		asm volatile (
 		"2:					\n"
 		ROW1("%[width]")
-		// Loop	
-		"1:						\n"	
-		"	add	%[bp], %[bp], #8		\n"	
+		// Loop
+		"1:						\n"
+		"	add	%[bp], %[bp], #8		\n"
 		"	add	%[screen], %[screen], #640	\n"
 		"	add	%[depth], %[depth], #320	\n"
 		// --
 		"	add	%[bp], %[bp], %[width]		\n"
 		"	sub	%[screen], %[screen], %[width], lsl #1	\n"
 		"	sub	%[depth], %[depth], %[width]	\n"
-		// --		
+		// --
 		"	subs 	%[lcount], %[lcount], #1	\n"
 		"	bne	2b"
 		// output
@@ -332,7 +336,7 @@ if (Tile & V_FLIP){
 		  [subdepth] "r" (GFX.DepthDelta - 1),
 		  [bp] "r" (pCache + StartLine - StartPixel + 7)
 		// clobbered
-		: "r8", "r9", "r10", "cc" 				
+		: "r8", "r9", "r10", "cc"
 		);
 
 	}

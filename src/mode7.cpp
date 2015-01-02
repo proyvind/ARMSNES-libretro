@@ -21,7 +21,7 @@ void DrawBGMode7Background16 (uint8 *Screen, int bg, int depth)
 
 #ifdef __DEBUG__
 
-	#define DMSG(rop) printf("Rendering Mode7 w/prio, ROp: " rop ", R:%d, r2130: %d, bg: %d\n", PPU.Mode7Repeat, GFX.r2130 & 1, bg)			
+	#define DMSG(rop) printf("Rendering Mode7 w/prio, ROp: " rop ", R:%d, r2130: %d, bg: %d\n", PPU.Mode7Repeat, GFX.r2130 & 1, bg)
 #else
 	#define DMSG(rop)
 #endif
@@ -104,7 +104,7 @@ void DrawBGMode7Background16R3 (uint8 *Screen, int bg, int depth)
 
 	BB = l->MatrixB * yy + (CentreX << 8);
 	DD = l->MatrixD * yy + (CentreY << 8);
-	
+
 	yy3 = ((yy + CentreY) & 7) << 4;
 
 	for (clip = 0; clip < ClipCount; clip++)
@@ -137,10 +137,10 @@ void DrawBGMode7Background16R3 (uint8 *Screen, int bg, int depth)
 		asm volatile (
 		"1:						\n"
 		"	ldrb	r0, [%[d]]			\n"
-		"	mov	r3, %[AA], asr #18		\n"	
+		"	mov	r3, %[AA], asr #18		\n"
 		"	cmp	%[depth], r0			\n"
 		"	bls	4f				\n"
-		"	orrs	r3, r3, %[CC], asr #18		\n"			
+		"	orrs	r3, r3, %[CC], asr #18		\n"
 		"	bne	2f				\n"
 		"						\n"
 		"	mov	r3, %[CC], asr #11		\n"
@@ -158,12 +158,15 @@ void DrawBGMode7Background16R3 (uint8 *Screen, int bg, int depth)
 		"	ldr	r1, %[daa]			\n"
 		"	ldrb	r0, [r3, #1]			\n"
 		"	add	%[AA], %[AA], r1		\n"
-		"	movs	r0, r0, lsl #2			\n"		
-		"	ldrne	r1, [%[colors], r0]		\n"	
+		"	movs	r0, r0, lsl #2			\n"
+  " IT ne\n" \
+		"	ldrne	r1, [%[colors], r0]		\n"
 		"	add	%[xx3], %[xx3], #1		\n"
+  " IT ne\n" \
 		"	strneb	%[depth], [%[d]]		\n"
 		"	ldr	r0, %[dcc]			\n"
-		"	strneh	r1, [%[p]]			\n"		
+  " IT ne\n" \
+		"	strneh	r1, [%[p]]			\n"
 		"						\n"
 		"	add	%[CC], %[CC], r0		\n"
 		"	add	%[d], %[d], #1			\n"
@@ -179,10 +182,13 @@ void DrawBGMode7Background16R3 (uint8 *Screen, int bg, int depth)
 		"						\n"
 		"	add	r3, %[VRAM], r3			\n"
 		"	ldrb	r0, [r3, #1]			\n"
-		"	movs	r0, r0, lsl #2			\n"		
-		"	ldrne	r1, [%[colors], r0]		\n"	
+		"	movs	r0, r0, lsl #2			\n"
+  " IT ne\n" \
+		"	ldrne	r1, [%[colors], r0]		\n"
+  " IT ne\n" \
 		"	strneb	%[depth], [%[d]]		\n"
-		"	strneh	r1, [%[p]]			\n"		
+  " IT ne\n" \
+		"	strneh	r1, [%[p]]			\n"
 		"4:						\n"
 		"	ldr	r0, %[daa]			\n"
 		"	ldr	r1, %[dcc]			\n"
@@ -216,10 +222,10 @@ void DrawBGMode7Background16R3 (uint8 *Screen, int bg, int depth)
 		asm volatile (
 		"1:						\n"
 		"	ldrb	r0, [%[d]]			\n"
-		"	mov	r3, %[AA], asr #18		\n"	
+		"	mov	r3, %[AA], asr #18		\n"
 		"	cmp	%[depth], r0			\n"
 		"	bls	4f				\n"
-		"	orrs	r3, r3, %[CC], asr #18		\n"			
+		"	orrs	r3, r3, %[CC], asr #18		\n"
 		"	bne	2f				\n"
 		"						\n"
 		"	mov	r3, %[CC], asr #11		\n"
@@ -237,12 +243,15 @@ void DrawBGMode7Background16R3 (uint8 *Screen, int bg, int depth)
 		"	ldr	r1, %[daa]			\n"
 		"	ldrb	r0, [r3, #1]			\n"
 		"	add	%[AA], %[AA], r1		\n"
-		"	movs	r0, r0, lsl #2			\n"		
-		"	ldrne	r1, [%[colors], r0]		\n"	
+		"	movs	r0, r0, lsl #2			\n"
+  " IT ne\n" \
+		"	ldrne	r1, [%[colors], r0]		\n"
 		"	add	%[xx3], %[xx3], #-1		\n"
+  " IT ne\n" \
 		"	strneb	%[depth], [%[d]]		\n"
 		"	ldr	r0, %[dcc]			\n"
-		"	strneh	r1, [%[p]]			\n"		
+  " IT ne\n" \
+		"	strneh	r1, [%[p]]			\n"
 		"						\n"
 		"	add	%[CC], %[CC], r0		\n"
 		"	add	%[d], %[d], #1			\n"
@@ -258,10 +267,13 @@ void DrawBGMode7Background16R3 (uint8 *Screen, int bg, int depth)
 		"						\n"
 		"	add	r3, %[VRAM], r3			\n"
 		"	ldrb	r0, [r3, #1]			\n"
-		"	movs	r0, r0, lsl #2			\n"		
-		"	ldrne	r1, [%[colors], r0]		\n"	
+		"	movs	r0, r0, lsl #2			\n"
+  " IT ne\n" \
+		"	ldrne	r1, [%[colors], r0]		\n"
+  " IT ne\n" \
 		"	strneb	%[depth], [%[d]]		\n"
-		"	strneh	r1, [%[p]]			\n"		
+  " IT ne\n" \
+		"	strneh	r1, [%[p]]			\n"
 		"4:						\n"
 		"	ldr	r0, %[daa]			\n"
 		"	ldr	r1, %[dcc]			\n"
@@ -346,7 +358,7 @@ void DrawBGMode7Background16R1R2 (uint8 *Screen, int bg, int depth)
 
 	BB = l->MatrixB * yy + (CentreX << 8);
 	DD = l->MatrixD * yy + (CentreY << 8);
-	
+
 	for (clip = 0; clip < ClipCount; clip++) {
 	    if (GFX.pCurrentClip->Count [0]){
 			Left = GFX.pCurrentClip->Left [clip][0];
@@ -371,7 +383,7 @@ void DrawBGMode7Background16R1R2 (uint8 *Screen, int bg, int depth)
 		"	mov	r3, %[AA], asr #18		\n"
 		"	cmp	%[depth], r0			\n"
 		"	bls	2f				\n"
-		"	orrs	r3, r3, %[CC], asr #18		\n"			
+		"	orrs	r3, r3, %[CC], asr #18		\n"
 		"	bne	2f				\n"
 		"						\n"
 		"	ldr	r1, %[AndByY]			\n"
@@ -394,21 +406,24 @@ void DrawBGMode7Background16R1R2 (uint8 *Screen, int bg, int depth)
 		"						\n"
 		"	ldrb	r0, [r3, #1]			\n"
 		"	add	%[AA], %[AA], %[daa]		\n"
-		"	movs	r0, r0, lsl #2			\n"		
-		"	ldrne	r1, [%[colors], r0]		\n"	
+		"	movs	r0, r0, lsl #2			\n"
+  " IT ne\n" \
+		"	ldrne	r1, [%[colors], r0]		\n"
+  " IT ne\n" \
 		"	strneb	%[depth], [%[d]]		\n"
 		"	add	%[CC], %[CC], %[dcc]		\n"
+  " IT ne\n" \
 		"	strneh	r1, [%[p]]			\n"
 		"	add	%[p], %[p], #2			\n"
-		"	add	%[d], %[d], #1			\n"		
+		"	add	%[d], %[d], #1			\n"
 		"	subs	%[x], %[x], #1			\n"
 		"	bne	1b				\n"
-		"	b	3f				\n"		
+		"	b	3f				\n"
 		"2:						\n"
 		"	add	%[AA], %[AA], %[daa]		\n"
 		"	add	%[CC], %[CC], %[dcc]		\n"
 		"	add	%[p], %[p], #2			\n"
-		"	add	%[d], %[d], #1			\n"		
+		"	add	%[d], %[d], #1			\n"
 		"	subs	%[x], %[x], #1			\n"
 		"	bne	1b				\n"
 		"3:						\n"
@@ -522,7 +537,7 @@ void DrawBGMode7Background16R0 (uint8 *Screen, int bg, int depth)
 		"	cmp	%[depth], r0			\n"
 		"	bls	2f				\n"
 		//"	ldr	r0, 7b				\n"
-		"	mov	r0, r3, asr #3			\n"		
+		"	mov	r0, r3, asr #3			\n"
 		"	and	r3, r1, #0x7f			\n"
 		"	and	r0, r0, %[AA], asr #7		\n"
 		"	sub	r3, r1, r3			\n"
@@ -538,16 +553,19 @@ void DrawBGMode7Background16R0 (uint8 *Screen, int bg, int depth)
 		"	add	r3, r3, r0			\n"
 		"						\n"
 		"	ldrb	r0, [r3, #1]			\n"
-		"	movs	r0, r0, lsl #2			\n"		
-		"	ldrne	r1, [%[colors], r0]		\n"	
+		"	movs	r0, r0, lsl #2			\n"
+  " IT ne\n" \
+		"	ldrne	r1, [%[colors], r0]		\n"
+  " IT ne\n" \
 		"	strneb	%[depth], [%[d]]		\n"
-		"	strneh	r1, [%[p]]			\n"		
+  " IT ne\n" \
+		"	strneh	r1, [%[p]]			\n"
 		"						\n"
 		"2:						\n"
 		"	add	%[AA], %[AA], %[daa]		\n"
 		"	add	%[CC], %[CC], %[dcc]		\n"
 		"	add	%[p], %[p], #2			\n"
-		"	add	%[d], %[d], #1			\n"		
+		"	add	%[d], %[d], #1			\n"
 		"	subs	%[x], %[x], #1			\n"
 		"	bne	1b				\n"
 		:

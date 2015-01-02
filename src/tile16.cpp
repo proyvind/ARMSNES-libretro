@@ -58,29 +58,45 @@ extern uint32 TailMask [5];
 
 #define f(from, to_lo, to_hi, pix) \
 	"	movs	" #from ", " #from ", lsl #(17)	\n" \
+  " IT cs\n" \
 	"	addcs	" #to_hi ", " #to_hi ", #(1 << ( 0 + 1 + " #pix ")) \n" \
+  " IT mi\n" \
 	"	addmi	" #to_hi ", " #to_hi ", #(1 << ( 8 + 1 + " #pix ")) \n" \
 	"	movs	" #from ", " #from ", lsl #2	\n" \
+  " IT cs\n" \
 	"	addcs	" #to_hi ", " #to_hi ", #(1 << (16 + 1 + " #pix ")) \n" \
+  " IT mi\n" \
 	"	addmi	" #to_hi ", " #to_hi ", #(1 << (24 + 1 + " #pix ")) \n" \
 	"	movs	" #from ", " #from ", lsl #2	\n"\
+  " IT cs\n" \
 	"	addcs	" #to_lo ", " #to_lo ", #(1 << ( 0 + 1 + " #pix ")) \n" \
+  " IT mi\n" \
 	"	addmi	" #to_lo ", " #to_lo ", #(1 << ( 8 + 1 + " #pix ")) \n" \
 	"	movs	" #from ", " #from ", lsl #2	\n" \
+  " IT cs\n" \
 	"	addcs	" #to_lo ", " #to_lo ", #(1 << (16 + 1 + " #pix ")) \n" \
+  " IT mi\n" \
 	"	addmi	" #to_lo ", " #to_lo ", #(1 << (24 + 1 + " #pix ")) \n" \
 	\
 	"	movs	" #from ", " #from ", lsl #2	\n"\
+  " IT cs\n" \
 	"	addcs	" #to_hi ", " #to_hi ", #(1 << ( 0 + " #pix ")) \n"\
+  " IT mi\n" \
 	"	addmi	" #to_hi ", " #to_hi ", #(1 << ( 8 + " #pix ")) \n" \
 	"	movs	" #from ", " #from ", lsl #2	\n"\
+  " IT cs\n" \
 	"	addcs	" #to_hi ", " #to_hi ", #(1 << (16 + " #pix ")) \n" \
+  " IT mi\n" \
 	"	addmi	" #to_hi ", " #to_hi ", #(1 << (24 + " #pix ")) \n"\
 	"	movs	" #from ", " #from ", lsl #2	\n"\
+  " IT cs\n" \
 	"	addcs	" #to_lo ", " #to_lo ", #(1 << ( 0 + " #pix ")) \n"\
+  " IT mi\n" \
 	"	addmi	" #to_lo ", " #to_lo ", #(1 << ( 8 + " #pix ")) \n" \
 	"	movs	" #from ", " #from ", lsl #2	\n"\
+  " IT cs\n" \
 	"	addcs	" #to_lo ", " #to_lo ", #(1 << (16 + " #pix ")) \n" \
+  " IT mi\n" \
 	"	addmi	" #to_lo ", " #to_lo ", #(1 << (24 + " #pix ")) \n"
 
 uint8 ConvertTile8bpp (uint8 *pCache, uint32 TileAddr)
@@ -94,7 +110,7 @@ uint8 ConvertTile8bpp (uint8 *pCache, uint32 TileAddr)
 	"	mov	%[non_zero], #0	\n"
 
 	"1:	\n"
-	
+
 	"	mov	r1, #0		\n"
 	"	mov	r2, #0		\n"
 
@@ -111,13 +127,13 @@ uint8 ConvertTile8bpp (uint8 *pCache, uint32 TileAddr)
 	f(r4, r2, r1, 0)
 
 	"	stmia	%[p]!, {r1, r2} \n"
-	
+
 	"	orr	%[non_zero], %[non_zero], r1	\n"
 	"	orr	%[non_zero], %[non_zero], r2	\n"
 
 	"	subs	r0, r0, #1	\n"
 	"	bne	1b		\n"
-		
+
 	: [non_zero] "+r" (non_zero),
 	  [tp] "+r" (tp),
 	  [p] "+r" (p)
@@ -138,7 +154,7 @@ uint8 ConvertTile4bpp (uint8 *pCache, uint32 TileAddr)
 	"	mov	r0, #8		\n"
 	"	mov	%[non_zero], #0	\n"
 	"1:	\n"
-	
+
 	"	mov	r1, #0		\n"
 	"	mov	r2, #0		\n"
 
@@ -149,13 +165,13 @@ uint8 ConvertTile4bpp (uint8 *pCache, uint32 TileAddr)
 	f(r4, r2, r1, 0)
 
 	"	stmia	%[p]!, {r1, r2} \n"
-	
+
 	"	orr	%[non_zero], %[non_zero], r1	\n"
 	"	orr	%[non_zero], %[non_zero], r2	\n"
 
 	"	subs	r0, r0, #1	\n"
 	"	bne	1b		\n"
-		
+
 	: [non_zero] "+r" (non_zero),
 	  [tp] "+r" (tp),
 	  [p] "+r" (p)
@@ -178,20 +194,20 @@ uint8 ConvertTile2bpp (uint8 *pCache, uint32 TileAddr)
 	"1:	\n"
 
 	"	ldrh	r3, [%[tp]], #2	\n"
-	
+
 	"	mov	r1, #0		\n"
 	"	mov	r2, #0		\n"
 
 	f(r3, r2, r1, 0)
 
 	"	stmia	%[p]!, {r1, r2} \n"
-	
+
 	"	orr	%[non_zero], %[non_zero], r1	\n"
 	"	orr	%[non_zero], %[non_zero], r2	\n"
 
 	"	subs	r0, r0, #1	\n"
 	"	bne	1b		\n"
-		
+
 	: [non_zero] "+r" (non_zero),
 	  [tp] "+r" (tp),
 	  [p] "+r" (p)
@@ -377,13 +393,19 @@ if (Tile & V_FLIP){
 			"	ldrb	r1, [%[bp], #" #p "]		\n"\
 			"	ldrb	r0, [%[bp], #(" #p " + 1)]	\n"\
 			"	movs	r1, r1, lsl #2			\n"\
+  " IT ne\n" \
 			"	ldrne	r1, [%[colors], r1]		\n"\
+  " IT ne\n" \
 			"	strneb	%[gfx_z2], [%[depth], #" #p "]	\n"\
+  " IT ne\n" \
 			"	strneh	r1, [%[screen], #(" #p " * 2)]	\n"\
 			"3:						\n"\
 			"	movs	r1, r0, lsl #2			\n"\
+  " IT ne\n" \
 			"	ldrne	r1, [%[colors], r1]		\n"\
+  " IT ne\n" \
 			"	strneb	%[gfx_z2], [%[depth], #(" #p " + 1)]	\n"\
+  " IT ne\n" \
 			"	strneh	r1, [%[screen], #((" #p " + 1) * 2)]	\n"\
 			"3:						\n"
 
@@ -391,8 +413,8 @@ if (Tile & V_FLIP){
 		FN(2)
 		FN(4)
 		FN(6)
-		// Loop	
-		"	sub	%[bp], %[bp], #8		\n"	
+		// Loop
+		"	sub	%[bp], %[bp], #8		\n"
 		"	add	%[screen], %[screen], #640	\n"
 		"	add	%[depth], %[depth], #320	\n"
 		"	subs 	%[lcount], %[lcount], #1	\n"
@@ -406,7 +428,7 @@ if (Tile & V_FLIP){
 		  [depth] "r" (GFX.DB + Offset),
 		  [bp] "r" (pCache + 56 - StartLine)
 		// clobbered
-		: "r0", "r1", "cc" // r8 & flags 				
+		: "r0", "r1", "cc" // r8 & flags
 		);
 	} else {
 		asm volatile (
@@ -415,22 +437,28 @@ if (Tile & V_FLIP){
 			"	ldrb	r1, [%[bp], #( 7 - " #p ")]	\n"\
 			"	ldrb	r0, [%[bp], #(7 - " #p " - 1)]	\n"\
 			"	movs	r1, r1, lsl #2			\n"\
+  " IT ne\n" \
 			"	ldrne	r1, [%[colors], r1]		\n"\
+  " IT ne\n" \
 			"	strneb	%[gfx_z2], [%[depth], #" #p "]	\n"\
+  " IT ne\n" \
 			"	strneh	r1, [%[screen], #(" #p " * 2)]	\n"\
 			"3:						\n"\
 			"	movs	r1, r0, lsl #2			\n"\
+  " IT ne\n" \
 			"	ldrne	r1, [%[colors], r1]		\n"\
+  " IT ne\n" \
 			"	strneb	%[gfx_z2], [%[depth], #(" #p " + 1)]	\n"\
+  " IT ne\n" \
 			"	strneh	r1, [%[screen], #((" #p " + 1) * 2 )]	\n"\
 			"3:						\n"
 
 		FN1(0)
 		FN1(2)
 		FN1(4)
-		FN1(6)	
-		// Loop	
-		"	sub	%[bp], %[bp], #8		\n"	
+		FN1(6)
+		// Loop
+		"	sub	%[bp], %[bp], #8		\n"
 		"	add	%[screen], %[screen], #640	\n"
 		"	add	%[depth], %[depth], #320	\n"
 		"	subs 	%[lcount], %[lcount], #1	\n"
@@ -444,7 +472,7 @@ if (Tile & V_FLIP){
 		  [depth] "r" (GFX.DB + Offset),
 		  [bp] "r" (pCache + 56 - StartLine)
 		// clobbered
-		: "r0", "r1", "cc" // r8 & flags 				
+		: "r0", "r1", "cc" // r8 & flags
 		);
 	}
 } else {
@@ -455,8 +483,8 @@ if (Tile & V_FLIP){
 		FN(2)
 		FN(4)
 		FN(6)
-		// Loop	
-		"	add	%[bp], %[bp], #8		\n"	
+		// Loop
+		"	add	%[bp], %[bp], #8		\n"
 		"	add	%[screen], %[screen], #640	\n"
 		"	add	%[depth], %[depth], #320	\n"
 		"	subs 	%[lcount], %[lcount], #1	\n"
@@ -470,7 +498,7 @@ if (Tile & V_FLIP){
 		  [depth] "r" (GFX.DB + Offset),
 		  [bp] "r" (pCache + StartLine)
 		// clobbered
-		: "r0", "r1", "cc" // r8 & flags 				
+		: "r0", "r1", "cc" // r8 & flags
 		);
 	} else {
 		asm volatile (
@@ -478,9 +506,9 @@ if (Tile & V_FLIP){
 		FN1(0)
 		FN1(2)
 		FN1(4)
-		FN1(6)	
-		// Loop	
-		"	add	%[bp], %[bp], #8		\n"	
+		FN1(6)
+		// Loop
+		"	add	%[bp], %[bp], #8		\n"
 		"	add	%[screen], %[screen], #640	\n"
 		"	add	%[depth], %[depth], #320	\n"
 		"	subs 	%[lcount], %[lcount], #1	\n"
@@ -494,7 +522,7 @@ if (Tile & V_FLIP){
 		  [depth] "r" (GFX.DB + Offset),
 		  [bp] "r" (pCache + StartLine)
 		// clobbered
-		: "r0", "r1", "cc" // r8 & flags 				
+		: "r0", "r1", "cc" // r8 & flags
 		);
 
 	}
@@ -518,19 +546,27 @@ if (Tile & V_FLIP){
 			"	ldrb	r9, [%[depth], #" #p "]		\n"\
 			"	ldrb	r8, [%[depth], #(" #p " + 1)]	\n"\
 			"	cmp	%[gfx_z1], r9			\n"\
+  " IT hi\n" \
 			"	ldrhib	r9, [%[bp], #" #p "]		\n"\
 			"	bls	3f				\n"\
 			"	movs	r9, r9, lsl #2			\n"\
+  " IT ne\n" \
 			"	ldrne	r9, [%[colors], r9]		\n"\
+  " IT ne\n" \
 			"	strneb	%[gfx_z2], [%[depth], #" #p "]	\n"\
+  " IT ne\n" \
 			"	strneh	r9, [%[screen], #(" #p " * 2)]	\n"\
 			"3:						\n"\
 			"	cmp	%[gfx_z1], r8			\n"\
+  " IT hi\n" \
 			"	ldrhib	r9, [%[bp], #(" #p " + 1)]	\n"\
 			"	bls	3f				\n"\
 			"	movs	r9, r9, lsl #2			\n"\
+  " IT ne\n" \
 			"	ldrne	r9, [%[colors], r9]		\n"\
+  " IT ne\n" \
 			"	strneb	%[gfx_z2], [%[depth], #(" #p " + 1)]	\n"\
+  " IT ne\n" \
 			"	strneh	r9, [%[screen], #((" #p " + 1) * 2)]	\n"\
 			"3:						\n"
 
@@ -538,8 +574,8 @@ if (Tile & V_FLIP){
 		FN(2)
 		FN(4)
 		FN(6)
-		// Loop	
-		"	sub	%[bp], %[bp], #8		\n"	
+		// Loop
+		"	sub	%[bp], %[bp], #8		\n"
 		"	add	%[screen], %[screen], #640	\n"
 		"	add	%[depth], %[depth], #320	\n"
 		"	subs 	%[lcount], %[lcount], #1	\n"
@@ -554,7 +590,7 @@ if (Tile & V_FLIP){
 		  [depth] "r" (GFX.DB + Offset),
 		  [bp] "r" (pCache + 56 - StartLine)
 		// clobbered
-		: "r9", "r8", "cc" // r8 & flags 				
+		: "r9", "r8", "cc" // r8 & flags
 		);
 	} else {
 		asm volatile (
@@ -563,28 +599,36 @@ if (Tile & V_FLIP){
 			"	ldrb	r9, [%[depth], #" #p "]		\n"\
 			"	ldrb	r8, [%[depth], #(" #p " + 1)]	\n"\
 			"	cmp	%[gfx_z1], r9			\n"\
+  " IT hi\n" \
 			"	ldrhib	r9, [%[bp], #( 7 - " #p ")]	\n"\
 			"	bls	3f				\n"\
 			"	movs	r9, r9, lsl #2			\n"\
+  " IT ne\n" \
 			"	ldrne	r9, [%[colors], r9]		\n"\
+  " IT ne\n" \
 			"	strneb	%[gfx_z2], [%[depth], #" #p "]	\n"\
+  " IT ne\n" \
 			"	strneh	r9, [%[screen], #(" #p " * 2)]	\n"\
 			"3:						\n"\
 			"	cmp	%[gfx_z1], r8			\n"\
+  " IT hi\n" \
 			"	ldrhib	r9, [%[bp], #(7 - " #p " - 1)]	\n"\
 			"	bls	3f				\n"\
 			"	movs	r9, r9, lsl #2			\n"\
+  " IT ne\n" \
 			"	ldrne	r9, [%[colors], r9]		\n"\
+  " IT ne\n" \
 			"	strneb	%[gfx_z2], [%[depth], #(" #p " + 1)]	\n"\
+  " IT ne\n" \
 			"	strneh	r9, [%[screen], #((" #p " + 1) * 2 )]	\n"\
 			"3:						\n"
 
 		FN1(0)
 		FN1(2)
 		FN1(4)
-		FN1(6)	
-		// Loop	
-		"	sub	%[bp], %[bp], #8		\n"	
+		FN1(6)
+		// Loop
+		"	sub	%[bp], %[bp], #8		\n"
 		"	add	%[screen], %[screen], #640	\n"
 		"	add	%[depth], %[depth], #320	\n"
 		"	subs 	%[lcount], %[lcount], #1	\n"
@@ -599,7 +643,7 @@ if (Tile & V_FLIP){
 		  [depth] "r" (GFX.DB + Offset),
 		  [bp] "r" (pCache + 56 - StartLine)
 		// clobbered
-		: "r9", "r8", "cc" // r8 & flags 				
+		: "r9", "r8", "cc" // r8 & flags
 		);
 	}
 } else {
@@ -610,8 +654,8 @@ if (Tile & V_FLIP){
 		FN(2)
 		FN(4)
 		FN(6)
-		// Loop	
-		"	add	%[bp], %[bp], #8		\n"	
+		// Loop
+		"	add	%[bp], %[bp], #8		\n"
 		"	add	%[screen], %[screen], #640	\n"
 		"	add	%[depth], %[depth], #320	\n"
 		"	subs 	%[lcount], %[lcount], #1	\n"
@@ -626,7 +670,7 @@ if (Tile & V_FLIP){
 		  [depth] "r" (GFX.DB + Offset),
 		  [bp] "r" (pCache + StartLine)
 		// clobbered
-		: "r9", "r8", "cc" // r8 & flags 				
+		: "r9", "r8", "cc" // r8 & flags
 		);
 	} else {
 		asm volatile (
@@ -634,9 +678,9 @@ if (Tile & V_FLIP){
 		FN1(0)
 		FN1(2)
 		FN1(4)
-		FN1(6)	
-		// Loop	
-		"	add	%[bp], %[bp], #8		\n"	
+		FN1(6)
+		// Loop
+		"	add	%[bp], %[bp], #8		\n"
 		"	add	%[screen], %[screen], #640	\n"
 		"	add	%[depth], %[depth], #320	\n"
 		"	subs 	%[lcount], %[lcount], #1	\n"
@@ -651,7 +695,7 @@ if (Tile & V_FLIP){
 		  [depth] "r" (GFX.DB + Offset),
 		  [bp] "r" (pCache + StartLine)
 		// clobbered
-		: "r9", "r8", "cc" // r8, r9 & flags 				
+		: "r9", "r8", "cc" // r8, r9 & flags
 		);
 
 	}
@@ -670,7 +714,7 @@ if (Width == 0) return;
 if (Width == 8) {
 	DrawTile16 (Tile, Offset, StartLine, LineCount);
 	return;
-	}	
+	}
 
      TILE_PREAMBLE
 Offset += StartPixel;
@@ -681,8 +725,11 @@ Offset += StartPixel;
 			"	cmp	%[gfx_z1], r8			\n"\
 			"	bls	3f				\n"\
 			"	movs	r9, r9, lsl #2			\n"\
+  " IT ne\n" \
 			"	ldrne	r9, [%[colors], r9]		\n"\
+  " IT ne\n" \
 			"	strneb	%[gfx_z2], [%[depth], #" #p "]	\n"\
+  " IT ne\n" \
 			"	strneh	r9, [%[screen], #(" #p " * 2)]	\n"\
 			"3:						\n"
 
@@ -692,8 +739,11 @@ Offset += StartPixel;
 			"	cmp	%[gfx_z1], r8			\n"\
 			"	bls	3f				\n"\
 			"	movs	r9, r9, lsl #2			\n"\
+  " IT ne\n" \
 			"	ldrne	r9, [%[colors], r9]		\n"\
+  " IT ne\n" \
 			"	strneb	%[gfx_z2], [%[depth], #" #p "]	\n"\
+  " IT ne\n" \
 			"	strneh	r9, [%[screen], #(" #p " * 2)]	\n"\
 			"3:						\n"\
 
@@ -705,15 +755,15 @@ if (Tile & V_FLIP){
 		asm volatile (
 		"2:					\n"
 		FN(0)
-		// Loop	
-		"1:						\n"	
-		"	sub	%[bp], %[bp], #8		\n"	
+		// Loop
+		"1:						\n"
+		"	sub	%[bp], %[bp], #8		\n"
 		"	add	%[screen], %[screen], #640	\n"
 		"	add	%[depth], %[depth], #320	\n"
 		"	subs 	%[lcount], %[lcount], #1	\n"
 		"	bne	2b"
 		// output
-		: 	// none	
+		: 	// none
 		// input
 		: [lcount] "r" (LineCount),
 		  [gfx_z1] "r" (GFX.Z1),
@@ -724,21 +774,21 @@ if (Tile & V_FLIP){
 		  [width] "r" (Width),
 		  [bp] "r" (pCache + 56 - StartLine + StartPixel)
 		// clobbered
-		: "r9", "r8", "cc" // r9 & flags 				
+		: "r9", "r8", "cc" // r9 & flags
 		);
 	} else {
 		asm volatile (
 		"2:					\n"
 		FN1(0)
-		// Loop	
-		"1:						\n"	
-		"	sub	%[bp], %[bp], #8		\n"	
+		// Loop
+		"1:						\n"
+		"	sub	%[bp], %[bp], #8		\n"
 		"	add	%[screen], %[screen], #640	\n"
 		"	add	%[depth], %[depth], #320	\n"
 		"	subs 	%[lcount], %[lcount], #1	\n"
 		"	bne	2b"
 		// output
-		: 	// none	
+		: 	// none
 		// input
 		: [lcount] "r" (LineCount),
 		  [gfx_z1] "r" (GFX.Z1),
@@ -749,7 +799,7 @@ if (Tile & V_FLIP){
 		  [width] "r" (Width),
 		  [bp] "r" (pCache + 56 - StartLine - StartPixel)
 		// clobbered
-		: "r9", "r8", "cc" // r9 & flags 				
+		: "r9", "r8", "cc" // r9 & flags
 		);
 	}
 } else {
@@ -757,15 +807,15 @@ if (Tile & V_FLIP){
 		asm volatile (
 		"2:					\n"
 		FN(0)
-		// Loop	
+		// Loop
 		"1:						\n"
-		"	add	%[bp], %[bp], #8		\n"	
+		"	add	%[bp], %[bp], #8		\n"
 		"	add	%[screen], %[screen], #640	\n"
 		"	add	%[depth], %[depth], #320	\n"
 		"	subs 	%[lcount], %[lcount], #1	\n"
 		"	bne	2b"
 		// output
-		: 	// none	
+		: 	// none
 		// input
 		: [lcount] "r" (LineCount),
 		  [gfx_z1] "r" (GFX.Z1),
@@ -776,21 +826,21 @@ if (Tile & V_FLIP){
 		  [width] "r" (Width),
 		  [bp] "r" (pCache + StartLine + StartPixel)
 		// clobbered
-		: "r9", "r8", "cc" // r9 & flags 				
+		: "r9", "r8", "cc" // r9 & flags
 		);
 	} else {
 		asm volatile (
 		"2:					\n"
 		FN1(0)
-		// Loop	
-		"1:						\n"	
-		"	add	%[bp], %[bp], #8		\n"	
+		// Loop
+		"1:						\n"
+		"	add	%[bp], %[bp], #8		\n"
 		"	add	%[screen], %[screen], #640	\n"
 		"	add	%[depth], %[depth], #320	\n"
 		"	subs 	%[lcount], %[lcount], #1	\n"
 		"	bne	2b"
 		// output
-		: 	// none	
+		: 	// none
 		// input
 		: [lcount] "r" (LineCount),
 		  [gfx_z1] "r" (GFX.Z1),
@@ -801,7 +851,7 @@ if (Tile & V_FLIP){
 		  [width] "r" (Width),
 		  [bp] "r" (pCache + StartLine - StartPixel)
 		// clobbered
-		: "r9", "r8", "cc" // r9 & flags 				
+		: "r9", "r8", "cc" // r9 & flags
 		);
 
 	}
@@ -816,15 +866,15 @@ if (Tile & V_FLIP){
 
 		FN(0)
 		FN(1)
-		// Loop	
-		"1:						\n"	
-		"	sub	%[bp], %[bp], #8		\n"	
+		// Loop
+		"1:						\n"
+		"	sub	%[bp], %[bp], #8		\n"
 		"	add	%[screen], %[screen], #640	\n"
 		"	add	%[depth], %[depth], #320	\n"
 		"	subs 	%[lcount], %[lcount], #1	\n"
 		"	bne	2b"
 		// output
-		: 	// none	
+		: 	// none
 		// input
 		: [lcount] "r" (LineCount),
 		  [gfx_z1] "r" (GFX.Z1),
@@ -835,7 +885,7 @@ if (Tile & V_FLIP){
 		  [width] "r" (Width),
 		  [bp] "r" (pCache + 56 - StartLine + StartPixel)
 		// clobbered
-		: "r9", "r8", "cc" // r9 & flags 				
+		: "r9", "r8", "cc" // r9 & flags
 		);
 	} else {
 		asm volatile (
@@ -843,15 +893,15 @@ if (Tile & V_FLIP){
 
 		FN1(0)
 		FN1(1)
-		// Loop	
-		"1:						\n"	
-		"	sub	%[bp], %[bp], #8		\n"	
+		// Loop
+		"1:						\n"
+		"	sub	%[bp], %[bp], #8		\n"
 		"	add	%[screen], %[screen], #640	\n"
 		"	add	%[depth], %[depth], #320	\n"
 		"	subs 	%[lcount], %[lcount], #1	\n"
 		"	bne	2b"
 		// output
-		: 	// none	
+		: 	// none
 		// input
 		: [lcount] "r" (LineCount),
 		  [gfx_z1] "r" (GFX.Z1),
@@ -862,7 +912,7 @@ if (Tile & V_FLIP){
 		  [width] "r" (Width),
 		  [bp] "r" (pCache + 56 - StartLine - StartPixel)
 		// clobbered
-		: "r9", "r8", "cc" // r9 & flags 				
+		: "r9", "r8", "cc" // r9 & flags
 		);
 	}
 } else {
@@ -871,15 +921,15 @@ if (Tile & V_FLIP){
 		"2:					\n"
 		FN(0)
 		FN(1)
-		// Loop	
+		// Loop
 		"1:						\n"
-		"	add	%[bp], %[bp], #8		\n"	
+		"	add	%[bp], %[bp], #8		\n"
 		"	add	%[screen], %[screen], #640	\n"
 		"	add	%[depth], %[depth], #320	\n"
 		"	subs 	%[lcount], %[lcount], #1	\n"
 		"	bne	2b"
 		// output
-		: 	// none	
+		: 	// none
 		// input
 		: [lcount] "r" (LineCount),
 		  [gfx_z1] "r" (GFX.Z1),
@@ -890,22 +940,22 @@ if (Tile & V_FLIP){
 		  [width] "r" (Width),
 		  [bp] "r" (pCache + StartLine + StartPixel)
 		// clobbered
-		: "r9", "r8", "cc" // r9 & flags 				
+		: "r9", "r8", "cc" // r9 & flags
 		);
 	} else {
 		asm volatile (
 		"2:					\n"
 		FN1(0)
 		FN1(1)
-		// Loop	
-		"1:						\n"	
-		"	add	%[bp], %[bp], #8		\n"	
+		// Loop
+		"1:						\n"
+		"	add	%[bp], %[bp], #8		\n"
 		"	add	%[screen], %[screen], #640	\n"
 		"	add	%[depth], %[depth], #320	\n"
 		"	subs 	%[lcount], %[lcount], #1	\n"
 		"	bne	2b"
 		// output
-		: 	// none	
+		: 	// none
 		// input
 		: [lcount] "r" (LineCount),
 		  [gfx_z1] "r" (GFX.Z1),
@@ -916,7 +966,7 @@ if (Tile & V_FLIP){
 		  [width] "r" (Width),
 		  [bp] "r" (pCache + StartLine - StartPixel)
 		// clobbered
-		: "r9", "r8", "cc" // r9 & flags 				
+		: "r9", "r8", "cc" // r9 & flags
 		);
 
 	}
@@ -933,15 +983,15 @@ if (Tile & V_FLIP){
 		FN(0)
 		FN(1)
 		FN(2)
-		// Loop	
-		"1:						\n"	
-		"	sub	%[bp], %[bp], #8		\n"	
+		// Loop
+		"1:						\n"
+		"	sub	%[bp], %[bp], #8		\n"
 		"	add	%[screen], %[screen], #640	\n"
 		"	add	%[depth], %[depth], #320	\n"
 		"	subs 	%[lcount], %[lcount], #1	\n"
 		"	bne	2b"
 		// output
-		: 	// none	
+		: 	// none
 		// input
 		: [lcount] "r" (LineCount),
 		  [gfx_z1] "r" (GFX.Z1),
@@ -952,7 +1002,7 @@ if (Tile & V_FLIP){
 		  [width] "r" (Width),
 		  [bp] "r" (pCache + 56 - StartLine + StartPixel)
 		// clobbered
-		: "r9", "r8", "cc" // r9 & flags 				
+		: "r9", "r8", "cc" // r9 & flags
 		);
 	} else {
 		asm volatile (
@@ -961,15 +1011,15 @@ if (Tile & V_FLIP){
 		FN1(0)
 		FN1(1)
 		FN1(2)
-		// Loop	
-		"1:						\n"	
-		"	sub	%[bp], %[bp], #8		\n"	
+		// Loop
+		"1:						\n"
+		"	sub	%[bp], %[bp], #8		\n"
 		"	add	%[screen], %[screen], #640	\n"
 		"	add	%[depth], %[depth], #320	\n"
 		"	subs 	%[lcount], %[lcount], #1	\n"
 		"	bne	2b"
 		// output
-		: 	// none	
+		: 	// none
 		// input
 		: [lcount] "r" (LineCount),
 		  [gfx_z1] "r" (GFX.Z1),
@@ -980,7 +1030,7 @@ if (Tile & V_FLIP){
 		  [width] "r" (Width),
 		  [bp] "r" (pCache + 56 - StartLine - StartPixel)
 		// clobbered
-		: "r9", "r8", "cc" // r9 & flags 				
+		: "r9", "r8", "cc" // r9 & flags
 		);
 	}
 } else {
@@ -990,15 +1040,15 @@ if (Tile & V_FLIP){
 		FN(0)
 		FN(1)
 		FN(2)
-		// Loop	
+		// Loop
 		"1:						\n"
-		"	add	%[bp], %[bp], #8		\n"	
+		"	add	%[bp], %[bp], #8		\n"
 		"	add	%[screen], %[screen], #640	\n"
 		"	add	%[depth], %[depth], #320	\n"
 		"	subs 	%[lcount], %[lcount], #1	\n"
 		"	bne	2b"
 		// output
-		: 	// none	
+		: 	// none
 		// input
 		: [lcount] "r" (LineCount),
 		  [gfx_z1] "r" (GFX.Z1),
@@ -1009,7 +1059,7 @@ if (Tile & V_FLIP){
 		  [width] "r" (Width),
 		  [bp] "r" (pCache + StartLine + StartPixel)
 		// clobbered
-		: "r9", "r8", "cc" // r9 & flags 				
+		: "r9", "r8", "cc" // r9 & flags
 		);
 	} else {
 		asm volatile (
@@ -1017,15 +1067,15 @@ if (Tile & V_FLIP){
 		FN1(0)
 		FN1(1)
 		FN1(2)
-		// Loop	
-		"1:						\n"	
-		"	add	%[bp], %[bp], #8		\n"	
+		// Loop
+		"1:						\n"
+		"	add	%[bp], %[bp], #8		\n"
 		"	add	%[screen], %[screen], #640	\n"
 		"	add	%[depth], %[depth], #320	\n"
 		"	subs 	%[lcount], %[lcount], #1	\n"
 		"	bne	2b"
 		// output
-		: 	// none	
+		: 	// none
 		// input
 		: [lcount] "r" (LineCount),
 		  [gfx_z1] "r" (GFX.Z1),
@@ -1036,7 +1086,7 @@ if (Tile & V_FLIP){
 		  [width] "r" (Width),
 		  [bp] "r" (pCache + StartLine - StartPixel)
 		// clobbered
-		: "r9", "r8", "cc" // r9 & flags 				
+		: "r9", "r8", "cc" // r9 & flags
 		);
 
 	}
@@ -1054,15 +1104,15 @@ if (Tile & V_FLIP){
 		FN(1)
 		FN(2)
 		FN(3)
-		// Loop	
-		"1:						\n"	
-		"	sub	%[bp], %[bp], #8		\n"	
+		// Loop
+		"1:						\n"
+		"	sub	%[bp], %[bp], #8		\n"
 		"	add	%[screen], %[screen], #640	\n"
 		"	add	%[depth], %[depth], #320	\n"
 		"	subs 	%[lcount], %[lcount], #1	\n"
 		"	bne	2b"
 		// output
-		: 	// none	
+		: 	// none
 		// input
 		: [lcount] "r" (LineCount),
 		  [gfx_z1] "r" (GFX.Z1),
@@ -1073,7 +1123,7 @@ if (Tile & V_FLIP){
 		  [width] "r" (Width),
 		  [bp] "r" (pCache + 56 - StartLine + StartPixel)
 		// clobbered
-		: "r9", "r8", "cc" // r9 & flags 				
+		: "r9", "r8", "cc" // r9 & flags
 		);
 	} else {
 		asm volatile (
@@ -1083,15 +1133,15 @@ if (Tile & V_FLIP){
 		FN1(1)
 		FN1(2)
 		FN1(3)
-		// Loop	
-		"1:						\n"	
-		"	sub	%[bp], %[bp], #8		\n"	
+		// Loop
+		"1:						\n"
+		"	sub	%[bp], %[bp], #8		\n"
 		"	add	%[screen], %[screen], #640	\n"
 		"	add	%[depth], %[depth], #320	\n"
 		"	subs 	%[lcount], %[lcount], #1	\n"
 		"	bne	2b"
 		// output
-		: 	// none	
+		: 	// none
 		// input
 		: [lcount] "r" (LineCount),
 		  [gfx_z1] "r" (GFX.Z1),
@@ -1102,7 +1152,7 @@ if (Tile & V_FLIP){
 		  [width] "r" (Width),
 		  [bp] "r" (pCache + 56 - StartLine - StartPixel)
 		// clobbered
-		: "r9", "r8", "cc" // r9 & flags 				
+		: "r9", "r8", "cc" // r9 & flags
 		);
 	}
 } else {
@@ -1113,15 +1163,15 @@ if (Tile & V_FLIP){
 		FN(1)
 		FN(2)
 		FN(3)
-		// Loop	
+		// Loop
 		"1:						\n"
-		"	add	%[bp], %[bp], #8		\n"	
+		"	add	%[bp], %[bp], #8		\n"
 		"	add	%[screen], %[screen], #640	\n"
 		"	add	%[depth], %[depth], #320	\n"
 		"	subs 	%[lcount], %[lcount], #1	\n"
 		"	bne	2b"
 		// output
-		: 	// none	
+		: 	// none
 		// input
 		: [lcount] "r" (LineCount),
 		  [gfx_z1] "r" (GFX.Z1),
@@ -1132,7 +1182,7 @@ if (Tile & V_FLIP){
 		  [width] "r" (Width),
 		  [bp] "r" (pCache + StartLine + StartPixel)
 		// clobbered
-		: "r9", "r8", "cc" // r9 & flags 				
+		: "r9", "r8", "cc" // r9 & flags
 		);
 	} else {
 		asm volatile (
@@ -1141,15 +1191,15 @@ if (Tile & V_FLIP){
 		FN1(1)
 		FN1(2)
 		FN1(3)
-		// Loop	
-		"1:						\n"	
-		"	add	%[bp], %[bp], #8		\n"	
+		// Loop
+		"1:						\n"
+		"	add	%[bp], %[bp], #8		\n"
 		"	add	%[screen], %[screen], #640	\n"
 		"	add	%[depth], %[depth], #320	\n"
 		"	subs 	%[lcount], %[lcount], #1	\n"
 		"	bne	2b"
 		// output
-		: 	// none	
+		: 	// none
 		// input
 		: [lcount] "r" (LineCount),
 		  [gfx_z1] "r" (GFX.Z1),
@@ -1160,7 +1210,7 @@ if (Tile & V_FLIP){
 		  [width] "r" (Width),
 		  [bp] "r" (pCache + StartLine - StartPixel)
 		// clobbered
-		: "r9", "r8", "cc" // r9 & flags 				
+		: "r9", "r8", "cc" // r9 & flags
 		);
 
 	}
@@ -1179,15 +1229,15 @@ if (Tile & V_FLIP){
 		FN(2)
 		FN(3)
 		FN(4)
-		// Loop	
-		"1:						\n"	
-		"	sub	%[bp], %[bp], #8		\n"	
+		// Loop
+		"1:						\n"
+		"	sub	%[bp], %[bp], #8		\n"
 		"	add	%[screen], %[screen], #640	\n"
 		"	add	%[depth], %[depth], #320	\n"
 		"	subs 	%[lcount], %[lcount], #1	\n"
 		"	bne	2b"
 		// output
-		: 	// none	
+		: 	// none
 		// input
 		: [lcount] "r" (LineCount),
 		  [gfx_z1] "r" (GFX.Z1),
@@ -1198,7 +1248,7 @@ if (Tile & V_FLIP){
 		  [width] "r" (Width),
 		  [bp] "r" (pCache + 56 - StartLine + StartPixel)
 		// clobbered
-		: "r9", "r8", "cc" // r9 & flags 				
+		: "r9", "r8", "cc" // r9 & flags
 		);
 	} else {
 		asm volatile (
@@ -1209,15 +1259,15 @@ if (Tile & V_FLIP){
 		FN1(2)
 		FN1(3)
 		FN1(4)
-		// Loop	
-		"1:						\n"	
-		"	sub	%[bp], %[bp], #8		\n"	
+		// Loop
+		"1:						\n"
+		"	sub	%[bp], %[bp], #8		\n"
 		"	add	%[screen], %[screen], #640	\n"
 		"	add	%[depth], %[depth], #320	\n"
 		"	subs 	%[lcount], %[lcount], #1	\n"
 		"	bne	2b"
 		// output
-		: 	// none	
+		: 	// none
 		// input
 		: [lcount] "r" (LineCount),
 		  [gfx_z1] "r" (GFX.Z1),
@@ -1228,7 +1278,7 @@ if (Tile & V_FLIP){
 		  [width] "r" (Width),
 		  [bp] "r" (pCache + 56 - StartLine - StartPixel)
 		// clobbered
-		: "r9", "r8", "cc" // r9 & flags 				
+		: "r9", "r8", "cc" // r9 & flags
 		);
 	}
 } else {
@@ -1240,15 +1290,15 @@ if (Tile & V_FLIP){
 		FN(2)
 		FN(3)
 		FN(4)
-		// Loop	
+		// Loop
 		"1:						\n"
-		"	add	%[bp], %[bp], #8		\n"	
+		"	add	%[bp], %[bp], #8		\n"
 		"	add	%[screen], %[screen], #640	\n"
 		"	add	%[depth], %[depth], #320	\n"
 		"	subs 	%[lcount], %[lcount], #1	\n"
 		"	bne	2b"
 		// output
-		: 	// none	
+		: 	// none
 		// input
 		: [lcount] "r" (LineCount),
 		  [gfx_z1] "r" (GFX.Z1),
@@ -1259,7 +1309,7 @@ if (Tile & V_FLIP){
 		  [width] "r" (Width),
 		  [bp] "r" (pCache + StartLine + StartPixel)
 		// clobbered
-		: "r9", "r8", "cc" // r9 & flags 				
+		: "r9", "r8", "cc" // r9 & flags
 		);
 	} else {
 		asm volatile (
@@ -1269,15 +1319,15 @@ if (Tile & V_FLIP){
 		FN1(2)
 		FN1(3)
 		FN1(4)
-		// Loop	
-		"1:						\n"	
-		"	add	%[bp], %[bp], #8		\n"	
+		// Loop
+		"1:						\n"
+		"	add	%[bp], %[bp], #8		\n"
 		"	add	%[screen], %[screen], #640	\n"
 		"	add	%[depth], %[depth], #320	\n"
 		"	subs 	%[lcount], %[lcount], #1	\n"
 		"	bne	2b"
 		// output
-		: 	// none	
+		: 	// none
 		// input
 		: [lcount] "r" (LineCount),
 		  [gfx_z1] "r" (GFX.Z1),
@@ -1288,7 +1338,7 @@ if (Tile & V_FLIP){
 		  [width] "r" (Width),
 		  [bp] "r" (pCache + StartLine - StartPixel)
 		// clobbered
-		: "r9", "r8", "cc" // r9 & flags 				
+		: "r9", "r8", "cc" // r9 & flags
 		);
 
 	}
@@ -1308,15 +1358,15 @@ if (Tile & V_FLIP){
 		FN(3)
 		FN(4)
 		FN(5)
-		// Loop	
-		"1:						\n"	
-		"	sub	%[bp], %[bp], #8		\n"	
+		// Loop
+		"1:						\n"
+		"	sub	%[bp], %[bp], #8		\n"
 		"	add	%[screen], %[screen], #640	\n"
 		"	add	%[depth], %[depth], #320	\n"
 		"	subs 	%[lcount], %[lcount], #1	\n"
 		"	bne	2b"
 		// output
-		: 	// none	
+		: 	// none
 		// input
 		: [lcount] "r" (LineCount),
 		  [gfx_z1] "r" (GFX.Z1),
@@ -1327,7 +1377,7 @@ if (Tile & V_FLIP){
 		  [width] "r" (Width),
 		  [bp] "r" (pCache + 56 - StartLine + StartPixel)
 		// clobbered
-		: "r9", "r8", "cc" // r9 & flags 				
+		: "r9", "r8", "cc" // r9 & flags
 		);
 	} else {
 		asm volatile (
@@ -1339,15 +1389,15 @@ if (Tile & V_FLIP){
 		FN1(3)
 		FN1(4)
 		FN1(5)
-		// Loop	
-		"1:						\n"	
-		"	sub	%[bp], %[bp], #8		\n"	
+		// Loop
+		"1:						\n"
+		"	sub	%[bp], %[bp], #8		\n"
 		"	add	%[screen], %[screen], #640	\n"
 		"	add	%[depth], %[depth], #320	\n"
 		"	subs 	%[lcount], %[lcount], #1	\n"
 		"	bne	2b"
 		// output
-		: 	// none	
+		: 	// none
 		// input
 		: [lcount] "r" (LineCount),
 		  [gfx_z1] "r" (GFX.Z1),
@@ -1358,7 +1408,7 @@ if (Tile & V_FLIP){
 		  [width] "r" (Width),
 		  [bp] "r" (pCache + 56 - StartLine - StartPixel)
 		// clobbered
-		: "r9", "r8", "cc" // r9 & flags 				
+		: "r9", "r8", "cc" // r9 & flags
 		);
 	}
 } else {
@@ -1371,15 +1421,15 @@ if (Tile & V_FLIP){
 		FN(3)
 		FN(4)
 		FN(5)
-		// Loop	
+		// Loop
 		"1:						\n"
-		"	add	%[bp], %[bp], #8		\n"	
+		"	add	%[bp], %[bp], #8		\n"
 		"	add	%[screen], %[screen], #640	\n"
 		"	add	%[depth], %[depth], #320	\n"
 		"	subs 	%[lcount], %[lcount], #1	\n"
 		"	bne	2b"
 		// output
-		: 	// none	
+		: 	// none
 		// input
 		: [lcount] "r" (LineCount),
 		  [gfx_z1] "r" (GFX.Z1),
@@ -1390,7 +1440,7 @@ if (Tile & V_FLIP){
 		  [width] "r" (Width),
 		  [bp] "r" (pCache + StartLine + StartPixel)
 		// clobbered
-		: "r9", "r8", "cc" // r9 & flags 				
+		: "r9", "r8", "cc" // r9 & flags
 		);
 	} else {
 		asm volatile (
@@ -1401,15 +1451,15 @@ if (Tile & V_FLIP){
 		FN1(3)
 		FN1(4)
 		FN1(5)
-		// Loop	
-		"1:						\n"	
-		"	add	%[bp], %[bp], #8		\n"	
+		// Loop
+		"1:						\n"
+		"	add	%[bp], %[bp], #8		\n"
 		"	add	%[screen], %[screen], #640	\n"
 		"	add	%[depth], %[depth], #320	\n"
 		"	subs 	%[lcount], %[lcount], #1	\n"
 		"	bne	2b"
 		// output
-		: 	// none	
+		: 	// none
 		// input
 		: [lcount] "r" (LineCount),
 		  [gfx_z1] "r" (GFX.Z1),
@@ -1420,7 +1470,7 @@ if (Tile & V_FLIP){
 		  [width] "r" (Width),
 		  [bp] "r" (pCache + StartLine - StartPixel)
 		// clobbered
-		: "r9", "r8", "cc" // r9 & flags 				
+		: "r9", "r8", "cc" // r9 & flags
 		);
 
 	}
@@ -1441,15 +1491,15 @@ if (Tile & V_FLIP){
 		FN(4)
 		FN(5)
 		FN(6)
-		// Loop	
-		"1:						\n"	
-		"	sub	%[bp], %[bp], #8		\n"	
+		// Loop
+		"1:						\n"
+		"	sub	%[bp], %[bp], #8		\n"
 		"	add	%[screen], %[screen], #640	\n"
 		"	add	%[depth], %[depth], #320	\n"
 		"	subs 	%[lcount], %[lcount], #1	\n"
 		"	bne	2b"
 		// output
-		: 	// none	
+		: 	// none
 		// input
 		: [lcount] "r" (LineCount),
 		  [gfx_z1] "r" (GFX.Z1),
@@ -1460,7 +1510,7 @@ if (Tile & V_FLIP){
 		  [width] "r" (Width),
 		  [bp] "r" (pCache + 56 - StartLine + StartPixel)
 		// clobbered
-		: "r9", "r8", "cc" // r9 & flags 				
+		: "r9", "r8", "cc" // r9 & flags
 		);
 	} else {
 		asm volatile (
@@ -1473,15 +1523,15 @@ if (Tile & V_FLIP){
 		FN1(4)
 		FN1(5)
 		FN1(6)
-		// Loop	
-		"1:						\n"	
-		"	sub	%[bp], %[bp], #8		\n"	
+		// Loop
+		"1:						\n"
+		"	sub	%[bp], %[bp], #8		\n"
 		"	add	%[screen], %[screen], #640	\n"
 		"	add	%[depth], %[depth], #320	\n"
 		"	subs 	%[lcount], %[lcount], #1	\n"
 		"	bne	2b"
 		// output
-		: 	// none	
+		: 	// none
 		// input
 		: [lcount] "r" (LineCount),
 		  [gfx_z1] "r" (GFX.Z1),
@@ -1492,7 +1542,7 @@ if (Tile & V_FLIP){
 		  [width] "r" (Width),
 		  [bp] "r" (pCache + 56 - StartLine - StartPixel)
 		// clobbered
-		: "r9", "r8", "cc" // r9 & flags 				
+		: "r9", "r8", "cc" // r9 & flags
 		);
 	}
 } else {
@@ -1506,15 +1556,15 @@ if (Tile & V_FLIP){
 		FN(4)
 		FN(5)
 		FN(6)
-		// Loop	
+		// Loop
 		"1:						\n"
-		"	add	%[bp], %[bp], #8		\n"	
+		"	add	%[bp], %[bp], #8		\n"
 		"	add	%[screen], %[screen], #640	\n"
 		"	add	%[depth], %[depth], #320	\n"
 		"	subs 	%[lcount], %[lcount], #1	\n"
 		"	bne	2b"
 		// output
-		: 	// none	
+		: 	// none
 		// input
 		: [lcount] "r" (LineCount),
 		  [gfx_z1] "r" (GFX.Z1),
@@ -1525,7 +1575,7 @@ if (Tile & V_FLIP){
 		  [width] "r" (Width),
 		  [bp] "r" (pCache + StartLine + StartPixel)
 		// clobbered
-		: "r9", "r8", "cc" // r9 & flags 				
+		: "r9", "r8", "cc" // r9 & flags
 		);
 	} else {
 		asm volatile (
@@ -1537,15 +1587,15 @@ if (Tile & V_FLIP){
 		FN1(4)
 		FN1(5)
 		FN1(6)
-		// Loop	
-		"1:						\n"	
-		"	add	%[bp], %[bp], #8		\n"	
+		// Loop
+		"1:						\n"
+		"	add	%[bp], %[bp], #8		\n"
 		"	add	%[screen], %[screen], #640	\n"
 		"	add	%[depth], %[depth], #320	\n"
 		"	subs 	%[lcount], %[lcount], #1	\n"
 		"	bne	2b"
 		// output
-		: 	// none	
+		: 	// none
 		// input
 		: [lcount] "r" (LineCount),
 		  [gfx_z1] "r" (GFX.Z1),
@@ -1556,7 +1606,7 @@ if (Tile & V_FLIP){
 		  [width] "r" (Width),
 		  [bp] "r" (pCache + StartLine - StartPixel)
 		// clobbered
-		: "r9", "r8", "cc" // r9 & flags 				
+		: "r9", "r8", "cc" // r9 & flags
 		);
 
 	}
@@ -1584,7 +1634,7 @@ if (Width == 0) return;
 if (Width == 8) {
 	DrawTile16 (Tile, Offset, StartLine, LineCount);
 	return;
-	}	
+	}
 
      TILE_PREAMBLE
 Offset += StartPixel;
@@ -1627,15 +1677,15 @@ if (Tile & V_FLIP){
 		FN(1)
 		FN(0)
 
-		// Loop	
-		"1:						\n"	
-		"	sub	%[bp], %[bp], #8		\n"	
+		// Loop
+		"1:						\n"
+		"	sub	%[bp], %[bp], #8		\n"
 		"	add	%[screen], %[screen], #640	\n"
 		"	add	%[depth], %[depth], #320	\n"
 		"	subs 	%[lcount], %[lcount], #1	\n"
 		"	bxne	%[width]		\n"
 		// output
-		: 	// none	
+		: 	// none
 		// input
 		: [lcount] "r" (LineCount),
 		  [gfx_z1] "r" (GFX.Z1),
@@ -1646,7 +1696,7 @@ if (Tile & V_FLIP){
 		  [width] "r" ((7 - Width) * SIZEOF_FN),
 		  [bp] "r" (pCache + 56 - StartLine + StartPixel)
 		// clobbered
-		: "r8", "r9", "cc" // r8, r9 & flags 				
+		: "r8", "r9", "cc" // r8, r9 & flags
 		);
 	} else {
 		asm volatile (
@@ -1660,15 +1710,15 @@ if (Tile & V_FLIP){
 		FN1(2)
 		FN1(1)
 		FN1(0)
-		// Loop	
-		"1:						\n"	
-		"	sub	%[bp], %[bp], #8		\n"	
+		// Loop
+		"1:						\n"
+		"	sub	%[bp], %[bp], #8		\n"
 		"	add	%[screen], %[screen], #640	\n"
 		"	add	%[depth], %[depth], #320	\n"
 		"	subs 	%[lcount], %[lcount], #1	\n"
 		"	bxne	%[width]		\n"
 		// output
-		: 	// none	
+		: 	// none
 		// input
 		: [lcount] "r" (LineCount),
 		  [gfx_z1] "r" (GFX.Z1),
@@ -1679,7 +1729,7 @@ if (Tile & V_FLIP){
 		  [width] "r" ((7 - Width) * SIZEOF_FN1),
 		  [bp] "r" (pCache + 56 - StartLine - StartPixel)
 		// clobbered
-		: "r8", "r9", "cc" // r8, r9 & flags 				
+		: "r8", "r9", "cc" // r8, r9 & flags
 		);
 	}
 } else {
@@ -1695,15 +1745,15 @@ if (Tile & V_FLIP){
 		FN(2)
 		FN(1)
 		FN(0)
-		// Loop	
+		// Loop
 		"1:						\n"
-		"	add	%[bp], %[bp], #8		\n"	
+		"	add	%[bp], %[bp], #8		\n"
 		"	add	%[screen], %[screen], #640	\n"
 		"	add	%[depth], %[depth], #320	\n"
 		"	subs 	%[lcount], %[lcount], #1	\n"
 		"	bxne	%[width]		\n"
 		// output
-		: 	// none	
+		: 	// none
 		// input
 		: [lcount] "r" (LineCount),
 		  [gfx_z1] "r" (GFX.Z1),
@@ -1714,7 +1764,7 @@ if (Tile & V_FLIP){
 		  [width] "r" ((7 - Width) * SIZEOF_FN),
 		  [bp] "r" (pCache + StartLine + StartPixel)
 		// clobbered
-		: "r8", "r9", "cc" // r8, r9 & flags 				
+		: "r8", "r9", "cc" // r8, r9 & flags
 		);
 	} else {
 		asm volatile (
@@ -1728,15 +1778,15 @@ if (Tile & V_FLIP){
 		FN1(2)
 		FN1(1)
 		FN1(0)
-		// Loop	
-		"1:						\n"	
-		"	add	%[bp], %[bp], #8		\n"	
+		// Loop
+		"1:						\n"
+		"	add	%[bp], %[bp], #8		\n"
 		"	add	%[screen], %[screen], #640	\n"
 		"	add	%[depth], %[depth], #320	\n"
 		"	subs 	%[lcount], %[lcount], #1	\n"
 		"	bxne	%[width]		\n"
 		// output
-		: 	// none	
+		: 	// none
 		// input
 		: [lcount] "r" (LineCount),
 		  [gfx_z1] "r" (GFX.Z1),
@@ -1747,7 +1797,7 @@ if (Tile & V_FLIP){
 		  [width] "r" ((7 - Width) * SIZEOF_FN1),
 		  [bp] "r" (pCache + StartLine - StartPixel)
 		// clobbered
-		: "r8", "r9", "cc" // r8, r9 & flags 				
+		: "r8", "r9", "cc" // r8, r9 & flags
 		);
 
 	}
@@ -1831,7 +1881,7 @@ void DrawLargePixel16Add (uint32 Tile, uint32 Offset,
 			       COLOR_ADD (p, *(s + GFX.Delta))    : \
 			       COLOR_ADD (p, GFX.FixedColour)) \
 			    : p)
-			
+
     RENDER_TILE_LARGE (GFX.ScreenColors [pixel], LARGE_ADD_PIXEL)
 }
 
@@ -1851,7 +1901,7 @@ void DrawLargePixel16Add1_2 (uint32 Tile, uint32 Offset,
 			       COLOR_ADD1_2 (p, *(s + GFX.Delta))    : \
 			       COLOR_ADD (p, GFX.FixedColour)) \
 			    : p))
-			
+
     RENDER_TILE_LARGE (GFX.ScreenColors [pixel], LARGE_ADD_PIXEL1_2)
 }
 
@@ -1872,7 +1922,7 @@ void DrawLargePixel16Sub (uint32 Tile, uint32 Offset,
 			       COLOR_SUB (p, *(s + GFX.Delta))    : \
 			       COLOR_SUB (p, GFX.FixedColour)) \
 			    : p)
-			
+
     RENDER_TILE_LARGE (GFX.ScreenColors [pixel], LARGE_SUB_PIXEL)
 }
 
@@ -1892,7 +1942,7 @@ void DrawLargePixel16Sub1_2 (uint32 Tile, uint32 Offset,
 			       COLOR_SUB1_2 (p, *(s + GFX.Delta))    : \
 			       COLOR_SUB (p, GFX.FixedColour)) \
 			    : p)
-			
+
     RENDER_TILE_LARGE (GFX.ScreenColors [pixel], LARGE_SUB_PIXEL1_2)
 }
 

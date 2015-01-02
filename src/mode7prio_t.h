@@ -68,7 +68,7 @@ static void DrawBGMode7Background16R3 (uint8 *Screen, int bg)
 
 	yy3 = ((yy + CentreY) & 7) << 4;
 
-	
+
 	for (clip = 0; clip < ClipCount; clip++)
 	{
 	    if (GFX.pCurrentClip->Count [0]){
@@ -95,8 +95,8 @@ static void DrawBGMode7Background16R3 (uint8 *Screen, int bg)
 
 		asm volatile (
 		"1:						\n"
-		"	mov	r3, %[AA], asr #18		\n"	
-		"	orrs	r3, r3, %[CC], asr #18		\n"			
+		"	mov	r3, %[AA], asr #18		\n"
+		"	orrs	r3, r3, %[CC], asr #18		\n"
 		"	bne	2f				\n"
 		"						\n"
 		"	mov	r3, %[CC], asr #11		\n"
@@ -115,26 +115,30 @@ static void DrawBGMode7Background16R3 (uint8 *Screen, int bg)
 		"	ldrb	r3, [%[d], #1]!			\n"
 		"	movs	r1, r0, lsl #24			\n"
 		"	beq	4f				\n"
+  " IT pl\n" \
 		"	andpl	r1, %[depth], #0xff		\n"
-		"	movmi	r1, %[depth], asr #8		\n"	
+  " IT mi\n" \
+		"	movmi	r1, %[depth], asr #8		\n"
 		"	cmp	r1, r3				\n"
 		"	bls	4f				\n"
 
-		"	strb	r1, [%[d]]		\n"	
-		
+		"	strb	r1, [%[d]]		\n"
+
 		"	mov	r1, #0x13000			\n" // R1 = ZDELTA
 		"	ldrb	r3, [%[d], r1]			\n"
-		"	ldr	r1, [%[colors], r0, lsl #2]	\n"	
-										
+		"	ldr	r1, [%[colors], r0, lsl #2]	\n"
+
 		"	cmp	r3, #1				\n"
 		"	blo	11f				\n"
 		"	mov	r3, #0x200000			\n"
+  " IT ne\n" \
 		"	addne	r0, r3, r3			\n"
+  " IT eq\n" \
 		"	ldreq	r3, %[fixedcolour]		\n"
-										
+
 		ROP
 		"11:						\n"
-		"	strh	r1, [%[p]]			\n"		
+		"	strh	r1, [%[p]]			\n"
 
 		"	ldr	r3, %[dir]			\n"
 		"	ldr	r1, %[daa]			\n"
@@ -158,26 +162,30 @@ static void DrawBGMode7Background16R3 (uint8 *Screen, int bg)
 		"	ldrb	r3, [%[d], #1]!			\n"
 		"	movs	r1, r0, lsl #24			\n"
 		"	beq	4f				\n"
+  " IT pl\n" \
 		"	andpl	r1, %[depth], #0xff		\n"
-		"	movmi	r1, %[depth], asr #8		\n"	 		
+  " IT mi\n" \
+		"	movmi	r1, %[depth], asr #8		\n"
 		"	cmp	r1, r3				\n"
 		"	bls	4f				\n"
 
 		"	strb	r1, [%[d]]			\n"
-		
+
 		"	mov	r1, #0x13000			\n" // R1 = ZDELTA
 		"	ldrb	r3, [%[d], r1]			\n"
-		"	ldr	r1, [%[colors], r0, lsl #2]	\n"	
-												
+		"	ldr	r1, [%[colors], r0, lsl #2]	\n"
+
 		"	cmp	r3, #1				\n"
 		"	blo	12f				\n"
 		"	mov	r3, #0x200000			\n"
+  " IT ne\n" \
 		"	ldrneh	r3, [%[p], r3]			\n"
+  " IT eq\n" \
 		"	ldreq	r3, %[fixedcolour]		\n"
-										
+
 		ROP
 		"12:						\n"
-		"	strh	r1, [%[p]]			\n"		
+		"	strh	r1, [%[p]]			\n"
 		"4:						\n"
 		"	ldr	r3, %[dir]			\n"
 		"	ldr	r0, %[daa]			\n"
@@ -266,7 +274,7 @@ static void DrawBGMode7Background16R1R2 (uint8 *Screen, int bg)
 
 	BB = l->MatrixB * yy + (CentreX << 8);
 	DD = l->MatrixD * yy + (CentreY << 8);
-	
+
 	for (clip = 0; clip < ClipCount; clip++) {
 	    if (GFX.pCurrentClip->Count [0]){
 			Left = GFX.pCurrentClip->Left [clip][0];
@@ -288,7 +296,7 @@ static void DrawBGMode7Background16R1R2 (uint8 *Screen, int bg)
 		asm volatile (
 		"1:						\n"
 		"	mov	r3, %[AA], asr #18		\n"
-		"	orrs	r3, r3, %[CC], asr #18		\n"			
+		"	orrs	r3, r3, %[CC], asr #18		\n"
 		"	bne	2f				\n"
 		"						\n"
 		"	ldr	r1, %[AndByY]			\n"
@@ -313,8 +321,10 @@ static void DrawBGMode7Background16R1R2 (uint8 *Screen, int bg)
 		"	ldrb	r3, [%[d], #1]!			\n"
 		"	movs	r1, r0, lsl #24			\n"
 		"	beq	2f				\n"
+  " IT pl\n" \
 		"	andpl	r1, %[depth], #0xff		\n"
-		"	movmi	r1, %[depth], asr #8		\n"	
+  " IT mi\n" \
+		"	movmi	r1, %[depth], asr #8		\n"
 		"	cmp	r1, r3				\n"
 		"	bls	2f				\n"
 
@@ -322,17 +332,19 @@ static void DrawBGMode7Background16R1R2 (uint8 *Screen, int bg)
 
 		"	mov	r1, #0x13000			\n" // R1 = ZDELTA
 		"	ldrb	r3, [%[d], r1]			\n"
-		"	ldr	r1, [%[colors], r0, lsl #2]	\n"	
-										
+		"	ldr	r1, [%[colors], r0, lsl #2]	\n"
+
 		"	cmp	r3, #1				\n"
 		"	blo	11f				\n"
 		"	mov	r3, #0x200000			\n"
+  " IT ne\n" \
 		"	ldrneh	r3, [%[p], r3]			\n"
+  " IT eq\n" \
 		"	ldreq	r3, %[fixedcolour]		\n"
-										
+
 		ROP
 		"11:						\n"
-		"	strh	r1, [%[p]]			\n"		
+		"	strh	r1, [%[p]]			\n"
 		"2:						\n"
 		//"	ldr	r0, %[dcc]			\n"
 		"	add	%[AA], %[AA], %[daa]		\n"
@@ -438,7 +450,7 @@ static void DrawBGMode7Background16R0 (uint8 *Screen, int bg)
 			cc = l->MatrixC;
 	    }
 		asm volatile (
-		"	ldr	r3, %[AndByY]			\n"		
+		"	ldr	r3, %[AndByY]			\n"
 		"1:						\n"
 		"	and	r1, r3, %[CC], asr #4		\n"
 		"	and	r0, r3, %[AA], asr #4		\n"
@@ -459,8 +471,10 @@ static void DrawBGMode7Background16R0 (uint8 *Screen, int bg)
 		"	ldrb	r3, [%[d], #1]!			\n"
 		"	movs	r1, r0, lsl #24			\n"
 		"	beq	2f				\n"
+  " IT pl\n" \
 		"	andpl	r1, %[depth], #0xff		\n"
-		"	movmi	r1, %[depth], asr #8		\n"	 		
+  " IT mi\n" \
+		"	movmi	r1, %[depth], asr #8		\n"
 		"	cmp	r1, r3				\n"
 		"	bls	2f				\n"
 
@@ -468,17 +482,19 @@ static void DrawBGMode7Background16R0 (uint8 *Screen, int bg)
 
 		"	mov	r1, #0x13000			\n" // R1 = ZDELTA
 		"	ldrb	r3, [%[d], r1]			\n"
-		"	ldr	r1, [%[colors], r0, lsl #2] 	\n"	
-										
+		"	ldr	r1, [%[colors], r0, lsl #2] 	\n"
+
 		"	cmp	r3, #1				\n"
 		"	blo	11f				\n"
 		"	mov	r3, #0x200000			\n"
+  " IT ne\n" \
 		"	ldrneh	r3, [%[p], r3]			\n"
+  " IT eq\n" \
 		"	ldreq	r3, %[fixedcolour]		\n"
-										
+
 		ROP
 		"11:						\n"
-		"	strh	r1, [%[p]]			\n"		
+		"	strh	r1, [%[p]]			\n"
 
 		"2:						\n"
 		//"	ldr	r0, %[dcc]			\n"
@@ -486,7 +502,8 @@ static void DrawBGMode7Background16R0 (uint8 *Screen, int bg)
 		"	add	%[CC], %[CC], %[dcc]		\n"
 		"	add	%[p], %[p], #2			\n"
 		"	subs	%[x], %[x], #1			\n"
-		"	ldrne	r3, %[AndByY]			\n"		
+  " IT ne\n" \
+		"	ldrne	r3, %[AndByY]			\n"
 		"	bne	1b				\n"
 		:
 		: [x] "r" (Right - Left),
@@ -515,8 +532,8 @@ DEC_FMODE7(ROPNAME)
 {
 #ifdef __DEBUG__
 	#define TOSTRING(n)	#n
-	printf("Rendering Mode7 w/prio, ROp: " TOSTRING(ROPNAME) ", R:%d, r2130: %d, bg: %d\n", PPU.Mode7Repeat, GFX.r2130 & 1, bg)			
-#endif	
+	printf("Rendering Mode7 w/prio, ROp: " TOSTRING(ROPNAME) ", R:%d, r2130: %d, bg: %d\n", PPU.Mode7Repeat, GFX.r2130 & 1, bg)
+#endif
     CHECK_SOUND();
 
     if (GFX.r2130 & 1) {
