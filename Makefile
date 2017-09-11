@@ -7,7 +7,7 @@ SHARED := -shared -Wl,--version-script=libretro/link.T
 ifeq ($(DEBUG), 1)
 CFLAGS += -O0 -g
 else
-CFLAGS += -Os
+CFLAGS ?= -Os
 endif
 
 OBJECTS    = ./src/apu.o ./src/apuaux.o ./src/c4.o ./src/c4emu.o ./src/cheats.o ./src/cheats2.o \
