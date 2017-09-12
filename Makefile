@@ -23,7 +23,7 @@ OBJECTS    = ./src/apu.o ./src/apuaux.o ./src/c4.o ./src/c4emu.o ./src/cheats.o 
 				 ./libretro/libretro.o ./libretro/memstream.o
 
 INCLUDES   = -I.
-DEFINES    = -DHAVE_STRINGS_H -DHAVE_STDINT_H -DHAVE_INTTYPES_H -DUSE_SA1
+DEFINES    = -std=gnu++03 -DHAVE_STRINGS_H -DHAVE_STDINT_H -DHAVE_INTTYPES_H -DUSE_SA1
 WARNINGS_DEFINES = -Wall -W -Wno-unused-parameter -Wno-parentheses -Wno-write-strings -Wno-comment
 CODE_DEFINES = -fomit-frame-pointer
 ALL_DEFINES = $(DEFINES) $(CODE_DEFINES) $(WARNINGS_DEFINES) $(fpic)
